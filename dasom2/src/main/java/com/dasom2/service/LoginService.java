@@ -1,13 +1,8 @@
-package com.sw.service;
-import com.sw.mapper.LoginMapper;
-import com.sw.vo.testVO;
-import com.sw.vo.UserVO;
-
-import java.util.Date;
-import java.util.List;
-
+package com.dasom2.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.dasom2.mapper.LoginMapper;
 
 @Service
 public class LoginService {

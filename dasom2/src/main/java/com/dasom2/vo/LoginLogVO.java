@@ -1,4 +1,4 @@
-package com.sw.vo;
+package com.dasom2.vo;
 
 import java.util.Date;
 

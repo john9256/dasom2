@@ -1,9 +1,10 @@
-package com.sw.service;
+package com.dasom2.service;
 
-import com.sw.mapper.LoginLogMapper;
-import com.sw.vo.LoginLogVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.dasom2.mapper.LoginLogMapper;
+import com.dasom2.vo.LoginLogVO;
 
 @Service
 public class LoginLogService {
