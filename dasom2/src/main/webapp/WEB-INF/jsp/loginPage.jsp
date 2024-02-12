@@ -8,6 +8,7 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <title>다솜 로그인</title>
+
 <style>
 body {
 	background-color: #f8f9fa;
@@ -34,6 +35,7 @@ body {
 }
 
 </style>
+
 </head>
 <body>
 
@@ -57,6 +59,7 @@ body {
 									placeholder="Enter password">
 							</div>
 							<button type="submit" class="btn btn-primary btn-block">로그인</button>
+							<a href="/register.user" class="btn btn-primary btn-block">회원가입</a>
 						</form>
 					</div>
 				</div>
