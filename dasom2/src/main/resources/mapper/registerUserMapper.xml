@@ -12,4 +12,27 @@
     <select id="getResidenceData" resultType="String">
         SELECT value1 FROM criteria_data WHERE user_id = #{userId}
     </select>
+    <select id="checkEmail" resultType="Int">
+        SELECT COUNT(*) FROM survey_response_simple WHERE = #{email}
+    </select>
+    <insert id="insertEmailSendLog">
+        INSERT INTO email_send_log(user_id, email, ip) VALUES(#{userId}, #{email}, #{currentIp})
+    </insert>
+    <select id="checkEmailVerified" resultType="String">
+        SELECT verification_flag FROM email_verification WHERE user_id = #{userId} AND email = #{email} ORDER BY createtime DESC
+    </select>
+    <insert id="saveEmailAndToken">
+        INSERT INTO email_verification(user_id, email, token) VALUES(#{userId}, #{email}, #{token})
+    </insert>
+    
+    <select id="" resultType="String">
+        
+    </select>
+    <select id="" resultType="String">
+        
+    </select>
+    <select id="" resultType="String">
+        
+    </select>
+    
 </mapper>

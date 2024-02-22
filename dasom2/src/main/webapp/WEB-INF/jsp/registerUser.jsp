@@ -70,9 +70,9 @@ body {
     직장 위치: <select name="jobResidence" id="jobResidence" required >
         <option value="">직장 위치를 선택해주세요</option>
     </select><br/>
-    신분증 이미지: <input type="file" name="idCardImage" required /><br/>
+    <!-- 신분증 이미지: <input type="file" name="idCardImage" required /><br/>
     명함 이미지: <input type="file" name="businessCardImage" required /><span>현재 재직중인 직장의 명함으로 부탁합니다</span><br/>
-    본인 사진: <input type="file" name="selfImage" required /><span>최근 1년 안의 사진으로 부탁합니다</span><br/>
+    본인 사진: <input type="file" name="selfImage" required /><span>최근 1년 안의 사진으로 부탁합니다</span><br/> -->
     <input type="submit" value="회원가입" />
 </form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -80,7 +80,7 @@ body {
 
 $(document).ready(function() {
     var isUserIdValid = false; // 아이디 중복 체크 상태
-    var isEmailVerified = false; // 이메일 인증 상태
+    var isEmailSended = false; // 이메일 송부 여부
 	
  // 거주지 데이터
     $.ajax({
@@ -99,7 +99,7 @@ $(document).ready(function() {
     
     // 아이디 중복 체크
     $("#userId").blur(function() {
-        var userId = $(this).val();
+        var userId = $("#userId").val();
         $.ajax({
             url: "/checkUserId",
             type: "GET",
@@ -117,29 +117,42 @@ $(document).ready(function() {
 
     // 이메일 인증 요청
     $("#sendEmailVerification").click(function() {
+    	if ($("#userId").val() == null || $("#userId").val() === "") {
+            alert("ID를 먼저 입력해주세요.");
+            return false; // 버튼 동작 막기		
+    	)
         var email = $("#email").val();
         $.ajax({
             url: "/sendEmailVerification",
             type: "GET",
-            data: { email: email },
+            data: { email: email 
+            		userId: userId},
             success: function(isRequested) {
                 if (isRequested) {
                     alert("이메일 인증을 요청했습니다. 이메일을 확인해 주세요.");
-                    isEmailVerified = true;
+                    isEmailSended = true;
                 } else {
-                    alert("이메일 인증 요청에 실패했습니다.");
-                    isEmailVerified = false;
+                    alert("이메일 인증 요청에 실패했습니다. 잘못된 이메일 혹은 이메일이 중복되어 있지 않은지 확인하세요.");
+                    isEmailSended = false;
                 }
             }
         });
     });
 
     // 폼 제출 전 검증
-    $("form").submit(function(e) {
-        if (!isUserIdValid || !isEmailVerified) {
-            e.preventDefault(); // 폼 제출 중지
-            alert("아이디 중복 체크와 이메일 인증을 완료해주세요.");
+ // 폼 제출 이벤트 핸들러
+    $("#registerForm").submit(function(e) {
+        // 기본 제출 동작 방지
+        e.preventDefault();
+
+        // 아이디 중복 체크 및 이메일 인증 요청 상태 확인
+        if (!isUserIdValid || !isEmailSended) {
+            alert("아이디 중복 체크 또는 이메일 인증 요청을 완료해주세요.");
+            return; // 폼 제출 중단
         }
+
+        // 모든 검증이 통과됐다면 폼 데이터를 서버로 전송
+        this.submit(); // 폼 데이터를 실제로 제출
     });
 });
 </script>

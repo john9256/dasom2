@@ -8,5 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface CommonMapper {
     
     List<String> getCriteriaData(String criteria);
+    void insertErrorLog(String methodName, String gubun, String errorMessage);
     
 }

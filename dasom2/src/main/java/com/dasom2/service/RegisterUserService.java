@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dasom2.mapper.CommonMapper;
 import com.dasom2.mapper.RegisterUserMapper;
 import com.dasom2.vo.RegisterUserVO;
 
@@ -21,66 +22,87 @@ public class RegisterUserService {
 	RegisterUserMapper RegisterUserMapper;
 	
 	@Autowired
+	CommonMapper CommonMapper;
+	
+	@Autowired
     private JavaMailSender emailSender;
 
     
     // 아이디 중복 체크
-    public boolean checkUserIdExist(String userId) {
-        return RegisterUserMapper.checkUserId(userId) > 0;
+    public boolean checkUserId(String userId) {
+        return RegisterUserMapper.checkUserId(userId) == 0;
     }
     
-    // 이메일 인증
-    public boolean sendEmailVerification(String email) {
-        // 이메일 인증 로직 구현
-        String verificationLink = "http://yourdomain.com/verify?email=" + email; // 예시 링크
-        emailService.sendSimpleMessage(email, "이메일 인증", "아래 링크를 클릭해주세요: " + verificationLink);
-        return true;
+    // 이메일 중복 체크 - 존재 하면 true 반환
+    public boolean checkEmailExist(String email) {
+        return RegisterUserMapper.checkEmail(email) > 0;
     }
     
-    public void sendSimpleMessage(String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage(); 
-        message.setFrom("noreply@example.com");
-        message.setTo(to); 
-        message.setSubject(subject); 
-        message.setText(text);
-        emailSender.send(message);
+    // 이메일 발송
+    public boolean sendEmailVerification(String userId, String email, String token) {
+        String subject = "다솜 소개팅 회원가입 이메일 인증";
+        String content = "이메일 인증을 위해 아래 링크를 클릭해주세요.\n"
+                       + "http://yourdomain.com/emailVerify?token=" + token;
+        
+        try {
+	        SimpleMailMessage message = new SimpleMailMessage();
+	        message.setTo(email);
+	        message.setSubject(subject);
+	        message.setText(content);
+	        emailSender.send(message);
+	        
+	        // 토큰과 이메일 저장
+	        RegisterUserMapper.saveEmailAndToken(userId, email, token);
+	        return true;
+        }
+        catch (Exception e) {
+        	e.printStackTrace();
+        	String methodName = e.getStackTrace()[0].getMethodName();
+        	CommonMapper.insertErrorLog(methodName, email, e.getMessage());
+            return false;
+		}
+        
     }
+    
+    // 이메일 인증 
+    public boolean verifyEmailByToken(String token) {
+    	String successEmail="";
+    	successEmail = RegisterUserMapper.getEmailByToken(token);
+    	if(!successEmail.equalsIgnoreCase("") && successEmail != null) {
+    		try {
+    			RegisterUserMapper.updateEmailVerification(successEmail);
+    		}
+    		catch (Exception e) {
+    			e.printStackTrace();
+    			String methodName = e.getStackTrace()[0].getMethodName();
+    			CommonMapper.insertErrorLog(methodName, successEmail, e.getMessage());
+    			return false;
+			}
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
+    
+    // 회원 가입시 이메일 인증 여부 확인
+    public boolean checkEmailVerified(String email, String userId) {
+    	boolean check = false;
+    	check = RegisterUserMapper.checkEmailVerified(email, userId);
+    		return check;
+    }
+    
+    // 이메일 발송 로그
+    public void insertEmailSendLog(String userId, String email, String currentIp) {
+    	RegisterUserMapper.insertEmailSendLog(userId, email, currentIp);
+    }
+    
+    
     
     // 유저 등록 서비스
-    public boolean registerUser(RegisterUserVO user, MultipartFile[] images) {
-        try {
-            // 파일 저장 로직
-            if (images != null) {
-                for (int i = 0; i < images.length; i++) {
-                    MultipartFile file = images[i];
-                    if (!file.isEmpty()) {
-                        byte[] bytes = file.getBytes();
-                        Path path = Paths.get(UPLOAD_DIR + file.getOriginalFilename());
-                        Files.write(path, bytes);
-
-                        // 파일 경로를 UserVO에 설정 (예시로만 보여줌, 실제 구현에 따라 달라질 수 있음)
-                        switch (i) {
-                            case 0:
-                                user.setIdCardImagePath(path.toString());
-                                break;
-                            case 1:
-                                user.setBusinessCardImagePath(path.toString());
-                                break;
-                            case 2:
-                                user.setSelfImagePath(path.toString());
-                                break;
-                        }
-                    }
-                }
-            }
-
-            // 데이터베이스에 사용자 정보와 파일 경로 저장
-            userMapper.insertUser(user);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+    public boolean registerUser(RegisterUserVO user) {
+        RegisterUserMapper.insertUser(user);
+		return true;
     }
     
     public List<String> getResidenceData(){

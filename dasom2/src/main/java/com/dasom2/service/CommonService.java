@@ -15,6 +15,7 @@ public class CommonService {
 	// 기준 정보 get
 	public List<String> getCriteriaData(String criteria) {
 		return CommonMapper.getCriteriaData(criteria);
+		
 	} 
     
 }
