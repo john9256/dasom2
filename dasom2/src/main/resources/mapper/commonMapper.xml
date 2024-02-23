@@ -4,4 +4,7 @@
     <select id="getCriteriaData" resultType="List" parameterType="String">
         SELECT value1 FROM criteria_data WHERE criteria = #{criteria}
     </select>
+    <insert id="insertErrorLog" parameterType="String">
+        INSERT INTO error_log VALUES(#{methodName}, #{gubun}, #{errorMessage})
+    </insert>
 </mapper>

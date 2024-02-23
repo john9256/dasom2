@@ -5,32 +5,35 @@
         SELECT * FROM testtable
     </select>
     
-    <select id="checkUserId" resultType="String">
+    <select id="checkUserId" resultType="String" parameterType="String">
         SELECT COUNT(*) FROM user_table WHERE user_id = #{userId}
     </select>
     
-    <select id="getResidenceData" resultType="String">
+    <select id="getResidenceData" resultType="String" parameterType="String">
         SELECT value1 FROM criteria_data WHERE user_id = #{userId}
     </select>
-    <select id="checkEmail" resultType="Int">
+    <select id="checkEmail" resultType="Int" parameterType="String">
         SELECT COUNT(*) FROM survey_response_simple WHERE = #{email}
     </select>
-    <insert id="insertEmailSendLog">
+    <insert id="insertEmailSendLog" parameterType="String">
         INSERT INTO email_send_log(user_id, email, ip) VALUES(#{userId}, #{email}, #{currentIp})
     </insert>
-    <select id="checkEmailVerified" resultType="String">
+    <select id="checkEmailVerified" resultType="String" parameterType="String">
         SELECT verification_flag FROM email_verification WHERE user_id = #{userId} AND email = #{email} ORDER BY createtime DESC
     </select>
-    <insert id="saveEmailAndToken">
+    <insert id="saveEmailAndToken" parameterType="String">
         INSERT INTO email_verification(user_id, email, token) VALUES(#{userId}, #{email}, #{token})
     </insert>
+    <select id="getEmailByToken" resultType="String" parameterType="String">
+        SELECT email FROM email_verification WHERE token = #{token}
+    </select>
+    <update id="updateEmailVerification" parameterType="String">
+        UPDATE email_verification SET verification_flag = TRUE WHERE email = #{email}
+    </update>
+    <insert id="insertUser" parameterType="RegisterUserVO">
+        insert into user_table(user_id, password, phone_number)
+    </insert>
     
-    <select id="" resultType="String">
-        
-    </select>
-    <select id="" resultType="String">
-        
-    </select>
     <select id="" resultType="String">
         
     </select>
