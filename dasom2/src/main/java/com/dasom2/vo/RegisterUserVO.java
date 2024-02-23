@@ -14,9 +14,10 @@ public class RegisterUserVO {
     private String jobDivision;
     private String residence;
     private String jobResidence;
-    private byte[] idCardImage;
-    private byte[] businessCardImage;
-    private byte[] selfImage;
+//    private byte[] idCardImage;
+//    private byte[] businessCardImage;
+//    private byte[] selfImage;
+    
 	public String getUserId() {
 		return userId;
 	}
@@ -83,24 +84,24 @@ public class RegisterUserVO {
 	public void setJobResidence(String jobResidence) {
 		this.jobResidence = jobResidence;
 	}
-	public byte[] getIdCardImage() {
-		return idCardImage;
-	}
-	public void setIdCardImage(byte[] idCardImage) {
-		this.idCardImage = idCardImage;
-	}
-	public byte[] getBusinessCardImage() {
-		return businessCardImage;
-	}
-	public void setBusinessCardImage(byte[] businessCardImage) {
-		this.businessCardImage = businessCardImage;
-	}
-	public byte[] getSelfImage() {
-		return selfImage;
-	}
-	public void setSelfImage(byte[] selfImage) {
-		this.selfImage = selfImage;
-	}
+//	public byte[] getIdCardImage() {
+//		return idCardImage;
+//	}
+//	public void setIdCardImage(byte[] idCardImage) {
+//		this.idCardImage = idCardImage;
+//	}
+//	public byte[] getBusinessCardImage() {
+//		return businessCardImage;
+//	}
+//	public void setBusinessCardImage(byte[] businessCardImage) {
+//		this.businessCardImage = businessCardImage;
+//	}
+//	public byte[] getSelfImage() {
+//		return selfImage;
+//	}
+//	public void setSelfImage(byte[] selfImage) {
+//		this.selfImage = selfImage;
+//	}
     
     
 }

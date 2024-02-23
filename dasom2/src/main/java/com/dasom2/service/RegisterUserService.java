@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -101,6 +102,13 @@ public class RegisterUserService {
     
     // 유저 등록 서비스
     public boolean registerUser(RegisterUserVO user) {
+    	
+    	// 암호화
+    	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    	String encodedPassword = passwordEncoder.encode(user.getPassword());
+    	user.setPassword(encodedPassword);
+    	
+    	// 저장
         RegisterUserMapper.insertUser(user);
 		return true;
     }
