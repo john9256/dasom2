@@ -31,7 +31,8 @@
         UPDATE email_verification SET verification_flag = TRUE WHERE email = #{email}
     </update>
     <insert id="insertUser" parameterType="RegisterUserVO">
-        insert into user_table(user_id, password, phone_number) VALUES(#{userId}, #{password}, #{phone_number})
+        insert into user_table(user_id, password, user_name, phone_number, email, sex, birthday, height, job_division, residence, job_residence) 
+        VALUES(#{userId}, #{password}, #{userName}, #{phoneNumber}, #{email}, #{sex}, #{birthday}, #{height}, #{jobDivision}, #{residence}, #{jobResidence})
     </insert>
     
     <select id="" resultType="String">

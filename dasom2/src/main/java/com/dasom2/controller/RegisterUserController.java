@@ -95,10 +95,10 @@ public class RegisterUserController {
     		) {
 		if (RegisterUserService.checkUserId(user.getUserId()) || RegisterUserService.checkEmailVerified(user.getUserId(), user.getEmail())) {
 	        RegisterUserService.registerUser(user);
-			return "redirect:/login"; 
+			return "redirect:/loginPage"; 
 	    }
 		else {
-			return "registrationFailed";
+			return "registerFail";
 		}
     }
 	

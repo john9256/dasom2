@@ -1,6 +1,7 @@
 package com.dasom2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,9 @@ public class LoginController {
     public String loginDo(String userId, String password, Model model, HttpSession session, HttpServletRequest request) {
     	
     	/* 사용자 확인 */
-        String userCheck = loginService.validateUser(userId, password);
+    	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    	String storedEncodedPassword = loginService.findPasswordByUserId(userId);
+        boolean isPasswordMatch = passwordEncoder.matches(password, storedEncodedPassword);
         
         LoginLogVO log = new LoginLogVO();
         String currentIp = request.getRemoteAddr();
@@ -52,7 +55,7 @@ public class LoginController {
             return "contactAdmin";
         }
 
-        if(userCheck == null) {
+        if(!isPasswordMatch) {
             log.setSuccessflag(false);
             log.setCount(latestCountByIp == null ? 1 : latestCountByIp + 1);
             loginLogService.insertLog(log);
@@ -62,13 +65,10 @@ public class LoginController {
         log.setSuccessflag(true);
         log.setCount(0); // 로그인 카운트 0으로 초기화
         loginLogService.insertLog(log);
-         
     	
 		/* 세션 값 저장 */
     	session.setAttribute("userId", userId);
-    	
     	model.addAttribute("userId", userId);
-    	model.addAttribute("surveyCheck", loginService.surveyCheck(userId));
         return "mainPage";
     }
     
@@ -81,8 +81,6 @@ public class LoginController {
         }
 
         model.addAttribute("userId", session.getAttribute("userId"));
-        model.addAttribute("surveyCheck", loginService.surveyCheck(session.getAttribute("userId").toString()));
-
         return "mainPage";
     }
     
