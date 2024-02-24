@@ -1,8 +1,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dasom2.mapper.testMapper">
+<mapper namespace="com.dasom2.mapper.CommonMapper">
 
-    <select id="getCriteriaData" resultType="List" parameterType="String">
-        SELECT value1 FROM criteria_data WHERE criteria = #{criteria}
+    <select id="getCriteriaData" resultType="map" parameterType="String">
+        SELECT value1 FROM criteria_data WHERE division = #{criteria}
     </select>
     <insert id="insertErrorLog" parameterType="String">
         INSERT INTO error_log VALUES(#{methodName}, #{gubun}, #{errorMessage})

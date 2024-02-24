@@ -1,27 +1,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dasom2.mapper.testMapper">
+<mapper namespace="com.dasom2.mapper.RegisterUserMapper">
 
-    <select id="selectTest" resultType="String">
-        SELECT * FROM testtable
-    </select>
-    
-    <select id="checkUserId" resultType="String" parameterType="String">
+    <select id="checkUserId" resultType="Int" parameterType="String">
         SELECT COUNT(*) FROM user_table WHERE user_id = #{userId}
     </select>
-    
     <select id="getResidenceData" resultType="String" parameterType="String">
-        SELECT value1 FROM criteria_data WHERE user_id = #{userId}
+        SELECT value1 FROM criteria_data WHERE division = #{division}
     </select>
     <select id="checkEmail" resultType="Int" parameterType="String">
-        SELECT COUNT(*) FROM survey_response_simple WHERE = #{email}
+        SELECT COUNT(*) FROM user_table WHERE email = #{email}
     </select>
-    <insert id="insertEmailSendLog" parameterType="String">
+    <insert id="insertEmailSendLog" parameterType="map">
         INSERT INTO email_send_log(user_id, email, ip) VALUES(#{userId}, #{email}, #{currentIp})
     </insert>
-    <select id="checkEmailVerified" resultType="String" parameterType="String">
+    <select id="checkEmailVerified" resultType="boolean" parameterType="map">
         SELECT verification_flag FROM email_verification WHERE user_id = #{userId} AND email = #{email} ORDER BY createtime DESC
     </select>
-    <insert id="saveEmailAndToken" parameterType="String">
+    <insert id="saveEmailAndToken" parameterType="map">
         INSERT INTO email_verification(user_id, email, token) VALUES(#{userId}, #{email}, #{token})
     </insert>
     <select id="getEmailByToken" resultType="String" parameterType="String">
@@ -34,9 +29,6 @@
         insert into user_table(user_id, password, user_name, phone_number, email, sex, birthday, height, job_division, residence, job_residence) 
         VALUES(#{userId}, #{password}, #{userName}, #{phoneNumber}, #{email}, #{sex}, #{birthday}, #{height}, #{jobDivision}, #{residence}, #{jobResidence})
     </insert>
-    
-    <select id="" resultType="String">
-        
-    </select>
+
     
 </mapper>

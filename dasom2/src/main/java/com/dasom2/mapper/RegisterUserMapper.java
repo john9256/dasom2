@@ -1,6 +1,7 @@
 package com.dasom2.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -9,11 +10,10 @@ import com.dasom2.vo.RegisterUserVO;
 @Mapper
 public interface RegisterUserMapper {
     
-    List<String> getResidenceData();
-    List<String> getJobDivisionData();
+//    List<String> getJobDivisionData();
     int checkUserId(String userId);
     int checkEmail(String email);
-    void saveEmailAndToken(String userId, String email, String token);
+    void saveEmailAndToken(Map<String, Object> params);
     String getEmailByToken(String token);
     void updateEmailVerification(String successEmail);
     void insertEmailSendLog(String userId, String email, String currentIp);

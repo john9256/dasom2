@@ -1,16 +1,12 @@
 package com.dasom2.service;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.dasom2.mapper.CommonMapper;
 import com.dasom2.mapper.RegisterUserMapper;
@@ -43,7 +39,9 @@ public class RegisterUserService {
     public boolean sendEmailVerification(String userId, String email, String token) {
         String subject = "다솜 소개팅 회원가입 이메일 인증";
         String content = "이메일 인증을 위해 아래 링크를 클릭해주세요.\n"
-                       + "http://yourdomain.com/emailVerify?token=" + token;
+                       + "http://192.168.62.228:8080/emailVerify?token=" + token;
+        // 핸드폰 핫스팟으로 연결했을때
+        // + "http://192.168.62.228:8080/emailVerify?token=" + token;
         
         try {
 	        SimpleMailMessage message = new SimpleMailMessage();
@@ -53,7 +51,11 @@ public class RegisterUserService {
 	        emailSender.send(message);
 	        
 	        // 토큰과 이메일 저장
-	        RegisterUserMapper.saveEmailAndToken(userId, email, token);
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("userId", userId);
+	        params.put("email", email);
+	        params.put("token", token);
+	        RegisterUserMapper.saveEmailAndToken(params);
 	        return true;
         }
         catch (Exception e) {
@@ -113,9 +115,6 @@ public class RegisterUserService {
 		return true;
     }
     
-    public List<String> getResidenceData(){
-    	return RegisterUserMapper.getResidenceData();
-    }
     
     
 }

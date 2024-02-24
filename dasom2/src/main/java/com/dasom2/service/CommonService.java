@@ -1,5 +1,6 @@
 package com.dasom2.service;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public class CommonService {
 	CommonMapper CommonMapper;
 	
 	// 기준 정보 get
-	public List<String> getCriteriaData(String criteria) {
+	public List<Map<String, Object>> getCriteriaData(String criteria) {
 		return CommonMapper.getCriteriaData(criteria);
 		
 	} 

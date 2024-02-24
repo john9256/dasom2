@@ -1,7 +1,7 @@
 package com.dasom2.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.dasom2.service.CommonService;
 import com.dasom2.service.RegisterUserService;
-import com.dasom2.vo.EmailVerificationTokenVO;
 import com.dasom2.vo.RegisterUserVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,11 +48,9 @@ public class RegisterUserController {
     public boolean sendEmailVerification(@RequestParam("email") String email, @RequestParam("userId") String userId, HttpSession session, HttpServletRequest request) {
     	// 이메일 중복 체크
     	boolean isValid = RegisterUserService.checkEmailExist(email);
-    	
     	// 이메일 발송 로그
     	String currentIp = request.getRemoteAddr();
     	RegisterUserService.insertEmailSendLog(userId, email, currentIp);
-    	
     	if(!isValid) {
 	    	String token = UUID.randomUUID().toString();
 	    	return RegisterUserService.sendEmailVerification(userId, email, token);
@@ -83,7 +79,7 @@ public class RegisterUserController {
 	// 거주지 정보 get
     @ResponseBody
 	@GetMapping("/getCriteriaData")
-	public List<String> getResidenceData(@RequestParam("criteria") String criteria) {
+	public List<Map<String, Object>> getResidenceData(@RequestParam("criteria") String criteria) {
 		return CommonService.getCriteriaData(criteria);
 	}
 	
