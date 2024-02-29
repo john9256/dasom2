@@ -1,13 +1,13 @@
 package com.dasom2.vo;
 
-import java.util.Date;
-
 public class UserVO {
+	
 	String userId;
-	String password;
+	String ip;
 	String passFlag;
+	String email;
+	String phoneNumber;
 	int chance;
-	Date createtime;
 	
 	public String getUserId() {
 		return userId;
@@ -15,11 +15,11 @@ public class UserVO {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getPassword() {
-		return password;
+	public String getIp() {
+		return ip;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 	public String getPassFlag() {
 		return passFlag;
@@ -27,17 +27,23 @@ public class UserVO {
 	public void setPassFlag(String passFlag) {
 		this.passFlag = passFlag;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 	public int getChance() {
 		return chance;
 	}
 	public void setChance(int chance) {
 		this.chance = chance;
-	}
-	public Date getCreatetime() {
-		return createtime;
-	}
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
 	}
 	
 }

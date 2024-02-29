@@ -10,17 +10,17 @@
     <select id="checkEmail" resultType="Int" parameterType="String">
         SELECT COUNT(*) FROM user_table WHERE email = #{email}
     </select>
-    <insert id="insertEmailSendLog" parameterType="map">
+    <insert id="insertEmailSendLog" parameterType="String">
         INSERT INTO email_send_log(user_id, email, ip) VALUES(#{userId}, #{email}, #{currentIp})
     </insert>
-    <select id="checkEmailVerified" resultType="boolean" parameterType="map">
+    <select id="checkEmailVerified" resultType="boolean" parameterType="String">
         SELECT verification_flag FROM email_verification WHERE user_id = #{userId} AND email = #{email} ORDER BY createtime DESC
     </select>
     <insert id="saveEmailAndToken" parameterType="map">
         INSERT INTO email_verification(user_id, email, token) VALUES(#{userId}, #{email}, #{token})
     </insert>
     <select id="getEmailByToken" resultType="String" parameterType="String">
-        SELECT email FROM email_verification WHERE token = #{token}
+        SELECT email FROM email_verification WHERE token = #{token} WHERE CREATETIME > SYSDATE()
     </select>
     <update id="updateEmailVerification" parameterType="String">
         UPDATE email_verification SET verification_flag = TRUE WHERE email = #{email}
