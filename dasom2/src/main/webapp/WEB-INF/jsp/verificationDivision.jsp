@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,12 +31,19 @@
 
 <c:choose>
     <c:when test="${successFlag == 'Y'}">
-        <div class="message">인증에 성공했습니다.</div>
+        <div class="message">인증에 성공했습니다.<br>이 창은 3초 후에 닫힙니다.</div>
     </c:when>
     <c:otherwise>
-        <div class="message">인증에 실패했습니다.</div>
+        <div class="message">인증에 실패했습니다. 아이디 및 이메일을 확인 바랍니다.<br>이 창은 3초 후에 닫힙니다.</div>
     </c:otherwise>
 </c:choose>
 
+<script>
+    // 3초 후에 창을 닫는 함수 정의
+    setTimeout(function() {
+        window.close();
+    }, 3000); // 3000 밀리초 = 3초 후에 실행
+    
+</script>
 </body>
 </html>

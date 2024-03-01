@@ -9,8 +9,9 @@ public class RegisterUserVO {
     private String phoneNumber;
     private String email;
     private String sex;
-    private Date birthday;
+    private String birthday;
     private String height;
+    private String companyName;
     private String jobDivision;
     private String residence;
     private String jobResidence;
@@ -54,10 +55,10 @@ public class RegisterUserVO {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 	public String getHeight() {
@@ -102,6 +103,12 @@ public class RegisterUserVO {
 //	public void setSelfImage(byte[] selfImage) {
 //		this.selfImage = selfImage;
 //	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
     
     
 }

@@ -20,14 +20,22 @@
         INSERT INTO email_verification(user_id, email, token) VALUES(#{userId}, #{email}, #{token})
     </insert>
     <select id="getEmailByToken" resultType="String" parameterType="String">
-        SELECT email FROM email_verification WHERE token = #{token} WHERE CREATETIME > SYSDATE()
+        SELECT email 
+        FROM (
+		    SELECT ROW_NUMBER() OVER (ORDER BY CREATETIME DESC) AS ROWNUM, A.* 
+		    FROM email_verification A 
+		    WHERE A.CREATETIME > NOW() - INTERVAL 10 MINUTE
+			) B
+		WHERE ROWNUM = 1
+		AND TOKEN = #{token}
+		AND USER_ID = #{userId}
     </select>
     <update id="updateEmailVerification" parameterType="String">
-        UPDATE email_verification SET verification_flag = TRUE WHERE email = #{email}
+        UPDATE email_verification SET verification_flag = TRUE WHERE email = #{email} AND token = #{token}
     </update>
     <insert id="insertUser" parameterType="RegisterUserVO">
-        insert into user_table(user_id, password, user_name, phone_number, email, sex, birthday, height, job_division, residence, job_residence) 
-        VALUES(#{userId}, #{password}, #{userName}, #{phoneNumber}, #{email}, #{sex}, #{birthday}, #{height}, #{jobDivision}, #{residence}, #{jobResidence})
+        insert into user_table(user_id, password, user_name, phone_number, email, sex, birthday, height, company_name, job_division, residence, job_residence) 
+        VALUES(#{userId}, #{password}, #{userName}, #{phoneNumber}, #{email}, #{sex}, STR_TO_DATE(#{birthday}, '%Y'), #{height}, #{companyName}, #{jobDivision}, #{residence}, #{jobResidence})
     </insert>
 
     

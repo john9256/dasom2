@@ -39,9 +39,11 @@ public class RegisterUserService {
     public boolean sendEmailVerification(String userId, String email, String token) {
         String subject = "다솜 소개팅 회원가입 이메일 인증";
         String content = "이메일 인증을 위해 아래 링크를 클릭해주세요.\n"
-                       + "http://192.168.62.228:8080/emailVerify?token=" + token;
+                       + "http://192.168.9.14:8080/emailVerify?token=" + token + "&userId=" + userId;
         // 핸드폰 핫스팟으로 연결했을때
-        // + "http://192.168.62.228:8080/emailVerify?token=" + token;
+        // 192.168.62.228
+        // plan a 와이파이 연결 했을 떄
+        // 192.168.9.14
         
         try {
 	        SimpleMailMessage message = new SimpleMailMessage();
@@ -68,12 +70,13 @@ public class RegisterUserService {
     }
     
     // 이메일 인증 
-    public boolean verifyEmailByToken(String token) {
+    public boolean verifyEmailByToken(String token, String userId) {
     	String successEmail="";
-    	successEmail = RegisterUserMapper.getEmailByToken(token);
+    	successEmail = RegisterUserMapper.getEmailByToken(token, userId);
+    	System.out.println(successEmail);
     	if(!successEmail.equalsIgnoreCase("") && successEmail != null) {
     		try {
-    			RegisterUserMapper.updateEmailVerification(successEmail);
+    			RegisterUserMapper.updateEmailVerification(successEmail, token);
     		}
     		catch (Exception e) {
     			e.printStackTrace();
@@ -103,16 +106,15 @@ public class RegisterUserService {
     
     
     // 유저 등록 서비스
-    public boolean registerUser(RegisterUserVO user) {
+    public void registerUser(RegisterUserVO user) {
     	
-    	// 암호화
+    	// 비밀번호 암호화
     	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     	String encodedPassword = passwordEncoder.encode(user.getPassword());
     	user.setPassword(encodedPassword);
     	
     	// 저장
         RegisterUserMapper.insertUser(user);
-		return true;
     }
     
     

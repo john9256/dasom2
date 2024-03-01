@@ -51,8 +51,8 @@ body {
     <option value="녀">녀</option>
 </select><br/>
 생일:
-<select name="birthdayYear" id="birthdayYear" required>
-    <% for (int year = 1980; year <= 2020; year++) { %>
+<select name="birthday" id="birthday" required>
+    <% for (int year = 1980; year <= 2010; year++) { %>
         <option value="<%= year %>"><%= year %></option>
     <% } %>
 </select>
@@ -63,7 +63,8 @@ body {
         <option value="<%= height %>"><%= height %>cm</option>
     <% } %>
 </select><br/>
-직업 구분: <input type="text" name="jobDivision" id="jobDivision" required /><br/>
+직장명: <input type="text" name="companyName" id="companyName" required /><br/>
+직무: <input type="text" name="jobDivision" id="jobDivision" placeholder="IT 개발자, " required /><br/>
 거주지: <select name="residence" id="residence" required>
     <option value="">거주지를 선택해주세요</option>
 </select><br/>

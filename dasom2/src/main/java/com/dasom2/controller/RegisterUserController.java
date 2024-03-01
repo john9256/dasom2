@@ -42,7 +42,7 @@ public class RegisterUserController {
         return isValid;
     }
     
-    // 이메일 발송
+    // 이메일 발송, 발송 로그
     @ResponseBody
     @PostMapping("/sendEmailVerification")
     public boolean sendEmailVerification(@RequestParam("email") String email, @RequestParam("userId") String userId, HttpSession session, HttpServletRequest request) {
@@ -62,9 +62,9 @@ public class RegisterUserController {
 	
     // 이메일 인증 
     @GetMapping("/emailVerify")
-    public String verifyEmailByToken(@RequestParam String token, Model model) {
+    public String verifyEmailByToken(@RequestParam String token, @RequestParam String userId, Model model) {
     	boolean successFlag = false;
-    	successFlag = RegisterUserService.verifyEmailByToken(token);
+    	successFlag = RegisterUserService.verifyEmailByToken(token, userId);
         if(successFlag) {
         	model.addAttribute("successFlag", "Y");
         	return "verificationDivision";
@@ -86,9 +86,8 @@ public class RegisterUserController {
 	
 	// 회원가입 신청
 	@PostMapping("/register")
-    public String register(RegisterUserVO user
-
-    		) {
+    public String register(RegisterUserVO user)
+	{
 		if (RegisterUserService.checkUserId(user.getUserId()) || RegisterUserService.checkEmailVerified(user.getUserId(), user.getEmail())) {
 	        RegisterUserService.registerUser(user);
 			return "redirect:/loginPage"; 

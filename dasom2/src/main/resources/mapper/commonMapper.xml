@@ -5,6 +5,6 @@
         SELECT value1 FROM criteria_data WHERE division = #{criteria}
     </select>
     <insert id="insertErrorLog" parameterType="String">
-        INSERT INTO error_log VALUES(#{methodName}, #{gubun}, #{errorMessage})
+        INSERT INTO error_log(method, gubun, error_message) VALUES(#{methodName}, #{gubun}, #{errorMessage})
     </insert>
 </mapper>
