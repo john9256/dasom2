@@ -15,9 +15,6 @@ public class RegisterUserVO {
     private String jobDivision;
     private String residence;
     private String jobResidence;
-//    private byte[] idCardImage;
-//    private byte[] businessCardImage;
-//    private byte[] selfImage;
     
 	public String getUserId() {
 		return userId;

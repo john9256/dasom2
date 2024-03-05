@@ -1,5 +1,6 @@
 package com.dasom2.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.dasom2.mapper.CommonMapper;
 import com.dasom2.service.CommonService;
 import com.dasom2.service.RegisterUserService;
 import com.dasom2.vo.RegisterUserVO;
@@ -27,6 +30,9 @@ public class RegisterUserController {
 	
 	@Autowired
 	CommonService CommonService;
+	
+	@Autowired
+	CommonMapper CommonMapper;
 	
 	// 회원가입 화면
 	@GetMapping("/register.user")
@@ -83,13 +89,22 @@ public class RegisterUserController {
 		return CommonService.getCriteriaData(criteria);
 	}
 	
-	
 	// 회원가입 신청
 	@PostMapping("/register")
-    public String register(RegisterUserVO user)
+    public String register(RegisterUserVO user
+    		,@RequestParam("idCard") MultipartFile idCard,
+            @RequestParam("businessCard") MultipartFile businessCard,
+            @RequestParam("selfImage") MultipartFile selfImage)
 	{
 		if (RegisterUserService.checkUserId(user.getUserId()) || RegisterUserService.checkEmailVerified(user.getUserId(), user.getEmail())) {
-	        RegisterUserService.registerUser(user);
+	        
+			RegisterUserService.registerUser(user);
+			try {
+				RegisterUserService.registerUserImages(user, idCard, businessCard, selfImage);
+			} catch (IOException e) {
+				e.printStackTrace();
+				CommonMapper.insertErrorLog("registerUserImages 메서드", user.getUserId(), e.getMessage());
+			}
 			return "redirect:/loginPage"; 
 	    }
 		else {

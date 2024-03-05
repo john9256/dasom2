@@ -38,5 +38,10 @@
         VALUES(#{userId}, #{password}, #{userName}, #{phoneNumber}, #{email}, #{sex}, STR_TO_DATE(#{birthday}, '%Y'), #{height}, #{companyName}, #{jobDivision}, #{residence}, #{jobResidence})
     </insert>
 
+    <insert id="insertUserImage" parameterType="RegisterUserImageVO">
+        insert into user_table(user_id, id_card_path, business_card_path, self_image_path) 
+        VALUES(#{userId}, #{idCardPath}, #{businessCardPath}, #{selfImagePath})
+    </insert>
+    
     
 </mapper>
