@@ -72,18 +72,6 @@ public class LoginController {
         return "mainPage";
     }
     
-    //메인페이지
-    @GetMapping("/mainPage")
-    public String mainPage(Model model, HttpSession session) {
-        // 로그인이 필요한 경우 로그인 페이지로 리디렉션
-        if (session.getAttribute("userId") == null) {
-            return "redirect:/loginPage";
-        }
-
-        model.addAttribute("userId", session.getAttribute("userId"));
-        return "mainPage";
-    }
-    
     //로그아웃
     @GetMapping("/logout")
     public String logout(HttpSession session) {

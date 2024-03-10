@@ -39,7 +39,7 @@
     </insert>
 
     <insert id="insertUserImage" parameterType="RegisterUserImageVO">
-        insert into user_table(user_id, id_card_path, business_card_path, self_image_path) 
+        insert into user_image(user_id, id_card_path, business_card_path, self_image_path) 
         VALUES(#{userId}, #{idCardPath}, #{businessCardPath}, #{selfImagePath})
     </insert>
     

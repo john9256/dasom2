@@ -71,9 +71,9 @@ body {
 직장 위치: <select name="jobResidence" id="jobResidence" required>
     <option value="">직장 위치를 선택해주세요</option>
 </select><br/>
-<!-- 신분증 이미지: <input type="file" name="idCardImage" id="idCardImage" required /><br/>
+신분증 이미지: <input type="file" name="idCardImage" id="idCardImage" required /><br/>
 명함 이미지: <input type="file" name="businessCardImage" id="businessCardImage" required /><span>현재 재직중인 직장의 명함으로 부탁합니다</span><br/>
-본인 사진: <input type="file" name="selfImage" id="selfImage" required /><span>최근 1년 안의 사진으로 부탁합니다</span><br/> -->
+본인 사진: <input type="file" name="selfImage" id="selfImage" required /><span>최근 1년 안의 사진으로 부탁합니다</span><br/>
 <input type="submit" value="회원가입" />
 </form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

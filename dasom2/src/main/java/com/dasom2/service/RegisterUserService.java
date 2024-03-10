@@ -45,7 +45,7 @@ public class RegisterUserService {
     public boolean sendEmailVerification(String userId, String email, String token) {
         String subject = "다솜 소개팅 회원가입 이메일 인증";
         String content = "이메일 인증을 위해 아래 링크를 클릭해주세요.\n"
-                       + "http://192.168.11.254:8080/emailVerify?token=" + token + "&userId=" + userId;
+                       + "http://192.168.31.228:8080/emailVerify?token=" + token + "&userId=" + userId;
         // 핸드폰 핫스팟으로 연결했을때
         // 192.168.62.228
         // plan a 와이파이 연결 했을 떄
@@ -121,12 +121,12 @@ public class RegisterUserService {
     }
     
     // 유저 등록시 사진 업로드 기능
-    public void registerUserImages(RegisterUserVO user, MultipartFile idCard, MultipartFile businessCard, MultipartFile selfImage) throws IOException {
+    public void registerUserImages(RegisterUserVO user, MultipartFile idCardImage, MultipartFile businessCardImage, MultipartFile selfImage) throws IOException {
         // 여기에 사용자 정보를 데이터베이스에 저장하는 로직 추가 (생략)
 
         // 이미지 파일 저장
-        String idCardPath = FileStorageService.saveFile(idCard, user.getUserId() + "_idCard");
-        String businessCardPath = FileStorageService.saveFile(businessCard, user.getUserId() + "_businessCard");
+        String idCardPath = FileStorageService.saveFile(idCardImage, user.getUserId() + "_idCard");
+        String businessCardPath = FileStorageService.saveFile(businessCardImage, user.getUserId() + "_businessCard");
         String selfImagePath = FileStorageService.saveFile(selfImage, user.getUserId() + "_selfImage");
 
         // 이미지 경로 정보를 데이터베이스에 저장

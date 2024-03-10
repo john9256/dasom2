@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -91,16 +92,18 @@ public class RegisterUserController {
 	
 	// 회원가입 신청
 	@PostMapping("/register")
+	@Transactional(rollbackFor = {Exception.class})
     public String register(RegisterUserVO user
-    		,@RequestParam("idCard") MultipartFile idCard,
-            @RequestParam("businessCard") MultipartFile businessCard,
+    		,@RequestParam("idCardImage") MultipartFile idCardImage,
+            @RequestParam("businessCardImage") MultipartFile businessCardImage,
             @RequestParam("selfImage") MultipartFile selfImage)
 	{
 		if (RegisterUserService.checkUserId(user.getUserId()) || RegisterUserService.checkEmailVerified(user.getUserId(), user.getEmail())) {
 	        
-			RegisterUserService.registerUser(user);
+			
 			try {
-				RegisterUserService.registerUserImages(user, idCard, businessCard, selfImage);
+				RegisterUserService.registerUser(user);
+				RegisterUserService.registerUserImages(user, idCardImage, businessCardImage, selfImage);
 			} catch (IOException e) {
 				e.printStackTrace();
 				CommonMapper.insertErrorLog("registerUserImages 메서드", user.getUserId(), e.getMessage());
