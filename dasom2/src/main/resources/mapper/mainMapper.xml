@@ -1,0 +1,12 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dasom2.mapper.CommonMapper">
+
+    <select id="getMeetingSchedule" resultType="MeetingScheduleVO" parameterType="String">
+        SELECT * FROM MEETING_SCHEDULE A
+        LEFT OUTER JOIN
+        (SELECT * FROM PARTICIPANT_USER WHERE EPISODE = #{userId}) B
+        ON A.EPISODE = B.EPISODE
+        
+    </select>
+    
+</mapper>

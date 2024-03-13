@@ -63,52 +63,66 @@ $(document).ready(function() {
     	matchingModalContent('matching');
     });
 
-    function dateSelectModalContent() {
+    
+    
+    function dateSelectModalContent(userId) {
         $.ajax({
-            url: "/getMeetingSchedule", // 서버에 매칭 정보를 요청할 URL
-            type: "POST", // HTTP 메소드
-            data:{
-            	userId: ${userId}
+            url: "/getMeetingSchedule",
+            type: "POST",
+            data: {
+                userId: userId
             },
             success: function(data) {
                 var content = "";
-                // 서버로부터 받은 데이터(매칭 정보)를 반복 처리
                 data.forEach(function(schedule) {
-                    // 매칭 정보를 사용해 HTML 컨텐츠 생성
+                    // 선택 여부에 따라 버튼 텍스트 설정
+                    var buttonText = "";
+                    if(schedule.userId === userId) {
+                        buttonText = "선택함";
+                    } else {
+                        buttonText = "선택";
+                    }
+                    
                     content += `<p>${schedule.episode}
-                    <button type="button" class="btn btn-info btn-sm" id="btn_${schedule.episode}" onclick="toggleSelection('${schedule.episode}')">선택</button>
-                    </p>`;
+                        <button type="button" class="btn btn-info btn-sm" id="btn_${schedule.episode}" onclick="toggleSelection('${userId}', '${schedule.episode}')">${buttonText}</button>
+                        </p>`;
                 });
-                // 생성된 HTML 컨텐츠를 모달의 바디에 삽입
+
                 $(".modal-body").html(content);
-                // 모달 창 표시
                 $("#matchModal").modal('show');
             },
             error: function(xhr, status, error) {
-                // 오류 처리 로직
                 console.error("Error: " + error);
             }
         });
     }
-});
 
-function toggleSelection(userId) {
-    const index = selectedMatches.indexOf(userId);
-    if (index > -1) {
-        // 이미 선택된 항목이면 선택 해제
-        selectedMatches.splice(index, 1);
-        document.getElementById(`btn_${userId}`).textContent = '상세 보기';
-    } else {
-        if (selectedMatches.length >= 2) {
-            // 선택된 항목이 이미 두 개인 경우 경고 메시지 표시
-            alert('두 개까지만 선택할 수 있습니다.');
-        } else {
-            // 새로운 항목 선택
-            selectedMatches.push(userId);
-            document.getElementById(`btn_${userId}`).textContent = '선택 함';
-        }
+
+    
+    function toggleSelection(userId, episode) {
+        // 선택된 회차의 버튼 ID를 구성
+        var btnId = `btn_${episode}`;
+        var episodeSelected = document.getElementById(btnId).textContent === '선택';
+        
+        $.ajax({
+            url: "/updateSelection",
+            type: "POST",
+            data: {
+                userId: userId,
+                episode: episode,
+                episodeSelected: episodeSelected
+            },
+            success: function() {
+                // 성공 시 버튼 텍스트 업데이트
+                document.getElementById(btnId).textContent = episodeSelected ? '선택함' : '선택';
+            },
+            error: function(xhr, status, error) {
+                console.error("Selection update failed: " + error);
+            }
+        });
     }
-}
+    
+    
 </script>
 
 </body>

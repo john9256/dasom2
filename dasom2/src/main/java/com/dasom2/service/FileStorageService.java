@@ -21,7 +21,7 @@ public class FileStorageService {
         	String filePath = EXTERNAL_FILE_PATH + fileName;
             
             Thumbnails.of(file.getInputStream())
-            .size(600, 600) // 원하는 크기 지정
+            .size(700, 700) // 원하는 크기 지정
             .outputFormat("jpg")
             .toFile(filePath);
             
