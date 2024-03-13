@@ -32,9 +32,12 @@ public class mainController {
         return "mainPage";
     }
     
+    // 소개팅 날짜 선택 모달 data
     @GetMapping("/getMeetingSchedule")
     public String  getMeetingSchedule(@RequestParam("userId") String userId) {
     	return MainMapper.getMeetingSchedule(userId);
     }
+    
+    
     
 }
