@@ -65,14 +65,19 @@ $(document).ready(function() {
 
     function dateSelectModalContent() {
         $.ajax({
-            url: "/getMatches", // 서버에 매칭 정보를 요청할 URL
+            url: "/getMeetingSchedule", // 서버에 매칭 정보를 요청할 URL
             type: "POST", // HTTP 메소드
+            data:{
+            	userId: ${userId}
+            },
             success: function(data) {
                 var content = "";
                 // 서버로부터 받은 데이터(매칭 정보)를 반복 처리
-                data.forEach(function(match) {
+                data.forEach(function(schedule) {
                     // 매칭 정보를 사용해 HTML 컨텐츠 생성
-                    content += `<p>${match.nickname} (${match.sex}, ${new Date(match.birthday).toLocaleDateString()})</p>`;
+                    content += `<p>${schedule.episode}
+                    <button type="button" class="btn btn-info btn-sm" id="btn_${schedule.episode}" onclick="toggleSelection('${schedule.episode}')">선택</button>
+                    </p>`;
                 });
                 // 생성된 HTML 컨텐츠를 모달의 바디에 삽입
                 $(".modal-body").html(content);
@@ -86,6 +91,24 @@ $(document).ready(function() {
         });
     }
 });
+
+function toggleSelection(userId) {
+    const index = selectedMatches.indexOf(userId);
+    if (index > -1) {
+        // 이미 선택된 항목이면 선택 해제
+        selectedMatches.splice(index, 1);
+        document.getElementById(`btn_${userId}`).textContent = '상세 보기';
+    } else {
+        if (selectedMatches.length >= 2) {
+            // 선택된 항목이 이미 두 개인 경우 경고 메시지 표시
+            alert('두 개까지만 선택할 수 있습니다.');
+        } else {
+            // 새로운 항목 선택
+            selectedMatches.push(userId);
+            document.getElementById(`btn_${userId}`).textContent = '선택 함';
+        }
+    }
+}
 </script>
 
 </body>

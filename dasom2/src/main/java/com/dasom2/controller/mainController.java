@@ -1,17 +1,14 @@
 package com.dasom2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.dasom2.service.LoginLogService;
+import com.dasom2.mapper.MainMapper;
 import com.dasom2.service.LoginService;
-import com.dasom2.vo.LoginLogVO;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -19,6 +16,9 @@ public class mainController {
 	
 	@Autowired
 	LoginService loginService;
+	
+	@Autowired
+	MainMapper MainMapper;
 	
 	//메인페이지
     @GetMapping("/mainPage")
@@ -32,5 +32,9 @@ public class mainController {
         return "mainPage";
     }
     
+    @GetMapping("/getMeetingSchedule")
+    public String  getMeetingSchedule(@RequestParam("userId") String userId) {
+    	return MainMapper.getMeetingSchedule(userId);
+    }
     
 }
