@@ -13,6 +13,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <!-- <script src="dashboard.js"></script>  -->
     
@@ -48,20 +49,22 @@
 </div>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 <script>
 $(document).ready(function() {
+	
     $('#dateSelectBtn').click(function() {
-    	dateSelectModalContent('dateSelect');
+    	dateSelectModalContent("${userId}");
     });
 
-    $('#statusViewBtn').click(function() {
+ /*    $('#statusViewBtn').click(function() {
     	statusModalContent('statusView');
     });
 
     $('#matchingBtn').click(function() {
     	matchingModalContent('matching');
-    });
+    }); */
 
     
     
@@ -75,6 +78,8 @@ $(document).ready(function() {
             success: function(data) {
                 var content = "";
                 data.forEach(function(schedule) {
+                	console.log(schedule.userId);
+                	console.log(userId);
                     // 선택 여부에 따라 버튼 텍스트 설정
                     var buttonText = "";
                     if(schedule.userId === userId) {
@@ -82,6 +87,7 @@ $(document).ready(function() {
                     } else {
                         buttonText = "선택";
                     }
+                    console.log(buttonText);
                     
                     content += `<p>${schedule.episode}
                         <button type="button" class="btn btn-info btn-sm" id="btn_${schedule.episode}" onclick="toggleSelection('${userId}', '${schedule.episode}')">${buttonText}</button>
@@ -89,7 +95,7 @@ $(document).ready(function() {
                 });
 
                 $(".modal-body").html(content);
-                $("#matchModal").modal('show');
+                $("#modal").modal('show');
             },
             error: function(xhr, status, error) {
                 console.error("Error: " + error);
@@ -121,7 +127,7 @@ $(document).ready(function() {
             }
         });
     }
-    
+});
     
 </script>
 

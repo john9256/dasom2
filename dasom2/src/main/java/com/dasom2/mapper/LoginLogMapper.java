@@ -9,7 +9,7 @@ import com.dasom2.vo.LoginLogVO;
 @Mapper
 public interface LoginLogMapper {
 
-    @Insert("INSERT INTO login_log(user_id, ip, createtime, successflag, count) VALUES(#{userId}, #{ip}, #{createtime}, #{successflag}, #{count})")
+    @Insert("INSERT INTO login_log(user_id, ip,  successflag, count) VALUES(#{userId}, #{ip}, #{successflag}, #{count})")
     void insertLog(LoginLogVO log);
     
     @Select("SELECT count FROM login_log WHERE username = #{userId} ORDER BY createtime DESC LIMIT 1")
