@@ -35,7 +35,7 @@
     </update>
     <insert id="insertUser" parameterType="RegisterUserVO">
         insert into user_table(user_id, password, user_name, phone_number, email, sex, birthday, height, company_name, job_division, residence, job_residence) 
-        VALUES(#{userId}, #{password}, #{userName}, #{phoneNumber}, #{email}, #{sex}, STR_TO_DATE(#{birthday}, '%Y'), #{height}, #{companyName}, #{jobDivision}, #{residence}, #{jobResidence})
+        VALUES(#{userId}, #{password}, #{userName}, #{phoneNumber}, #{email}, #{sex}, STR_TO_DATE(CONCAT(#{birthday}, '-01-01'), '%Y-%m-%d'), #{height}, #{companyName}, #{jobDivision}, #{residence}, #{jobResidence})
     </insert>
 
     <insert id="insertUserImage" parameterType="RegisterUserImageVO">

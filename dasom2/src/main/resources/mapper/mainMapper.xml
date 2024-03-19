@@ -2,7 +2,7 @@
 <mapper namespace="com.dasom2.mapper.MainMapper">
 
     <select id="getMeetingSchedule" resultType="MeetingScheduleVO" parameterType="String">
-        SELECT A.EPISODE AS episode, B.USER_ID AS userId FROM MEETING_SCHEDULE A
+        SELECT DATE_FORMAT(A.EPISODE, '%m월 %d일') AS episode, B.USER_ID AS userId FROM MEETING_SCHEDULE A
         LEFT OUTER JOIN
         (SELECT * FROM PARTICIPANT_USER WHERE USER_ID = #{userId}) B
         ON A.EPISODE = B.EPISODE

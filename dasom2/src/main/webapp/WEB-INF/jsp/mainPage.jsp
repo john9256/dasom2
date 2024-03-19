@@ -77,9 +77,10 @@ $(document).ready(function() {
             },
             success: function(data) {
                 var content = "";
+                //var episode = "";
                 data.forEach(function(schedule) {
-                	console.log(schedule.userId);
-                	console.log(userId);
+                	episode = schedule.episode;
+                	
                     // 선택 여부에 따라 버튼 텍스트 설정
                     var buttonText = "";
                     if(schedule.userId === userId) {
@@ -87,10 +88,9 @@ $(document).ready(function() {
                     } else {
                         buttonText = "선택";
                     }
-                    console.log(buttonText);
                     
-                    content += `<p>${schedule.episode}
-                        <button type="button" class="btn btn-info btn-sm" id="btn_${schedule.episode}" onclick="toggleSelection('${userId}', '${schedule.episode}')">${buttonText}</button>
+                    content += `<p>`+episode+`
+                        <button type="button" class="btn btn-info btn-sm" id="btn_`+episode+`" onclick="toggleSelection('${userId}', `+episode+`)">`+buttonText+`</button>
                         </p>`;
                 });
 
