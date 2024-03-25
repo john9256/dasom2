@@ -133,10 +133,10 @@ $(document).ready(function() {
 	            		userId: $("#userId").val()},
 	            success: function(isRequested) {
 	                if (isRequested) {
-	                    alert("이메일 인증을 요청했습니다. 이메일을 확인해 주세요.");
+	                    alert("이메일 인증을 요청했습니다.\n 이메일을 확인해 주세요.");
 	                    isEmailSended = true;
 	                } else {
-	                    alert("이메일 인증 요청에 실패했습니다. 잘못된 이메일 혹은 이메일이 중복되어 있지 않은지 확인하세요.");
+	                    alert("이메일 인증 요청에 실패했습니다.\n 잘못된 이메일 혹은 이메일이 중복되어 있지 않은지 확인하세요.");
 	                    isEmailSended = false;
 	                }
 	            }

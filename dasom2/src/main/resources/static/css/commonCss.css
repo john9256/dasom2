@@ -1,0 +1,17 @@
+.right-button{
+   float: right;
+   width: 100px
+}
+
+.top-text{
+     font-size: 40px;
+     text-align: center;
+     color: #ff85a2;
+     text-decoration: none; /* 밑줄을 제거하여 링크가 클릭 가능함을 보여줍니다. */
+     font-weight: bold;
+    }
+
+    .selectedBtn{
+    	background-color: #ff85a2 !important;
+        border-color: #ff85a2;
+    }

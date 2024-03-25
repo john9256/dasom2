@@ -38,13 +38,17 @@ public class mainController {
         return "mainPage";
     }
     
-    // 소개팅 날짜 선택 모달 data
+    // 소개팅 스케줄 날짜 선택 모달 data
     @ResponseBody
     @PostMapping("/getMeetingSchedule")
     public List<MeetingScheduleVO> getMeetingSchedule(@RequestParam("userId") String userId) {
     	return MainService.getMeetingSchedule(userId);
     }
     
-    
+    @ResponseBody
+    @PostMapping("/updateScheduleSelection")
+    public void updateScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected) {
+    	MainService.updateScheduleSelection(userId, episode, episodeSelected);
+    }
     
 }
