@@ -17,8 +17,10 @@ public class MainService {
 		return MainMapper.getMeetingSchedule(userId);
 	}
 	
-	public void updateScheduleSelection(String userId, String episode, Boolean episodeSelected) {
+	public boolean updateScheduleSelection(String userId, String episode, Boolean episodeSelected) {
+		MainMapper.checkHeadCount(episode);
 		MainMapper.getMeetingSchedule(userId, episode, episodeSelected);
+		
 	}
 	
     

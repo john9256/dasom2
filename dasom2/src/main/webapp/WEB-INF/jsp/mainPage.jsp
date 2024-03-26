@@ -163,6 +163,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error("Error: " + error);
+                alert("스케줄을 불러오는데 실패했습니다.");
             }
         });
     }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dasom2.mapper.MainMapper;
 import com.dasom2.service.LoginService;
 import com.dasom2.service.MainService;
 import com.dasom2.vo.MeetingScheduleVO;
@@ -41,14 +40,19 @@ public class mainController {
     // 소개팅 스케줄 날짜 선택 모달 data
     @ResponseBody
     @PostMapping("/getMeetingSchedule")
-    public List<MeetingScheduleVO> getMeetingSchedule(@RequestParam("userId") String userId) {
+    public List<MeetingScheduleVO> getMeetingSchedule(@RequestParam("userId") String userId, HttpSession session) {
+    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     	return MainService.getMeetingSchedule(userId);
+    	}
+		return null;
     }
     
     @ResponseBody
     @PostMapping("/updateScheduleSelection")
-    public void updateScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected) {
-    	MainService.updateScheduleSelection(userId, episode, episodeSelected);
+    public boolean updateScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
+    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    	return MainService.updateScheduleSelection(userId, episode, episodeSelected);
+    	}
     }
     
 }
