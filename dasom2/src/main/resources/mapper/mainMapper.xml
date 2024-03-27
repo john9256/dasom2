@@ -8,7 +8,16 @@
         ON A.EPISODE = B.EPISODE
         WHERE A.COMPLETE_FLAG = 'N'
         ORDER BY A.EPISODE ASC
-        
+    </select>
+    
+    <select id="checkHeadCount" resultType="String" parameterType="String">
+        SELECT episode from MEETING_SCHEDULE
+		WHERE EPISODE = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d')
+		AND 
+		HEADCOUNT >= (
+		select COUNT(*) from participant_user a
+		where a.episode = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d')
+		)
     </select>
     
 </mapper>

@@ -51,8 +51,9 @@ public class mainController {
     @PostMapping("/updateScheduleSelection")
     public boolean updateScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
-    	return MainService.updateScheduleSelection(userId, episode, episodeSelected);
+    	return MainService.updateScheduleSelection(userId, episode, episodeSelected); 
     	}
+    	return false;
     }
     
 }
