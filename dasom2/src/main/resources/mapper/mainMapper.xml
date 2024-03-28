@@ -14,7 +14,7 @@
          SELECT episode from MEETING_SCHEDULE
 		WHERE EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
 		AND 
-		HEADCOUNT &lt;= (
+		HEADCOUNT &gt; (
 		SELECT COUNT(*) FROM PARTICIPANT_USER A
 		WHERE A.EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
 		)

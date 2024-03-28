@@ -17,18 +17,20 @@ public class MainService {
 		return MainMapper.getMeetingSchedule(userId);
 	}
 	
-	public boolean insertScheduleSelection(String userId, String episode, Boolean episodeSelected) {
-		// 스케줄에 인원수가 꽉 차면 false 반환
+	public boolean insertScheduleSelection(String userId, String episode, String episodeSelected) {
+		// 스케줄에 인원수가 남으면 참가인원에 insert
 		if(MainMapper.checkHeadCount(episode) == null) {
-			return false;
-		}
-		else {
-		MainMapper.insertScheduleSelection(userId, episode, episodeSelected);
+			MainMapper.insertScheduleSelection(userId, episode, episodeSelected);
 			return true;
 		}
-		
+		else {
+			return false;
+		}
 	}
 	
-    
+	public boolean deleteScheduleSelection(String userId, String episode, String episodeSelected) {
+		MainMapper.deleteScheduleSelection(userId, episode, episodeSelected);
+		return true;
+	}
 }
 

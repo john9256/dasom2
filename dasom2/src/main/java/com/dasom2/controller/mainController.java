@@ -49,13 +49,13 @@ public class mainController {
     
     @ResponseBody
     @PostMapping("/ScheduleSelection")
-    public boolean ScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
+    public boolean ScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") String episodeSelected, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
-    	 if(episodeSelected) {
+    	 if(episodeSelected.equalsIgnoreCase("선택")) {
     		 return MainService.insertScheduleSelection(userId, episode, episodeSelected); 
     	 }
     	 else {
-    		 
+    		 return MainService.deleteScheduleSelection(userId, episode, episodeSelected);
     	 }
     	}
     	return false;

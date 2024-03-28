@@ -174,29 +174,34 @@ function toggleSelection(userId, episode) {
     // 선택된 회차의 버튼 ID를 구성
     var btnId = "btn_" + episode;
     var episodeSelected = document.getElementById(btnId).textContent === '선택';
-    
-    $.ajax({
-        url: "/ScheduleSelection",
-        type: "POST",
-        data: {
-            userId: userId,
-            episode: episode,
-            episodeSelected: episodeSelected
-        },
-        success: function(data) {
-            // 성공 시 버튼 텍스트 업데이트
-            if(data == true){
-            document.getElementById(btnId).textContent = episodeSelected ? '선택함' : '선택';
+
+    // 사용자에게 스케줄 선택 확인 요청
+    var userConfirmed = confirm("해당 날짜에 소개팅을 신청하시겠습니까?");
+
+    // 사용자가 확인을 누른 경우에만 AJAX 통신 실행
+    if(userConfirmed) {
+        $.ajax({
+            url: "/ScheduleSelection",
+            type: "POST",
+            data: {
+                userId: userId,
+                episode: episode,
+                episodeSelected: episodeSelected
+            },
+            success: function(data) {
+                // 성공 시 버튼 텍스트 업데이트
+                if(data == true) {
+                    document.getElementById(btnId).textContent = episodeSelected ? '선택함' : '선택';
+                } else {
+                    alert("소개팅 신청에 실패했습니다.");
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Selection update failed: " + error);
+                alert("소개팅 신청에 실패했습니다.");
             }
-            else{
-            	alert("스케줄 선택에 실패했습니다.");
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error("Selection update failed: " + error);
-            alert("스케줄 선택에 실패했습니다.");
-        }
-    });
+        });
+    }
 }
 
 </script>
