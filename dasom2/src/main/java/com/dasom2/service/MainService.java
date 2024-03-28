@@ -17,13 +17,13 @@ public class MainService {
 		return MainMapper.getMeetingSchedule(userId);
 	}
 	
-	public boolean updateScheduleSelection(String userId, String episode, Boolean episodeSelected) {
+	public boolean insertScheduleSelection(String userId, String episode, Boolean episodeSelected) {
 		// 스케줄에 인원수가 꽉 차면 false 반환
 		if(MainMapper.checkHeadCount(episode) == null) {
 			return false;
 		}
 		else {
-		MainMapper.updateScheduleSelection(userId, episode, episodeSelected);
+		MainMapper.insertScheduleSelection(userId, episode, episodeSelected);
 			return true;
 		}
 		

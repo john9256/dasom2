@@ -176,16 +176,21 @@ function toggleSelection(userId, episode) {
     var episodeSelected = document.getElementById(btnId).textContent === '선택';
     
     $.ajax({
-        url: "/updateScheduleSelection",
+        url: "/ScheduleSelection",
         type: "POST",
         data: {
             userId: userId,
             episode: episode,
             episodeSelected: episodeSelected
         },
-        success: function() {
+        success: function(data) {
             // 성공 시 버튼 텍스트 업데이트
+            if(data == true){
             document.getElementById(btnId).textContent = episodeSelected ? '선택함' : '선택';
+            }
+            else{
+            	alert("스케줄 선택에 실패했습니다.");
+            }
         },
         error: function(xhr, status, error) {
             console.error("Selection update failed: " + error);

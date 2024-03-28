@@ -48,10 +48,15 @@ public class mainController {
     }
     
     @ResponseBody
-    @PostMapping("/updateScheduleSelection")
-    public boolean updateScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
+    @PostMapping("/ScheduleSelection")
+    public boolean ScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
-    	return MainService.updateScheduleSelection(userId, episode, episodeSelected); 
+    	 if(episodeSelected) {
+    		 return MainService.insertScheduleSelection(userId, episode, episodeSelected); 
+    	 }
+    	 else {
+    		 
+    	 }
     	}
     	return false;
     }
