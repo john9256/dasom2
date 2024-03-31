@@ -1,6 +1,8 @@
 package com.dasom2.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,16 +51,18 @@ public class mainController {
     
     @ResponseBody
     @PostMapping("/ScheduleSelection")
-    public boolean ScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") String episodeSelected, HttpSession session) {
+    public Map<String, Object> ScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
-    	 if(episodeSelected.equalsIgnoreCase("선택")) {
+    	 if(episodeSelected == true) {
     		 return MainService.insertScheduleSelection(userId, episode, episodeSelected); 
     	 }
     	 else {
     		 return MainService.deleteScheduleSelection(userId, episode, episodeSelected);
     	 }
     	}
-    	return false;
+    	Map<String, Object> status = new HashMap<String, Object>();
+		status.put("status", "fail");
+		return status;
     }
     
 }

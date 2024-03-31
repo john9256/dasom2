@@ -189,12 +189,21 @@ function toggleSelection(userId, episode) {
                 episodeSelected: episodeSelected
             },
             success: function(data) {
+            	var btn = document.getElementById(btnId);
                 // 성공 시 버튼 텍스트 업데이트
-                if(data == true) {
-                    document.getElementById(btnId).textContent = episodeSelected ? '선택함' : '선택';
-                } else {
-                    alert("소개팅 신청에 실패했습니다.");
-                }
+            	 if(data.status == "complete") {
+           	        btn.textContent = '선택함';
+           	        btn.className = "btn btn-info btn-sm right-button selectedBtn"; // 선택된 스타일 적용
+           	        alert("소개팅 신청에 성공했습니다.");
+           	    } else if (data.status == "full"){
+           	        alert("남은 자리가 없습니다.");
+           	    } else if(data.status == "cancel") {
+           	        btn.textContent = '선택';
+           	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
+           	        alert("소개팅 신청을 취소했습니다.");
+           	    } else {
+           	        alert("소개팅 신청에 실패했습니다.");
+           	    }
             },
             error: function(xhr, status, error) {
                 console.error("Selection update failed: " + error);

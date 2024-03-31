@@ -21,12 +21,11 @@
     </select>
     
     <insert id="insertScheduleSelection"  parameterType="String">
-        SELECT DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일') AS episode, B.USER_ID AS userId FROM MEETING_SCHEDULE A
-        LEFT OUTER JOIN
-        (SELECT * FROM PARTICIPANT_USER WHERE USER_ID = #{userId}) B
-        ON A.EPISODE = B.EPISODE
-        WHERE A.COMPLETE_FLAG = 'N'
-        ORDER BY A.EPISODE ASC
+        INSERT INTO PARTICIPANT_USER(USER_ID, EPISODE) VALUES(#{userId}, DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'))
     </insert>
+    
+    <delete id="deleteScheduleSelection"  parameterType="String">
+        DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일')
+    </delete>
     
 </mapper>

@@ -1,5 +1,8 @@
 package com.dasom2.service;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,20 +20,27 @@ public class MainService {
 		return MainMapper.getMeetingSchedule(userId);
 	}
 	
-	public boolean insertScheduleSelection(String userId, String episode, String episodeSelected) {
+	public Map<String, Object> insertScheduleSelection(String userId, String episode, Boolean episodeSelected) {
 		// 스케줄에 인원수가 남으면 참가인원에 insert
-		if(MainMapper.checkHeadCount(episode) == null) {
+		if(MainMapper.checkHeadCount(episode) != null) {
 			MainMapper.insertScheduleSelection(userId, episode, episodeSelected);
-			return true;
+			Map<String, Object> status = new HashMap<String, Object>();
+			status.put("status", "complete");
+			return status;
 		}
 		else {
-			return false;
+			Map<String, Object> status = new HashMap<String, Object>();
+			status.put("status", "full");
+			return status;
 		}
+		
 	}
 	
-	public boolean deleteScheduleSelection(String userId, String episode, String episodeSelected) {
+	public Map<String, Object> deleteScheduleSelection(String userId, String episode, Boolean episodeSelected) {
 		MainMapper.deleteScheduleSelection(userId, episode, episodeSelected);
-		return true;
+		Map<String, Object> status = new HashMap<String, Object>();
+		status.put("status", "cancel");
+		return status;
 	}
 }
 

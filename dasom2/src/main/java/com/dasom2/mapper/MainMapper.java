@@ -10,7 +10,7 @@ import com.dasom2.vo.MeetingScheduleVO;
 public interface MainMapper {
     
 	List<MeetingScheduleVO> getMeetingSchedule(String userId);
-	void insertScheduleSelection(String userId, String episode, String episodeSelected);
-	void deleteScheduleSelection(String userId, String episode, String episodeSelected);
+	void insertScheduleSelection(String userId, String episode, Boolean episodeSelected);
+	void deleteScheduleSelection(String userId, String episode, Boolean episodeSelected);
 	String checkHeadCount(String episode);
 }
