@@ -2,7 +2,7 @@
 <mapper namespace="com.dasom2.mapper.MainMapper">
 
     <select id="getMeetingSchedule" resultType="MeetingScheduleVO" parameterType="String">
-        SELECT DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일') AS episode, B.USER_ID AS userId FROM MEETING_SCHEDULE A
+        SELECT DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일') AS episode, B.USER_ID AS userId, A.LOCATION AS location FROM MEETING_SCHEDULE A
         LEFT OUTER JOIN
         (SELECT * FROM PARTICIPANT_USER WHERE USER_ID = #{userId}) B
         ON A.EPISODE = B.EPISODE
@@ -21,11 +21,11 @@
     </select>
     
     <insert id="insertScheduleSelection"  parameterType="String">
-        INSERT INTO PARTICIPANT_USER(USER_ID, EPISODE) VALUES(#{userId}, DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'))
+        INSERT INTO PARTICIPANT_USER(USER_ID, EPISODE) VALUES(#{userId}, DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00'))
     </insert>
     
     <delete id="deleteScheduleSelection"  parameterType="String">
-        DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일')
+        DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
     </delete>
     
 </mapper>

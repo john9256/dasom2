@@ -119,15 +119,6 @@ $(document).ready(function() {
     	dateSelectModalContent("${userId}");
     });
 
- /*    $('#statusViewBtn').click(function() {
-    	statusModalContent('statusView');
-    });
-
-    $('#matchingBtn').click(function() {
-    	matchingModalContent('matching');
-    }); */
-
-    
     
     function dateSelectModalContent(userId) {
         $.ajax({
@@ -138,9 +129,12 @@ $(document).ready(function() {
             },
             success: function(data) {
                 var content = "";
+                var episode;
+                var location;
                 //var episode = "";
                 data.forEach(function(schedule) {
                 	episode = schedule.episode;
+                	location = schedule.location;
                 	
                     // 선택 여부에 따라 버튼 텍스트 설정
                     var buttonText = "";
@@ -153,7 +147,7 @@ $(document).ready(function() {
                     }
                     var buttonClass = schedule.userId === userId ? "btn-selected" : "";
                     
-                    content += `<p>`+episode+`
+                    content += `<p>`+ episode +` (`+ location +`) 
                         <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelection('${userId}', '`+episode+`')">`+buttonText+`</button>
                         </p>`;
                 });
@@ -176,7 +170,13 @@ function toggleSelection(userId, episode) {
     var episodeSelected = document.getElementById(btnId).textContent === '선택';
 
     // 사용자에게 스케줄 선택 확인 요청
-    var userConfirmed = confirm("해당 날짜에 소개팅을 신청하시겠습니까?");
+    var userConfirmed;
+    	if(episodeSelected){
+    		userConfirmed = confirm("소개팅을 신청하시겠습니까?");
+    		}
+    	else{
+    		userConfirmed = confirm("소개팅을 취소하시겠습니까?");
+    	}
 
     // 사용자가 확인을 누른 경우에만 AJAX 통신 실행
     if(userConfirmed) {

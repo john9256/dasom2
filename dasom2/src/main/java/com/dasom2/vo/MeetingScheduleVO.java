@@ -5,7 +5,14 @@ public class MeetingScheduleVO {
 	String userId;
 	String episode;
 	String episodeSelected;
+	String location;
 	
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
 	public String getUserId() {
 		return userId;
 	}
