@@ -8,74 +8,143 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <title>회원 가입</title>
-
 <style>
-body {
-	background-color: #f8f9fa;
-}
+        body {
+            background-color: #f8f9fa;
+        }
 
-.card {
-	margin-top: 100px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
+        .card {
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-.card-header {
-	background-color: #f8a5c2;
-	color: #fff;
-}
+        .card-header, .btn-primary {
+            background-color: #f8a5c2;
+            color: #fff;
+        }
 
-.btn-primary {
-	background-color: #f8a5c2;
-	border-color: #f8a5c2;
-}
+        .btn-primary:hover {
+            background-color: #e687a6;
+            border-color: #e687a6;
+        }
 
-.btn-primary:hover {
-	background-color: #e687a6;
-	border-color: #e687a6;
-}
+        .form-control:focus {
+            border-color: #f8a5c2;
+            box-shadow: 0 0 0 0.2rem rgba(248, 165, 194, 0.25);
+        }
 
-</style>
-
+        .custom-file-input:focus ~ .custom-file-label {
+            border-color: #f8a5c2;
+            box-shadow: 0 0 0 0.2rem rgba(248, 165, 194, 0.25);
+        }
+    </style>
 </head>
 <body>
-<form action="/register" method="post" enctype="multipart/form-data">
-아이디: <input type="text" name="userId" id="userId" required /><br/>
-비밀번호: <input type="password" name="password" id="password" required /><br/>
-이름: <input type="text" name="userName" id="userName" required /><br/>
-전화번호: <input type="text" name="phoneNumber" id="phoneNumber" placeholder="숫자만 입력해주세요" required /><br/>
-이메일: <input type="text" name="email" id="email" required /><br/>
-<button type="button" id="sendEmailVerification">이메일 인증</button><br/>
-성별: 
-<select name="sex" id="sex" required>
-    <option value="남">남</option>
-    <option value="녀">녀</option>
-</select><br/>
-생일:
-<select name="birthday" id="birthday" required>
-    <% for (int year = 1980; year <= 2010; year++) { %>
-        <option value="<%= year %>"><%= year %></option>
-    <% } %>
-</select>
-<br/>
-키:
-<select name="height" id="height" required>
-    <% for (int height = 150; height <= 190; height++) { %>
-        <option value="<%= height %>"><%= height %>cm</option>
-    <% } %>
-</select><br/>
-직장명: <input type="text" name="companyName" id="companyName" required /><br/>
-직무: <input type="text" name="jobDivision" id="jobDivision" placeholder="IT 개발자, " required /><br/>
-거주지: <select name="residence" id="residence" required>
-    <option value="">거주지를 선택해주세요</option>
-</select><br/>
-직장 위치: <select name="jobResidence" id="jobResidence" required>
-    <option value="">직장 위치를 선택해주세요</option>
-</select><br/>
-신분증 이미지: <input type="file" name="idCardImage" id="idCardImage" required /><br/>
-명함 이미지: <input type="file" name="businessCardImage" id="businessCardImage" required /><span>현재 재직중인 직장의 명함으로 부탁합니다</span><br/>
-본인 사진: <input type="file" name="selfImage" id="selfImage" required /><span>최근 1년 안의 사진으로 부탁합니다</span><br/>
-<input type="submit" value="회원가입" />
-</form>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">소개팅 준비를 해주세요!</div>
+                <div class="card-body">
+                    <form action="/register" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="userId">아이디:</label>
+                            <input type="text" class="form-control" name="userId" id="userId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">비밀번호:</label>
+                            <input type="password" class="form-control" name="password" id="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="userName">이름:</label>
+                            <input type="text" class="form-control" name="userName" id="userName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNumber">전화번호:</label>
+                            <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="숫자만 입력해주세요" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">이메일:</label>
+                            <input type="text" class="form-control" name="email" id="email" required>
+                        </div>
+						<div class="form-group">
+						    <button type="button" id="sendEmailVerification" class="btn btn-primary">이메일 인증</button>
+						</div>
+						<div id="loadingMessage" style="display: none;">이메일 인증을 요청중입니다...</div>
+						<div class="form-group">
+						    <label for="sex">성별:</label>
+						    <select class="form-control" name="sex" id="sex" required>
+						        <option value="남">남</option>
+						        <option value="녀">녀</option>
+						    </select>
+						</div>
+						<div class="form-group">
+						    <label for="birthday">생일:</label>
+						    <select class="form-control" name="birthday" id="birthday" required>
+						        <% for (int year = 1980; year <= 2010; year++) { %>
+						            <option value="<%= year %>"><%= year %></option>
+						        <% } %>
+						    </select>
+						</div>
+						<div class="form-group">
+						    <label for="height">키:</label>
+						    <select class="form-control" name="height" id="height" required>
+						        <% for (int height = 150; height <= 190; height++) { %>
+						            <option value="<%= height %>"><%= height %>cm</option>
+						        <% } %>
+						    </select>
+						</div>
+						<div class="form-group">
+						    <label for="companyName">직장명:</label>
+						    <input type="text" class="form-control" name="companyName" id="companyName" required>
+						</div>
+						<div class="form-group">
+						    <label for="jobDivision">직무:</label>
+						    <input type="text" class="form-control" name="jobDivision" id="jobDivision" placeholder="IT 개발자, " required>
+						</div>
+						<div class="form-group">
+						    <label for="residence">거주지:</label>
+						    <select class="form-control" name="residence" id="residence" required>
+						        <option value="">거주지를 선택해주세요</option>
+						        <!-- Dynamic options should be loaded here -->
+						    </select>
+						</div>
+						<div class="form-group">
+						    <label for="jobResidence">직장 위치:</label>
+						    <select class="form-control" name="jobResidence" id="jobResidence" required>
+						        <option value="">직장 위치를 선택해주세요</option>
+						        <!-- Dynamic options should be loaded here -->
+						    </select>
+						</div>
+						<div class="form-group">
+						    <label for="idCardImage">신분증 이미지:</label>
+						    <input type="file" class="form-control-file" name="idCardImage" id="idCardImage" required>
+						</div>
+						<div class="form-group">
+						    <label for="businessCardImage">명함 이미지:</label>
+						    <input type="file" class="form-control-file" name="businessCardImage" id="businessCardImage" required>
+						    <small class="form-text text-muted">현재 재직중인 직장의 명함으로 부탁합니다</small>
+						</div>
+						<div class="form-group">
+						    <label for="selfImage">본인 사진:</label>
+						    <input type="file" class="form-control-file" name="selfImage" id="selfImage" required>
+						    <small class="form-text text-muted">최근 1년 안의 사진으로 부탁합니다</small>
+						</div>
+                        <button type="submit" class="btn btn-primary">회원가입</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 
@@ -126,6 +195,7 @@ $(document).ready(function() {
             alert("ID를 먼저 입력해주세요.");
             return false; // 버튼 동작 막기		
     	}
+    	$("#loadingMessage").show();
 	        $.ajax({
 	            url: "/sendEmailVerification",
 	            type: "POST",
@@ -139,6 +209,13 @@ $(document).ready(function() {
 	                    alert("이메일 인증 요청에 실패했습니다.\n 잘못된 이메일 혹은 이메일이 중복되어 있지 않은지 확인하세요.");
 	                    isEmailSended = false;
 	                }
+	            },
+	            error: function() {
+	                alert("이메일 인증 요청 중 오류가 발생했습니다.");
+	            },
+	            complete: function() {
+	                // Hide loading message
+	                $("#loadingMessage").hide();
 	            }
 	        });
     });
