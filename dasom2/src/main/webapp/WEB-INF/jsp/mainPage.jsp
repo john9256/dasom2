@@ -114,14 +114,23 @@
 
 <script>
 $(document).ready(function() {
-	console.log("${userId}");
+	
     $('#dateSelectBtn').click(function() {
     	dateSelectModalContent("${userId}");
     });
-
+	
+    $('#statusViewBtn').click(function() {
+    	matchingModalContent("${userId}");
+    });
     
-    function dateSelectModalContent(userId) {
-        $.ajax({
+    $('#matchingBtn').click(function() {
+    	matchingModalContent("${userId}");
+    });
+    
+    
+    function matchingModalContent(userId) {
+    	$(".modal-body").html("");
+    	$.ajax({
             url: "/getMeetingSchedule",
             type: "POST",
             data: {
@@ -132,6 +141,7 @@ $(document).ready(function() {
                 var episode;
                 var location;
                 //var episode = "";
+                $(".modal-body").html("");
                 data.forEach(function(schedule) {
                 	episode = schedule.episode;
                 	location = schedule.location;
@@ -161,6 +171,50 @@ $(document).ready(function() {
             }
         });
     }
+    
+ 	function dateSelectModalContent(userId) {
+ 		$(".modal-body").html("");
+      $.ajax({
+          url: "/getMeetingSchedule",
+          type: "POST",
+          data: {
+              userId: userId
+          },
+          success: function(data) {
+              var content = "";
+              var episode;
+              var location;
+              //var episode = "";
+              
+              data.forEach(function(schedule) {
+              	episode = schedule.episode;
+              	location = schedule.location;
+              	
+                  // 선택 여부에 따라 버튼 텍스트 설정
+                  var buttonText = "";
+                  var selectedCss = " ";
+                  if(schedule.userId === userId) {
+                      buttonText = "선택함";
+                      selectedCss = ' selectedBtn';
+                  } else {
+                      buttonText = "선택";
+                  }
+                  var buttonClass = schedule.userId === userId ? "btn-selected" : "";
+                  
+                  content += `<p>`+ episode +` (`+ location +`) 
+                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelection('${userId}', '`+episode+`')">`+buttonText+`</button>
+                      </p>`;
+              });
+
+              $(".modal-body").html(content);
+              $("#modal").modal('show');
+          },
+          error: function(xhr, status, error) {
+              console.error("Error: " + error);
+              alert("스케줄을 불러오는데 실패했습니다.");
+          }
+      });
+  }
     
 });
 
