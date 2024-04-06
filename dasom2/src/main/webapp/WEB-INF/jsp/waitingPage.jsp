@@ -9,7 +9,7 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/commonCss.css">
-    <title>메인페이지</title>
+    <title>대기 페이지</title>
     <style>
     .full-screen-wrapper {
         display: flex;
@@ -50,6 +50,14 @@
      font-weight: bold;
     }
     
+    .second-text{
+     font-size: 20px;
+     text-align: center;
+     color: #ff85a2;
+     text-decoration: none; /* 밑줄을 제거하여 링크가 클릭 가능함을 보여줍니다. */
+     font-weight: bold;
+    }
+    
     .top-text a:link, .top-text a:visited {
     color: #ff85a2; /* 방문하지 않은 링크 */
     text-decoration: none; /* 밑줄 제거 */
@@ -80,11 +88,11 @@
 <body>
 <div class="container mt-3">
     <div class="top-text"><a href="/mainPage">다솜 소개팅</a></div>
+    <div class="second-text"><a href="/mainPage">호스트가 회원가입을 확인중에 있습니다.<br> 확인 완료 후 사용 가능합니다</a></div>
     <div class="full-screen-wrapper">
     <div class="button-container">
+    	<button id="guideBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">소개팅 가이드</button>
         <button id="dateSelectBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">날짜 선택</button>
-        <button id="statusViewBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">현황 화면</button>
-        <button id="matchingBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">두근두근 매칭</button>
     </div>
 </div>
 </div>
@@ -123,60 +131,15 @@ $(document).ready(function() {
     	matchingModalContent("${userId}");
     });
     
-    $('#matchingBtn').click(function() {
-    	matchingModalContent("${userId}");
+    $('#guideBtn').click(function() {
+    	matchingModalContent();
     });
     
-    // 두근두근 매칭 모달
-    function matchingModalContent(userId) {
-    	$(".modal-body").html("");
-    	$("#modalLabel").html("마음에 드는 이성 두명을 골라주세요~");
-    	$.ajax({
-            url: "/getMatchingInfo",
-            type: "POST",
-            data: {
-                userId: userId
-            },
-            success: function(data) {
-                var content = "";
-                var episode;
-                var location;
-                //var episode = "";
-                $(".modal-body").html("");
-                data.forEach(function(schedule) {
-                	episode = schedule.episode;
-                	location = schedule.location;
-                	
-                    // 선택 여부에 따라 버튼 텍스트 설정
-                    var buttonText = "";
-                    var selectedCss = " ";
-                    if(schedule.userId === userId) {
-                        buttonText = "선택함";
-                        selectedCss = ' selectedBtn';
-                    } else {
-                        buttonText = "선택";
-                    }
-                    var buttonClass = schedule.userId === userId ? "btn-selected" : "";
-                    
-                    content += `<p>`+ episode +` (`+ location +`) 
-                        <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelection('${userId}', '`+episode+`')">`+buttonText+`</button>
-                        </p>`;
-                });
-
-                $(".modal-body").html(content);
-                $("#modal").modal('show');
-            },
-            error: function(xhr, status, error) {
-                console.error("Error: " + error);
-                alert("스케줄을 불러오는데 실패했습니다.");
-            }
-        });
-    }
     
-    // 날짜 선택 모달
- 	function dateSelectModalContent(userId) {
+    // 소개팅 가이드 모달
+ 	function dateSelectModalContent() {
  		$(".modal-body").html("");
- 		$("#modalLabel").html("소개팅 날짜 선택");
+ 		$("#modalLabel").html("소개팅 가이드");
       $.ajax({
           url: "/getMeetingSchedule",
           type: "POST",

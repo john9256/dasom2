@@ -13,4 +13,5 @@ public interface MainMapper {
 	void insertScheduleSelection(String userId, String episode, Boolean episodeSelected);
 	void deleteScheduleSelection(String userId, String episode, Boolean episodeSelected);
 	String checkHeadCount(String episode);
+	String getPassFlagbyUser(String userId);
 }

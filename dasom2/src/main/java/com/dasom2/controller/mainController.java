@@ -28,15 +28,29 @@ public class mainController {
 	MainService MainService;
 	
 	//메인페이지
-    @GetMapping("/mainPage")
+    @SuppressWarnings("unused")
+	@GetMapping("/mainPage")
     public String mainPage(Model model, HttpSession session) {
         // 로그인이 필요한 경우 로그인 페이지로 리디렉션
+    	
+    	model.addAttribute("userId", session.getAttribute("userId"));
+    	
         if (session.getAttribute("userId") == null) {
             return "redirect:/loginPage";
         }
-
-        model.addAttribute("userId", session.getAttribute("userId"));
-        return "mainPage";
+        
+        // 소개팅 신청 서류 합격 인원에게만 메인 페이지 보여주기
+        System.out.println(MainService.getPassFlagbyUser(String.valueOf(session.getAttribute("userId"))));
+        if(
+        		false
+//        		MainService.getPassFlagbyUser(String.valueOf(session.getAttribute("userId"))).equalsIgnoreCase("Y")
+        		
+        		) {
+        	return "mainPage";
+        }
+        else {
+        	return "waitingPage";
+        }
     }
     
     // 소개팅 스케줄 날짜 선택 모달 data

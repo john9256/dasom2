@@ -1,5 +1,4 @@
 package com.dasom2.service;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +40,10 @@ public class MainService {
 		Map<String, Object> status = new HashMap<String, Object>();
 		status.put("status", "cancel");
 		return status;
+	}
+	
+	public String getPassFlagbyUser(String userId) {
+		return MainMapper.getPassFlagbyUser(userId);
 	}
 }
 

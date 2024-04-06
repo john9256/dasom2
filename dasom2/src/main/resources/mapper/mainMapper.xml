@@ -28,4 +28,8 @@
         DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
     </delete>
     
+    <select id="getPassFlagbyUser" resultType="String" parameterType="String">
+    	SELECT pass_flag FROM user_manage WHERE user_id = #{userId}
+    </select>
+    
 </mapper>
