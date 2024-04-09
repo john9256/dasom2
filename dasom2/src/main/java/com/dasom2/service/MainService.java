@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.dasom2.mapper.MainMapper;
 import com.dasom2.vo.MeetingScheduleVO;
+import com.dasom2.vo.matchPersonVO;
 
 @Service
 public class MainService { 
@@ -19,10 +20,13 @@ public class MainService {
 		return MainMapper.getMeetingSchedule(userId);
 	}
 	
-	public Map<String, Object> insertScheduleSelection(String userId, String episode, Boolean episodeSelected) {
+	public Map<String, Object> insertParticipantUser(String userId, String episode, Boolean episodeSelected) {
 		// 스케줄에 인원수가 남으면 참가인원에 insert
-		if(MainMapper.checkHeadCount(episode) != null) {
-			MainMapper.insertScheduleSelection(userId, episode, episodeSelected);
+		System.out.println(userId);
+		System.out.println(episode);
+		if(MainMapper.checkHeadCount(userId, episode) != null) {
+			System.out.println(MainMapper.checkHeadCount(userId, episode));
+			MainMapper.insertParticipantUser(userId, episode, episodeSelected);
 			Map<String, Object> status = new HashMap<String, Object>();
 			status.put("status", "complete");
 			return status;
@@ -35,15 +39,26 @@ public class MainService {
 		
 	}
 	
-	public Map<String, Object> deleteScheduleSelection(String userId, String episode, Boolean episodeSelected) {
-		MainMapper.deleteScheduleSelection(userId, episode, episodeSelected);
+	public Map<String, Object> deleteParticipantUser(String userId, String episode, Boolean episodeSelected) {
+		MainMapper.deleteParticipantUser(userId, episode, episodeSelected);
 		Map<String, Object> status = new HashMap<String, Object>();
 		status.put("status", "cancel");
 		return status;
 	}
 	
-	public String getPassFlagbyUser(String userId) {
-		return MainMapper.getPassFlagbyUser(userId);
+	public Boolean getPassFlagbyUser(String userId) {
+		if(MainMapper.getPassFlagbyUser(userId) != null) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
+	
+	public List<matchPersonVO> getMatchingInfo(String userId){
+		return MainMapper.getMatchingInfo(userId);
+	}
+	
+	
 }
 

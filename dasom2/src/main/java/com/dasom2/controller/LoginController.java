@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.dasom2.service.LoginLogService;
 import com.dasom2.service.LoginService;
+import com.dasom2.service.MainService;
 import com.dasom2.vo.LoginLogVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,9 @@ public class LoginController {
 	@Autowired
     LoginLogService loginLogService;
   
+	@Autowired
+	MainService MainService;
+	
     //로그인 페이지 이동
     @GetMapping("/loginPage")
     public String loginPage(Model model, HttpSession session) {
@@ -69,7 +73,14 @@ public class LoginController {
 		/* 세션 값 저장 */
     	session.setAttribute("userId", userId);
     	model.addAttribute("userId", userId);
-        return "mainPage";
+    	
+    	if(MainService.getPassFlagbyUser(String.valueOf(session.getAttribute("userId")))) 
+        {
+        	return "mainPage";
+        }
+        else {
+        	return "waitingPage";
+        }
     }
     
     //로그아웃

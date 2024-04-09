@@ -14,7 +14,11 @@
         INSERT INTO email_send_log(user_id, email, ip) VALUES(#{userId}, #{email}, #{currentIp})
     </insert>
     <select id="checkEmailVerified" resultType="boolean" parameterType="String">
-        SELECT verification_flag FROM email_verification WHERE user_id = #{userId} AND email = #{email} ORDER BY createtime DESC
+        SELECT AA.verification_flag FROM
+		(
+			SELECT verification_flag, ROW_NUMBER() OVER () AS ROWNUM FROM email_verification WHERE user_id = #{userId} AND email = #{email} ORDER BY createtime DESC
+		) AA
+		WHERE AA.ROWNUM = 1;
     </select>
     <insert id="saveEmailAndToken" parameterType="map">
         INSERT INTO email_verification(user_id, email, token) VALUES(#{userId}, #{email}, #{token})
@@ -43,5 +47,8 @@
         VALUES(#{userId}, #{idCardPath}, #{businessCardPath}, #{selfImagePath})
     </insert>
     
+    <insert id="insertUserManage" parameterType="String">
+    	INSERT INTO USER_MANAGE (USER_ID, CHANCE) VALUE(#{userId}, 0)
+    </insert>
     
 </mapper>

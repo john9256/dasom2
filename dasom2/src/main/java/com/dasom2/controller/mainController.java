@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dasom2.service.LoginService;
 import com.dasom2.service.MainService;
 import com.dasom2.vo.MeetingScheduleVO;
+import com.dasom2.vo.matchPersonVO;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -26,6 +27,10 @@ public class mainController {
 	
 	@Autowired
 	MainService MainService;
+	@GetMapping("/test1")
+	public String test1() {
+		return "index";
+	}
 	
 	//메인페이지
     @SuppressWarnings("unused")
@@ -40,12 +45,8 @@ public class mainController {
         }
         
         // 소개팅 신청 서류 합격 인원에게만 메인 페이지 보여주기
-        System.out.println(MainService.getPassFlagbyUser(String.valueOf(session.getAttribute("userId"))));
-        if(
-        		false
-//        		MainService.getPassFlagbyUser(String.valueOf(session.getAttribute("userId"))).equalsIgnoreCase("Y")
-        		
-        		) {
+        if(MainService.getPassFlagbyUser(String.valueOf(session.getAttribute("userId")))) 
+        {
         	return "mainPage";
         }
         else {
@@ -68,15 +69,24 @@ public class mainController {
     public Map<String, Object> ScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     	 if(episodeSelected == true) {
-    		 return MainService.insertScheduleSelection(userId, episode, episodeSelected); 
+    		 return MainService.insertParticipantUser(userId, episode, episodeSelected); 
     	 }
     	 else {
-    		 return MainService.deleteScheduleSelection(userId, episode, episodeSelected);
+    		 return MainService.deleteParticipantUser(userId, episode, episodeSelected);
     	 }
     	}
     	Map<String, Object> status = new HashMap<String, Object>();
 		status.put("status", "fail");
 		return status;
+    }
+    
+    @ResponseBody
+    @PostMapping("/getMatchingInfo")
+    public List<matchPersonVO> getMatchingInfo(@RequestParam("userId") String userId, HttpSession session) {
+    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    	return MainService.getMatchingInfo(userId);
+    	}
+		return null;
     }
     
 }

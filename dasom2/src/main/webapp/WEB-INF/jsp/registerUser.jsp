@@ -75,8 +75,8 @@
 						<div class="form-group">
 						    <label for="sex">성별:</label>
 						    <select class="form-control" name="sex" id="sex" required>
-						        <option value="남">남</option>
-						        <option value="녀">녀</option>
+						        <option value="남성">남성</option>
+						        <option value="여성">여성</option>
 						    </select>
 						</div>
 						<div class="form-group">

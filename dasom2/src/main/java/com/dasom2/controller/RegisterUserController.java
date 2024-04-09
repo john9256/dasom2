@@ -104,9 +104,10 @@ public class RegisterUserController {
 			try {
 				RegisterUserService.registerUser(user);
 				RegisterUserService.registerUserImages(user, idCardImage, businessCardImage, selfImage);
+				RegisterUserService.registerUserManage(user.getUserId());
 			} catch (IOException e) {
 				e.printStackTrace();
-				CommonMapper.insertErrorLog("registerUserImages 메서드", user.getUserId(), e.getMessage());
+				CommonMapper.insertErrorLog("register 메서드", user.getUserId(), e.getMessage());
 			}
 			return "redirect:/loginPage"; 
 	    }

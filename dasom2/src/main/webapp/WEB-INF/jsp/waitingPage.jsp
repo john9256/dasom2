@@ -88,7 +88,7 @@
 <body>
 <div class="container mt-3">
     <div class="top-text"><a href="/mainPage">다솜 소개팅</a></div>
-    <div class="second-text"><a href="/mainPage">호스트가 회원가입을 확인중에 있습니다.<br> 확인 완료 후 사용 가능합니다</a></div>
+    <div class="second-text"><a href="/mainPage">호스트가 회원가입을 확인중에 있습니다.<br>이후 서비스 정상 이용 가능하십니다</a></div>
     <div class="full-screen-wrapper">
     <div class="button-container">
     	<button id="guideBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">소개팅 가이드</button>

@@ -7,6 +7,7 @@
         (SELECT * FROM PARTICIPANT_USER WHERE USER_ID = #{userId}) B
         ON A.EPISODE = B.EPISODE
         WHERE A.COMPLETE_FLAG = 'N'
+        AND A.EPISODE > DATE_ADD(NOW(), INTERVAL -1 HOUR)
         ORDER BY A.EPISODE ASC
     </select>
     
@@ -14,22 +15,61 @@
          SELECT episode from MEETING_SCHEDULE
 		WHERE EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
 		AND 
-		HEADCOUNT &gt; (
+		HEADCOUNT/2 <![CDATA[>]]> (
 		SELECT COUNT(*) FROM PARTICIPANT_USER A
 		WHERE A.EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
+		AND A.SEX = (SELECT SEX FROM USER_TABLE WHERE USER_ID = #{userId})
 		)
     </select>
     
-    <insert id="insertScheduleSelection"  parameterType="String">
-        INSERT INTO PARTICIPANT_USER(USER_ID, EPISODE) VALUES(#{userId}, DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00'))
+    <insert id="insertParticipantUser"  parameterType="String">
+        INSERT INTO PARTICIPANT_USER(USER_ID, EPISODE, SEX, NICKNAME) 
+        VALUES(
+        #{userId}
+        , DATE_FORMAT(STR_TO_DATE(#{episode}
+        , '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
+        , (SELECT SEX FROM USER_TABLE WHERE USER_ID = #{userId})
+        ,(SELECT AA.VALUE1 AS NICKNAME
+		 FROM
+			( 
+			SELECT VALUE1, ROW_NUMBER() OVER () AS ROWNUM 
+			FROM CRITERIA_DATA
+			WHERE DIVISION = 
+			(
+			SELECT 
+			CASE 
+			WHEN SEX = '남성' THEN 'male_nickname'
+			ELSE 'female_nickname'
+			END
+			FROM 
+			USER_TABLE WHERE USER_ID = #{userId}
+			)
+			AND VALUE1 NOT IN (SELECT NICKNAME FROM PARTICIPANT_USER WHERE EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00'))
+			) AA
+			WHERE ROWNUM = 1)
+        )
     </insert>
     
-    <delete id="deleteScheduleSelection"  parameterType="String">
+    <delete id="deleteParticipantUser"  parameterType="String">
         DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
     </delete>
     
     <select id="getPassFlagbyUser" resultType="String" parameterType="String">
-    	SELECT pass_flag FROM user_manage WHERE user_id = #{userId}
+    	SELECT pass_flag FROM user_manage WHERE user_id = #{userId} AND PASS_FLAG = 'Y'
     </select>
     
+    <select id="getMatchingInfo" resultType="matchPersonVO" parameterType="String">
+    	SELECT NICKNAME, EPISODE FROM PARTICIPANT_USER 
+		WHERE 
+		EPISODE =
+		(
+		SELECT AA.EPISODE FROM
+		(
+		SELECT EPISODE, ROW_NUMBER() OVER () AS ROWNUM FROM PARTICIPANT_USER WHERE USER_ID =#{userId}
+		ORDER BY EPISODE DESC
+		)AA
+		WHERE AA.ROWNUM =1
+		)
+		AND SEX <![CDATA[<>]]> (SELECT SEX FROM USER_TABLE WHERE USER_ID =#{userId})
+    </select>
 </mapper>

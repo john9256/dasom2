@@ -20,6 +20,7 @@
 
     .button-container {
         display: flex;
+         margin-top: -120px;
         flex-direction: column; /* Stacks buttons vertically */
         align-items: center; /* Centers buttons horizontally */
         gap: 25px; /* Space between buttons */
@@ -66,7 +67,17 @@
         margin-top: auto;
         margin-bottom: auto;
     }
+	.text-right a.btn {
+    margin-top: 0px;
+    background-color: #ff85a2; /* 배경 색상 */
+    border-color: #ff85a2; /* 테두리 색상 */
+    color: white; /* 글자 색상 */
+	}
 	
+	.text-right a.btn:hover {
+	    background-color: pink; /* 호버 시 배경 색상 */
+	    border-color: pink; /* 호버 시 테두리 색상 */
+	}
 </style>
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
@@ -80,6 +91,9 @@
 <body>
 <div class="container mt-3">
     <div class="top-text"><a href="/mainPage">다솜 소개팅</a></div>
+    <div class="text-right">
+        <a href="/logout" class="btn btn-primary" role="button">로그아웃</a>
+    </div>
     <div class="full-screen-wrapper">
     <div class="button-container">
         <button id="dateSelectBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">날짜 선택</button>
@@ -120,7 +134,7 @@ $(document).ready(function() {
     });
 	
     $('#statusViewBtn').click(function() {
-    	matchingModalContent("${userId}");
+    	/* matchingModalContent("${userId}"); */
     });
     
     $('#matchingBtn').click(function() {
@@ -139,11 +153,8 @@ $(document).ready(function() {
             },
             success: function(data) {
                 var content = "";
-                var episode;
-                var location;
-                //var episode = "";
                 $(".modal-body").html("");
-                data.forEach(function(schedule) {
+                data.forEach(function(matchInfo) {
                 	episode = schedule.episode;
                 	location = schedule.location;
                 	

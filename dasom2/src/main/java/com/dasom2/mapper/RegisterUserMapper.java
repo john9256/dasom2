@@ -20,4 +20,5 @@ public interface RegisterUserMapper {
     boolean checkEmailVerified(String email, String userId);
     void insertUser(RegisterUserVO user);
     void insertUserImage(RegisterUserImageVO userImage);
+    void insertUserManage(String userId);
 }

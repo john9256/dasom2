@@ -134,6 +134,9 @@ public class RegisterUserService {
         RegisterUserMapper.insertUserImage(userImage);
     }
     
+    public void registerUserManage(String userId) {
+    	RegisterUserMapper.insertUserManage(userId);
+    }
     
 }
 
