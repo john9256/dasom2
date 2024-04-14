@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasom2.service.LoginService;
 import com.dasom2.service.MainService;
+import com.dasom2.service.testService;
 import com.dasom2.vo.MeetingScheduleVO;
-import com.dasom2.vo.matchPersonVO;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -27,6 +27,10 @@ public class mainController {
 	
 	@Autowired
 	MainService MainService;
+	
+	@Autowired
+	testService testService;
+	
 	@GetMapping("/test1")
 	public String test1() {
 		return "index";
@@ -82,11 +86,17 @@ public class mainController {
     
     @ResponseBody
     @PostMapping("/getMatchingInfo")
-    public List<matchPersonVO> getMatchingInfo(@RequestParam("userId") String userId, HttpSession session) {
+    public Map<String, Object> getMatchingInfo(@RequestParam("userId") String userId, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    		
     	return MainService.getMatchingInfo(userId);
     	}
 		return null;
     }
+    
+    @GetMapping("/test11")
+    public void test() {
+    	MainService.test();
+    	}
     
 }

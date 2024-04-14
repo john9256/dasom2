@@ -14,11 +14,5 @@ public class testController {
 	@Autowired 
 	testService testService;
 	
-	//TEST
-	@GetMapping("/TEST11")
-	public void test() {
-		testService.selectTest();
-		System.out.println(testService.selectTest());
-    
-	}
+	
 }

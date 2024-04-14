@@ -1,14 +1,16 @@
 package com.dasom2.vo;
 
+import java.time.LocalDateTime;
+
 public class matchPersonVO {
 	
     private String userId;
     private String nickName;
     private String pick;
-    private String episode;
+    private LocalDateTime localDateTimeEpisode;
     private String pickType;
-    
-    public String getUserId() {
+    private LocalDateTime localDateTimeRemainTime;
+	public String getUserId() {
 		return userId;
 	}
 	public void setUserId(String userId) {
@@ -23,17 +25,14 @@ public class matchPersonVO {
 	public String getPick() {
 		return pick;
 	}
-	public void setPick1(String pick) {
-		this.pick = pick;
-	}
-	public String getEpisode() {
-		return episode;
-	}
-	public void setEpisode(String episode) {
-		this.episode = episode;
-	}
 	public void setPick(String pick) {
 		this.pick = pick;
+	}
+	public LocalDateTime getLocalDateTimeEpisode() {
+		return localDateTimeEpisode;
+	}
+	public void setLocalDateTimeEpisode(LocalDateTime localDateTimeEpisode) {
+		this.localDateTimeEpisode = localDateTimeEpisode;
 	}
 	public String getPickType() {
 		return pickType;
@@ -41,7 +40,14 @@ public class matchPersonVO {
 	public void setPickType(String pickType) {
 		this.pickType = pickType;
 	}
-	
+	public LocalDateTime getLocalDateTimeRemainTime() {
+		return localDateTimeRemainTime;
+	}
+	public void setLocalDateTimeRemainTime(LocalDateTime localDateTimeRemainTime) {
+		this.localDateTimeRemainTime = localDateTimeRemainTime;
+	}
+    
+
 	
     
     

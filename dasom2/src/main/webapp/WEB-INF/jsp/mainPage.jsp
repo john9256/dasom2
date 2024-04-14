@@ -156,7 +156,6 @@ $(document).ready(function() {
                 $(".modal-body").html("");
                 data.forEach(function(matchInfo) {
                 	episode = schedule.episode;
-                	location = schedule.location;
                 	
                     // 선택 여부에 따라 버튼 텍스트 설정
                     var buttonText = "";

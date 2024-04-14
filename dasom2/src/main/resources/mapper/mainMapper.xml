@@ -2,56 +2,59 @@
 <mapper namespace="com.dasom2.mapper.MainMapper">
 
     <select id="getMeetingSchedule" resultType="MeetingScheduleVO" parameterType="String">
-        SELECT DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일') AS episode, B.USER_ID AS userId, A.LOCATION AS location FROM MEETING_SCHEDULE A
+        SELECT A.EPISODE AS LocalDateTimeEpisode, B.USER_ID AS userId, A.LOCATION AS location FROM MEETING_SCHEDULE A
         LEFT OUTER JOIN
         (SELECT * FROM PARTICIPANT_USER WHERE USER_ID = #{userId}) B
         ON A.EPISODE = B.EPISODE
         WHERE A.COMPLETE_FLAG = 'N'
-        AND A.EPISODE > DATE_ADD(NOW(), INTERVAL -1 HOUR)
+        AND A.EPISODE > DATE_ADD(NOW(), INTERVAL 3 HOUR)
         ORDER BY A.EPISODE ASC
     </select>
     
-    <select id="checkHeadCount" resultType="String" parameterType="String">
-         SELECT episode from MEETING_SCHEDULE
-		WHERE EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
+    <select id="checkHeadCount">
+        SELECT episode from MEETING_SCHEDULE
+		WHERE EPISODE = #{episode}
 		AND 
 		HEADCOUNT/2 <![CDATA[>]]> (
 		SELECT COUNT(*) FROM PARTICIPANT_USER A
-		WHERE A.EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
+		WHERE A.EPISODE = #{episode}
 		AND A.SEX = (SELECT SEX FROM USER_TABLE WHERE USER_ID = #{userId})
 		)
     </select>
     
-    <insert id="insertParticipantUser"  parameterType="String">
-        INSERT INTO PARTICIPANT_USER(USER_ID, EPISODE, SEX, NICKNAME) 
-        VALUES(
-        #{userId}
-        , DATE_FORMAT(STR_TO_DATE(#{episode}
-        , '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
-        , (SELECT SEX FROM USER_TABLE WHERE USER_ID = #{userId})
-        ,(SELECT AA.VALUE1 AS NICKNAME
-		 FROM
-			( 
-			SELECT VALUE1, ROW_NUMBER() OVER () AS ROWNUM 
-			FROM CRITERIA_DATA
-			WHERE DIVISION = 
-			(
-			SELECT 
-			CASE 
-			WHEN SEX = '남성' THEN 'male_nickname'
-			ELSE 'female_nickname'
-			END
-			FROM 
-			USER_TABLE WHERE USER_ID = #{userId}
-			)
-			AND VALUE1 NOT IN (SELECT NICKNAME FROM PARTICIPANT_USER WHERE EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00'))
-			) AA
-			WHERE ROWNUM = 1)
-        )
-    </insert>
+    <insert id="insertParticipantUser">
+	    INSERT INTO PARTICIPANT_USER(USER_ID, EPISODE, SEX, NICKNAME) 
+	    VALUES (
+	        #{userId},
+	        #{episode},
+	        (SELECT SEX FROM USER_TABLE WHERE USER_ID = #{userId}),
+	        (
+	            SELECT VALUE1 
+	            FROM (
+	                SELECT VALUE1 
+	                FROM CRITERIA_DATA
+	                WHERE DIVISION = (
+	                    SELECT CASE 
+	                               WHEN SEX = '남성' THEN 'male_nickname'
+	                               ELSE 'female_nickname'
+	                           END
+	                    FROM USER_TABLE 
+	                    WHERE USER_ID = #{userId}
+	                )
+	                AND VALUE1 NOT IN (
+	                    SELECT NICKNAME 
+	                    FROM PARTICIPANT_USER 
+	                    WHERE EPISODE = #{episode}
+	                )
+	                ORDER BY RAND()
+	                LIMIT 1
+	            ) AS AA
+	        )
+	    )
+	</insert>
     
-    <delete id="deleteParticipantUser"  parameterType="String">
-        DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = DATE_FORMAT(STR_TO_DATE(#{episode}, '%y년 %m월 %d일'), '%Y-%m-%d 00:00:00')
+    <delete id="deleteParticipantUser">
+        DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = #{episode}
     </delete>
     
     <select id="getPassFlagbyUser" resultType="String" parameterType="String">
@@ -59,17 +62,27 @@
     </select>
     
     <select id="getMatchingInfo" resultType="matchPersonVO" parameterType="String">
-    	SELECT NICKNAME, EPISODE FROM PARTICIPANT_USER 
-		WHERE 
-		EPISODE =
-		(
-		SELECT AA.EPISODE FROM
-		(
-		SELECT EPISODE, ROW_NUMBER() OVER () AS ROWNUM FROM PARTICIPANT_USER WHERE USER_ID =#{userId}
-		ORDER BY EPISODE DESC
-		)AA
-		WHERE AA.ROWNUM =1
+    	SELECT NICKNAME, EPISODE, EPISODE - DATE_ADD(NOW(), INTERVAL -5 HOUR) AS REMAINTIME
+		FROM PARTICIPANT_USER 
+		WHERE SEX <![CDATA[<>]]> (
+			SELECT SEX 
+			FROM USER_TABLE
+			WHERE USER_ID = #{userId}
+			)
+		AND EPISODE = (SELECT AA.EPISODE FROM
+				(
+				SELECT EPISODE, ROW_NUMBER() OVER () AS ROWNUM 
+		        FROM PARTICIPANT_USER 
+		        WHERE USER_ID =#{userId}
+		        <!-- AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND NOW() -->
+		        AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND DATE_ADD(NOW(), INTERVAL 5 HOUR)
+				ORDER BY EPISODE DESC
+				)AA
+				WHERE AA.ROWNUM =1
 		)
-		AND SEX <![CDATA[<>]]> (SELECT SEX FROM USER_TABLE WHERE USER_ID =#{userId})
     </select>
+    
+    <select id="test" resultType="java.time.LocalDateTime">
+   		SELECT EPISODE FROM MEETING_SCHEDULE
+	</select>
 </mapper>
