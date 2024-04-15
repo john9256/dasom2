@@ -86,17 +86,12 @@ public class mainController {
     
     @ResponseBody
     @PostMapping("/getMatchingInfo")
-    public Map<String, Object> getMatchingInfo(@RequestParam("userId") String userId, HttpSession session) {
+    public List<Map<String, Object>> getMatchingInfo(@RequestParam("userId") String userId, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     		
     	return MainService.getMatchingInfo(userId);
     	}
 		return null;
     }
-    
-    @GetMapping("/test11")
-    public void test() {
-    	MainService.test();
-    	}
     
 }

@@ -1,6 +1,7 @@
 package com.dasom2.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,34 +65,34 @@ public class MainService {
 		}
 	}
 	
-	public Map<String, Object> getMatchingInfo(String userId){
+	public List<Map<String, Object>> getMatchingInfo(String userId){
+		
+		List<Map<String, Object>> matchInfoList = new ArrayList<>();
 		Map<String, Object> matchInfoMap = new HashMap<String, Object>();
 		
 		List<matchPersonVO> matchingInfoList = MainMapper.getMatchingInfo(userId);
+		
+		System.out.println(matchingInfoList.size());
 		if(matchingInfoList.size() != 0) {
-			for(matchPersonVO matchingInfo : matchingInfoList) {
+			for(int i =0; i < matchingInfoList.size(); i++) {
+				matchPersonVO matchingInfo = matchingInfoList.get(i);
+				System.out.println(matchingInfo.getNickName());
 				matchInfoMap.put("nickName", matchingInfo.getNickName());
+				matchInfoList.set(i, matchInfoMap);
 			}
 			String formattedEpisode = matchingInfoList.get(0).getLocalDateTimeEpisode().format(formatter);
-			String formattedRemain = matchingInfoList.get(0).getLocalDateTimeRemainTime().format(formatter);
 			
-			matchInfoMap.put("remainTime",formattedRemain);
-			matchInfoMap.put("episode", formattedEpisode);
-			matchInfoMap.put("status", "success");
+			matchInfoList.get(0).put("episode", formattedEpisode);
+			matchInfoList.get(0).put("status", "success");
+			System.out.println(matchInfoList);
 		}
 		else {
-			matchInfoMap.put("status", "empty");
+			 Map<String, Object> emptyMap = new HashMap<>();
+		        emptyMap.put("status", "empty");
+		        matchInfoList.add(emptyMap);
 		}
-		return matchInfoMap;
+		return matchInfoList;
 		
-	}
-	
-	public void test()
-	{
-		
-		System.out.println(MainMapper.test());
-		LocalDateTime episode = MainMapper.test();
-		System.out.println(episode.format(formatter));
 	}
 	
 }

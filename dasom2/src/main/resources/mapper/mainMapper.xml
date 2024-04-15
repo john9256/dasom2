@@ -62,7 +62,7 @@
     </select>
     
     <select id="getMatchingInfo" resultType="matchPersonVO" parameterType="String">
-    	SELECT NICKNAME, EPISODE, EPISODE - DATE_ADD(NOW(), INTERVAL -5 HOUR) AS REMAINTIME
+    	SELECT NICKNAME, EPISODE AS localDateTimeEpisode
 		FROM PARTICIPANT_USER 
 		WHERE SEX <![CDATA[<>]]> (
 			SELECT SEX 

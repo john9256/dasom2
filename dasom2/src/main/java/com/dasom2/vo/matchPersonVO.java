@@ -9,7 +9,6 @@ public class matchPersonVO {
     private String pick;
     private LocalDateTime localDateTimeEpisode;
     private String pickType;
-    private LocalDateTime localDateTimeRemainTime;
 	public String getUserId() {
 		return userId;
 	}
@@ -40,15 +39,5 @@ public class matchPersonVO {
 	public void setPickType(String pickType) {
 		this.pickType = pickType;
 	}
-	public LocalDateTime getLocalDateTimeRemainTime() {
-		return localDateTimeRemainTime;
-	}
-	public void setLocalDateTimeRemainTime(LocalDateTime localDateTimeRemainTime) {
-		this.localDateTimeRemainTime = localDateTimeRemainTime;
-	}
-    
-
-	
-    
     
 }
