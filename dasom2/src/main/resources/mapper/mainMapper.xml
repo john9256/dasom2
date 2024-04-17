@@ -1,12 +1,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dasom2.mapper.MainMapper">
-
+	
+	
     <select id="getMeetingSchedule" resultType="MeetingScheduleVO" parameterType="String">
         SELECT A.EPISODE AS LocalDateTimeEpisode, B.USER_ID AS userId, A.LOCATION AS location FROM MEETING_SCHEDULE A
         LEFT OUTER JOIN
         (SELECT * FROM PARTICIPANT_USER WHERE USER_ID = #{userId}) B
         ON A.EPISODE = B.EPISODE
         WHERE A.COMPLETE_FLAG = 'N'
+        <!-- 현재 시간보다 세시간 넘게 남은 소개팅 날짜만 가져옴 -->
         AND A.EPISODE > DATE_ADD(NOW(), INTERVAL 3 HOUR)
         ORDER BY A.EPISODE ASC
     </select>

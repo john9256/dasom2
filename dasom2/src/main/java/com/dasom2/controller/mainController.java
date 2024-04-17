@@ -89,9 +89,9 @@ public class mainController {
     public List<Map<String, Object>> getMatchingInfo(@RequestParam("userId") String userId, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     		
-    	return MainService.getMatchingInfo(userId);
+    		return MainService.getMatchingInfo(userId);
     	}
-		return null;
+			return null;
     }
     
 }

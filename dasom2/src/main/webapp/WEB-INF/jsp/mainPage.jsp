@@ -153,9 +153,10 @@ $(document).ready(function() {
             },
             success: function(data) {
                 var content = "";
+                let nickName = "";
                 $(".modal-body").html("");
                 data.forEach(function(matchInfo) {
-                	episode = schedule.episode;
+                	nickName = matchInfo.nickName;
                 	
                     // 선택 여부에 따라 버튼 텍스트 설정
                     var buttonText = "";

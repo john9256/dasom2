@@ -68,23 +68,20 @@ public class MainService {
 	public List<Map<String, Object>> getMatchingInfo(String userId){
 		
 		List<Map<String, Object>> matchInfoList = new ArrayList<>();
-		Map<String, Object> matchInfoMap = new HashMap<String, Object>();
 		
 		List<matchPersonVO> matchingInfoList = MainMapper.getMatchingInfo(userId);
+		matchPersonVO matchingInfoVo;
 		
-		System.out.println(matchingInfoList.size());
 		if(matchingInfoList.size() != 0) {
 			for(int i =0; i < matchingInfoList.size(); i++) {
-				matchPersonVO matchingInfo = matchingInfoList.get(i);
-				System.out.println(matchingInfo.getNickName());
-				matchInfoMap.put("nickName", matchingInfo.getNickName());
-				matchInfoList.set(i, matchInfoMap);
+				matchingInfoVo = matchingInfoList.get(i);
+				Map<String, Object> matchInfoMap = new HashMap<String, Object>();
+				matchInfoMap.put("nickName", matchingInfoVo.getNickName());
+				matchInfoList.add(i, matchInfoMap);
 			}
 			String formattedEpisode = matchingInfoList.get(0).getLocalDateTimeEpisode().format(formatter);
-			
 			matchInfoList.get(0).put("episode", formattedEpisode);
 			matchInfoList.get(0).put("status", "success");
-			System.out.println(matchInfoList);
 		}
 		else {
 			 Map<String, Object> emptyMap = new HashMap<>();
