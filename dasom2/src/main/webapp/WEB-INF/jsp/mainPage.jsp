@@ -157,20 +157,20 @@ $(document).ready(function() {
                 $(".modal-body").html("");
                 data.forEach(function(matchInfo) {
                 	nickName = matchInfo.nickName;
+                	episode = matchInfo.episode;
                 	
                     // 선택 여부에 따라 버튼 텍스트 설정
                     var buttonText = "";
                     var selectedCss = " ";
-                    if(schedule.userId === userId) {
-                        buttonText = "선택함";
-                        selectedCss = ' selectedBtn';
+                    if(matchInfo.pick != null) {
+                       buttonText = "선택함";
+                       selectedCss = ' selectedBtn';
                     } else {
-                        buttonText = "선택";
+                       buttonText = "선택";
                     }
-                    var buttonClass = schedule.userId === userId ? "btn-selected" : "";
                     
-                    content += `<p>`+ episode +` (`+ location +`) 
-                        <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelection('${userId}', '`+episode+`')">`+buttonText+`</button>
+                    content += `<p>`+ nickName +` 
+                        <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+nickName+`" onclick="toggleSelectionMatch('${userId}', '`+nickName+`', '`+episode+`')">`+buttonText+`</button>
                         </p>`;
                 });
 
@@ -183,6 +183,7 @@ $(document).ready(function() {
             }
         });
     }
+    
     
     // 날짜 선택 모달
  	function dateSelectModalContent(userId) {
@@ -213,10 +214,9 @@ $(document).ready(function() {
                   } else {
                       buttonText = "선택";
                   }
-                  var buttonClass = schedule.userId === userId ? "btn-selected" : "";
                   
                   content += `<p>`+ episode +` (`+ location +`) 
-                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelection('${userId}', '`+episode+`')">`+buttonText+`</button>
+                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelectionSchedule('${userId}', '`+episode+`')">`+buttonText+`</button>
                       </p>`;
               });
 
@@ -232,7 +232,8 @@ $(document).ready(function() {
     
 });
 
-function toggleSelection(userId, episode) {
+
+function toggleSelectionSchedule(userId, episode) {
     // 선택된 회차의 버튼 ID를 구성
     var btnId = "btn_" + episode;
     var episodeSelected = document.getElementById(btnId).textContent === '선택';
@@ -249,12 +250,98 @@ function toggleSelection(userId, episode) {
     // 사용자가 확인을 누른 경우에만 AJAX 통신 실행
     if(userConfirmed) {
         $.ajax({
-            url: "/ScheduleSelection",
+            url: "/ScheduleSelectionInsert",
             type: "POST",
             data: {
                 userId: userId,
                 episode: episode,
                 episodeSelected: episodeSelected
+            },
+            success: function(data) {
+            	var btn = document.getElementById(btnId);
+                // 성공 시 버튼 텍스트 업데이트
+            	 if(data.status == "complete") {
+           	        btn.textContent = '선택함';
+           	        btn.className = "btn btn-info btn-sm right-button selectedBtn"; // 선택된 스타일 적용
+           	        alert("소개팅 신청에 성공했습니다.");
+           	    } else if (data.status == "noChance"){
+           	        alert("남은 티켓이 없습니다 \n 티켓을 구매해주세요.");
+           	    } else if (data.status == "full"){
+           	        alert("남은 자리가 없습니다.");
+           	    } else if (data.status == "continuity"){
+           	        alert("소개팅 중복 매칭 방지를 위해 \n 주 1회 참여 가능합니다.");
+           	    } else if(data.status == "cancel") {
+           	        btn.textContent = '선택';
+           	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
+           	        alert("소개팅 신청을 취소했습니다.");
+           	    } else if (data.status == "duplicate"){
+           	    	userConfirmDuplicate = confirm("이전에 함께 참여 했던 이성이" ` + data.duplicateCount + ` "명 존재합니다. \n 그럼에도 참여를 하시겠습니까?");
+           	    		if(userConfirmDuplicate){
+           	    			$.ajax({
+           	    	            url: "/ScheduleSelectionDuplicateInsert",
+           	    	            type: "POST",
+           	    	            data: {
+           	    	                userId: userId,
+           	    	                episode: episode,
+           	    	                episodeSelected: episodeSelected
+           	    	            },
+           	    	            success: function(data) {
+           	    	            	btn = document.getElementById(btnId);
+           	    	                // 성공 시 버튼 텍스트 업데이트
+           	    	            	 if(data.status == "complete") {
+	           	    	           	        btn.textContent = '선택함';
+	           	    	           	        btn.className = "btn btn-info btn-sm right-button selectedBtn"; // 선택된 스타일 적용
+	           	    	           	        alert("소개팅 신청에 성공했습니다.");
+           	    	           	    	}
+           	    	            	else {
+           	    	           	        alert("소개팅 신청에 실패했습니다.");
+           	    	           	    }
+           	    	            },
+           	    	            error: function(xhr, status, error) {
+           	    	                console.error("Selection update failed: " + error);
+           	    	                alert("소개팅 신청에 실패했습니다.");
+           	    	            }
+           	    	            	}
+           	    	            }
+           	    		}
+           	    } else {
+           	        alert("소개팅 신청에 실패했습니다.");
+           	    }
+            },
+            error: function(xhr, status, error) {
+                console.error("Selection update failed: " + error);
+                alert("소개팅 신청에 실패했습니다.");
+            }
+        });
+    }
+}
+
+
+
+function toggleSelectionMatch(userId, nickName, episode) {
+    // 선택된 회차의 버튼 ID를 구성
+    var btnId = "btn_" + nickName;
+    var nickNameSelected = document.getElementById(btnId).textContent === '선택';
+
+    // 사용자에게 스케줄 선택 확인 요청
+    var userConfirmed;
+    	if(nickNameSelected){
+    		userConfirmed = confirm("선택 하시겠습니까?");
+    		}
+    	else{
+    		userConfirmed = confirm("선택을 취소 하시겠습니까?");
+    	}
+
+    // 사용자가 확인을 누른 경우에만 AJAX 통신 실행
+    if(userConfirmed) {
+        $.ajax({
+            url: "/matchSelectionInsert",
+            type: "POST",
+            data: {
+                userId: userId,
+                episode: episode,
+                nickName : nickName,
+                nickNameSelected: nickNameSelected
             },
             success: function(data) {
             	var btn = document.getElementById(btnId);
@@ -280,7 +367,6 @@ function toggleSelection(userId, episode) {
         });
     }
 }
-
 </script>
 
 </body>

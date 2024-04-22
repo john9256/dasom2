@@ -69,10 +69,11 @@ public class mainController {
     }
     
     @ResponseBody
-    @PostMapping("/ScheduleSelection")
+    @PostMapping("/ScheduleSelectionInsert")
     public Map<String, Object> ScheduleSelection(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     	 if(episodeSelected == true) {
+    		 
     		 return MainService.insertParticipantUser(userId, episode, episodeSelected); 
     	 }
     	 else {
@@ -82,6 +83,16 @@ public class mainController {
     	Map<String, Object> status = new HashMap<String, Object>();
 		status.put("status", "fail");
 		return status;
+    }
+    
+    
+    @ResponseBody
+    @PostMapping("/ScheduleSelectionDuplicateInsert")
+    public Map<String, Object> ScheduleSelectionDuplicate(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
+    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    		return MainService.insertParticipantUserDupliacate(userId, episode, episodeSelected); 
+    	}
+    	return null;
     }
     
     @ResponseBody
@@ -94,4 +105,21 @@ public class mainController {
 			return null;
     }
     
+    
+    @ResponseBody
+    @PostMapping("/matchSelectionInsert")
+    public Map<String, Object> matchSelectionInsert(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("nickName") String nickName, @RequestParam("nickNameSelected") Boolean nickNameSelected, HttpSession session) {
+    	Map<String, Object> status = new HashMap<String, Object>();
+    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    	 if(nickNameSelected == true) {
+    		 return MainService.insertMatchPick(userId, episode, nickName); 
+    	 }
+    	 else {
+    		 return MainService.deleteMatchPick(userId, episode, nickName);
+    	 }
+    	}
+    	
+		status.put("status", "fail");
+		return status;
+    }
 }

@@ -4,16 +4,17 @@ import java.time.LocalDateTime;
 
 public class matchPersonVO {
 	
-    private String userId;
+    private String pickedUserId;
     private String nickName;
     private String pick;
     private LocalDateTime localDateTimeEpisode;
     private String pickType;
-	public String getUserId() {
-		return userId;
+    
+	public String getPickedUserId() {
+		return pickedUserId;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setpPickedUserId(String pickedUserId) {
+		this.pickedUserId = pickedUserId;
 	}
 	public String getNickName() {
 		return nickName;

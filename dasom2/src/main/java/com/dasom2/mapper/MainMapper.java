@@ -12,11 +12,17 @@ import com.dasom2.vo.matchPersonVO;
 public interface MainMapper {
     
 	List<MeetingScheduleVO> getMeetingSchedule(String userId);
+	int checkChace(String userId);
+	void minusChance(String userId);
+	void plusChance(String userId);
+	int checkDuplication(String userId, LocalDateTime LocalDateTimeEpisode);
+	String checkContinuity(String userId, LocalDateTime LocalDateTimeEpisode);
 	void insertParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
 	void deleteParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
 	String checkHeadCount(String userId, LocalDateTime episode);
 	String getPassFlagbyUser(String userId);
 	List<matchPersonVO> getMatchingInfo(String userId);
-	void insertPickUser(String userId, String nickName, String pickType);
+	void insertPickUser(String userId, LocalDateTime episode, String nickName);
+	void deletePickUser(String userId, LocalDateTime episode, String nickName);
 	LocalDateTime test();
 }
