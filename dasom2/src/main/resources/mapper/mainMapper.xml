@@ -13,18 +13,6 @@
         ORDER BY A.EPISODE ASC
     </select>
     
-    <select id = "checkChace">
-    	SELECT CHANCE FROM USER_MANAGE WHERE USER_ID = #{userId}
-    </select>
-    
-    <update id = "minusChance">
-    	UPDATE USER_MANAGE SET CHANCE -1 WHERE USER_ID = #{userId}
-    </update>
-    
-    <update id = "plusChance">
-    	UPDATE USER_MANAGE SET CHANCE +1 WHERE USER_ID = #{userId}
-    </update>
-    
     <select id="checkHeadCount">
         SELECT episode from MEETING_SCHEDULE
 		WHERE EPISODE = #{episode}
@@ -121,7 +109,31 @@
 						)
     </select>
     
-    <select id="test" resultType="java.time.LocalDateTime">
-   		SELECT EPISODE FROM MEETING_SCHEDULE
-	</select>
+    <select id = "checkChace">
+    	SELECT CHANCE FROM USER_MANAGE WHERE USER_ID = #{userId}
+    </select>
+    
+    <update id = "minusChance">
+    	UPDATE USER_MANAGE SET CHANCE = CHANCE -1 WHERE USER_ID = #{userId}
+    </update>
+    
+    <update id = "plusChance">
+    	UPDATE USER_MANAGE SET CHANCE = CHANCE +1 WHERE USER_ID = #{userId}
+    </update>
+    
+    <select id="checkMatchPickCount">
+        SELECT COUNT(*) 
+        FROM MATCHING
+		WHERE USER_ID = #{userId}
+		AND EPISODE = #{episode}
+    </select>
+    
+    <insert id="insertPickUser">
+    	INSERT INTO MATCHING(USER_ID, PICK, EPISODE) VALUES(#{userId},#{nickName},#{episode})
+    </insert>
+    
+    <delete id="deletePickUser">
+    	DELETE FROM MATCHING WHERE USER_ID = #{userId} AND EPISODE = #{episode} AND PICK = #{nickName}
+    </delete>
+    
 </mapper>

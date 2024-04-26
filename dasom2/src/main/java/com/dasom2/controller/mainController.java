@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasom2.mapper.CommonMapper;
 import com.dasom2.service.LoginService;
 import com.dasom2.service.MainService;
 import com.dasom2.service.testService;
@@ -30,6 +31,9 @@ public class mainController {
 	
 	@Autowired
 	testService testService;
+	
+	@Autowired
+	CommonMapper CommonMapper;
 	
 	@GetMapping("/test1")
 	public String test1() {
@@ -111,15 +115,17 @@ public class mainController {
     public Map<String, Object> matchSelectionInsert(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("nickName") String nickName, @RequestParam("nickNameSelected") Boolean nickNameSelected, HttpSession session) {
     	Map<String, Object> status = new HashMap<String, Object>();
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
-    	 if(nickNameSelected == true) {
-    		 return MainService.insertMatchPick(userId, episode, nickName); 
-    	 }
-    	 else {
-    		 return MainService.deleteMatchPick(userId, episode, nickName);
-    	 }
+	    	if(nickNameSelected == true) {
+	    		return MainService.insertMatchPick(userId, episode, nickName);
+	    	}
+	    	else {
+	    		return MainService.deleteMatchPick(userId, episode, nickName);
+	    	}
     	}
     	
 		status.put("status", "fail");
 		return status;
     }
+    
+    
 }

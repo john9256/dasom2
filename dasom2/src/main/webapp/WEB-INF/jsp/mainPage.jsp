@@ -275,7 +275,7 @@ function toggleSelectionSchedule(userId, episode) {
            	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
            	        alert("소개팅 신청을 취소했습니다.");
            	    } else if (data.status == "duplicate"){
-           	    	userConfirmDuplicate = confirm("이전에 함께 참여 했던 이성이" ` + data.duplicateCount + ` "명 존재합니다. \n 그럼에도 참여를 하시겠습니까?");
+           	    	userConfirmDuplicate = confirm("이전에 함께 참여 했던 이성이" + data.duplicateCount + "명 존재합니다. \n 그럼에도 참여를 하시겠습니까?");
            	    		if(userConfirmDuplicate){
            	    			$.ajax({
            	    	            url: "/ScheduleSelectionDuplicateInsert",
@@ -301,8 +301,7 @@ function toggleSelectionSchedule(userId, episode) {
            	    	                console.error("Selection update failed: " + error);
            	    	                alert("소개팅 신청에 실패했습니다.");
            	    	            }
-           	    	            	}
-           	    	            }
+           	    	       })
            	    		}
            	    } else {
            	        alert("소개팅 신청에 실패했습니다.");
@@ -349,20 +348,20 @@ function toggleSelectionMatch(userId, nickName, episode) {
             	 if(data.status == "complete") {
            	        btn.textContent = '선택함';
            	        btn.className = "btn btn-info btn-sm right-button selectedBtn"; // 선택된 스타일 적용
-           	        alert("소개팅 신청에 성공했습니다.");
+           	        alert("선택을 완료했습니다.");
            	    } else if (data.status == "full"){
-           	        alert("남은 자리가 없습니다.");
+           	        alert("이미 두명을 선택했습니다.");
            	    } else if(data.status == "cancel") {
            	        btn.textContent = '선택';
            	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
-           	        alert("소개팅 신청을 취소했습니다.");
+           	        alert("선택을 취소했습니다.");
            	    } else {
-           	        alert("소개팅 신청에 실패했습니다.");
+           	        alert("선택을 실패했습니다.");
            	    }
             },
             error: function(xhr, status, error) {
                 console.error("Selection update failed: " + error);
-                alert("소개팅 신청에 실패했습니다.");
+                alert("선택을 실패했습니다.");
             }
         });
     }

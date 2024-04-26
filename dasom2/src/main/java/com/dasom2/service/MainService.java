@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dasom2.mapper.CommonMapper;
 import com.dasom2.mapper.MainMapper;
 import com.dasom2.vo.MeetingScheduleVO;
 import com.dasom2.vo.matchPersonVO;
@@ -18,6 +19,9 @@ public class MainService {
 	
 	@Autowired
 	MainMapper MainMapper;
+	
+	@Autowired
+	CommonMapper CommonMapper;
 	
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy년 M월 d일 a h시");
 	
@@ -131,36 +135,42 @@ public class MainService {
 	
 	// 인원 pick
 	
-	 public Map<String, Object> insertMatchPick(String userId, String episode, String nickName){
-		 LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
-		 Map<String, Object> status = new HashMap<String, Object>();
-		 // MainMapper.insertPickUserHisotry(userId, localDateTimeEpisode, nickName);
-		 try {
-			 MainMapper.insertPickUser(userId, LocalDateTimeEpisode, nickName);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-		 status.put("status", "success");
-		 
-		 return status;
-		 
-	 }
-	 
+	public Map<String, Object> insertMatchPick(String userId, String episode, String nickName) {
+        LocalDateTime localDateTimeEpisode = LocalDateTime.parse(episode, formatter);
+        Map<String, Object> status = new HashMap<>();
+        try {
+        	if(MainMapper.checkMatchPickCount(userId, localDateTimeEpisode) > 2) {
+        		status.put("status", "full");
+        	}
+        	else{
+        		MainMapper.insertPickUser(userId, localDateTimeEpisode, nickName);
+        		status.put("status", "complete");
+        	}
+        	
+        } catch (Exception e) {
+            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
+            CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
+            status.put("status", "error");
+        }
+        
+        return status;
+    }
+	
 	 public Map<String, Object> deleteMatchPick(String userId, String episode, String nickName){
 		 LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
 		 Map<String, Object> status = new HashMap<String, Object>();
 		 // MainMapper.insertPickUserHisotry(userId, localDateTimeEpisode, nickName);
-		 MainMapper.deletePickUser(userId, LocalDateTimeEpisode, nickName);
-		 
-		 
+		 try {MainMapper.deletePickUser(userId, LocalDateTimeEpisode, nickName);
+		 } catch (Exception e) {
+			 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
+	         CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
+	         status.put("status", "error");
+		 }
+		 status.put("status", "complete");
 		 return status;
 		 
 	 }
 }
-
-
-
-
-
 

@@ -20,6 +20,7 @@ public interface MainMapper {
 	void insertParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
 	void deleteParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
 	String checkHeadCount(String userId, LocalDateTime episode);
+	int checkMatchPickCount(String userId, LocalDateTime episode);
 	String getPassFlagbyUser(String userId);
 	List<matchPersonVO> getMatchingInfo(String userId);
 	void insertPickUser(String userId, LocalDateTime episode, String nickName);
