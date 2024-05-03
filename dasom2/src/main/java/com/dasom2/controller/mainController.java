@@ -111,7 +111,7 @@ public class mainController {
     
     
     @ResponseBody
-    @PostMapping("/matchSelectionInsert")
+    @PostMapping("/matchSelection")
     public Map<String, Object> matchSelectionInsert(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("nickName") String nickName, @RequestParam("nickNameSelected") Boolean nickNameSelected, HttpSession session) {
     	Map<String, Object> status = new HashMap<String, Object>();
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {

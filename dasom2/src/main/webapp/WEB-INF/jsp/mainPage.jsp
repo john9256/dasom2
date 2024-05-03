@@ -154,32 +154,39 @@ $(document).ready(function() {
             success: function(data) {
                 var content = "";
                 let nickName = "";
+                let episode;
                 $(".modal-body").html("");
-                data.forEach(function(matchInfo) {
-                	nickName = matchInfo.nickName;
-                	episode = matchInfo.episode;
-                	
-                    // 선택 여부에 따라 버튼 텍스트 설정
-                    var buttonText = "";
-                    var selectedCss = " ";
-                    if(matchInfo.pick != null) {
-                       buttonText = "선택함";
-                       selectedCss = ' selectedBtn';
-                    } else {
-                       buttonText = "선택";
-                    }
-                    
-                    content += `<p>`+ nickName +` 
-                        <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+nickName+`" onclick="toggleSelectionMatch('${userId}', '`+nickName+`', '`+episode+`')">`+buttonText+`</button>
-                        </p>`;
-                });
-
+                
+                if(data.length === 0){
+        			$("#modalLabel").html("현재 " + userId + " 님이 진행중인 소개팅이 없습니다.");
+        		}
+                else{
+	                data.forEach(function(matchInfo) {
+	                	
+	                	nickName = matchInfo.nickName;
+	                	episode = matchInfo.episode;
+	                	
+	                    // 선택 여부에 따라 버튼 텍스트 설정
+	                    var buttonText = "";
+	                    var selectedCss = " ";
+	                    if(matchInfo.pick != null) {
+	                       buttonText = "선택함";
+	                       selectedCss = ' selectedBtn';
+	                    } else {
+	                       buttonText = "선택";
+	                    }
+	                    
+	                    content += `<p>`+ nickName +` 
+	                        <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+nickName+`" onclick="toggleSelectionMatch('${userId}', '`+nickName+`', '`+episode+`')">`+buttonText+`</button>
+	                        </p>`;
+	                });
+            	}
                 $(".modal-body").html(content);
                 $("#modal").modal('show');
             },
             error: function(xhr, status, error) {
                 console.error("Error: " + error);
-                alert("스케줄을 불러오는데 실패했습니다.");
+                alert("데이터를 불러오는데 실패했습니다.");
             }
         });
     }
@@ -275,7 +282,7 @@ function toggleSelectionSchedule(userId, episode) {
            	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
            	        alert("소개팅 신청을 취소했습니다.");
            	    } else if (data.status == "duplicate"){
-           	    	userConfirmDuplicate = confirm("이전에 함께 참여 했던 이성이" + data.duplicateCount + "명 존재합니다. \n 그럼에도 참여를 하시겠습니까?");
+           	    	userConfirmDuplicate = confirm("이전에 함께 참여 했던 이성이 " + data.duplicateCount + " 명 존재합니다. \n 그럼에도 참여를 하시겠습니까?");
            	    		if(userConfirmDuplicate){
            	    			$.ajax({
            	    	            url: "/ScheduleSelectionDuplicateInsert",
@@ -334,7 +341,7 @@ function toggleSelectionMatch(userId, nickName, episode) {
     // 사용자가 확인을 누른 경우에만 AJAX 통신 실행
     if(userConfirmed) {
         $.ajax({
-            url: "/matchSelectionInsert",
+            url: "/matchSelection",
             type: "POST",
             data: {
                 userId: userId,

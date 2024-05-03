@@ -39,36 +39,48 @@ public class MainService {
 		// 스케줄에 인원수가 남으면 참가인원에 insert
 		LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
 		Map<String, Object> status = new HashMap<String, Object>();
-		
 		int duplicateCount = MainMapper.checkDuplication(userId, LocalDateTimeEpisode);
-		// 참여 가능 횟수 확인
-		if(MainMapper.checkChace(userId) <= 0) {
-			status.put("status", "noChance");
-			return status;
-		}
-		// 최대 인원 수 제한
-		else if(MainMapper.checkHeadCount(userId, LocalDateTimeEpisode) == null) {
-			// MainMapper.insertParticipantUserHistory(userId, LocalDateTimeEpisode, episodeSelected);
-			status.put("status", "full");
-			return status;
-		}
-		// 소개팅 연속 참여 불가
-		else if(MainMapper.checkContinuity(userId, LocalDateTimeEpisode) != null) {
-			status.put("status", "continuity");
-			return status;
-		}
-		// 소개팅 참가 인원 중복 배제
-		else if(duplicateCount != 0) {
-			status.put("status", "duplicate");
-			status.put("duplicateCount", duplicateCount);
-			return status;
-		}
-		else {
-			MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
-			MainMapper.minusChance(userId);
-			status.put("status", "complete");
-			return status;
-		}
+		
+		try {
+			
+			// 참여 가능 횟수 확인
+			if(MainMapper.checkChace(userId) <= 0) {
+				status.put("status", "noChance");
+				return status;
+			}
+			// 최대 인원 수 제한
+			else if(MainMapper.checkHeadCount(userId, LocalDateTimeEpisode) == null) {
+				// MainMapper.insertParticipantUserHistory(userId, LocalDateTimeEpisode, episodeSelected);
+				status.put("status", "full");
+				return status;
+			}
+			// 소개팅 연속 참여 불가
+			else if(MainMapper.checkContinuity(userId, LocalDateTimeEpisode) != null) {
+				status.put("status", "continuity");
+				return status;
+			}
+			// 소개팅 참가 인원 중복 배제
+			else if(duplicateCount != 0) {
+				status.put("status", "duplicate");
+				status.put("duplicateCount", duplicateCount);
+				return status;
+			}
+			else {
+				MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
+				MainMapper.minusChance(userId);
+				status.put("status", "complete");
+				return status;
+			}
+        	
+        } catch (Exception e) {
+            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
+            CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
+            status.put("status", "error");
+        }
+		
+		return status;
+		
 		
 	}
 	
@@ -77,20 +89,38 @@ public class MainService {
 		LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
 		Map<String, Object> status = new HashMap<String, Object>();
 		
-			MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
-			MainMapper.minusChance(userId);
-			status.put("status", "complete");
+			try {
+				MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
+				MainMapper.minusChance(userId);
+				status.put("status", "complete");
+			}
+			catch (Exception e) {
+	            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	            String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
+	            CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
+	            status.put("status", "error");
+	        }
+			
 			return status;
 		
 	}
 	
 	public Map<String, Object> deleteParticipantUser(String userId, String episode, Boolean episodeSelected) {
 		LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
-		// MainMapper.deleteParticipantUserHistory(userId, LocalDateTimeEpisode, episodeSelected);
-		MainMapper.deleteParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
-		MainMapper.plusChance(userId);
 		Map<String, Object> status = new HashMap<String, Object>();
-		status.put("status", "cancel");
+		
+		try{
+			MainMapper.deleteParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
+			MainMapper.plusChance(userId);
+			
+			status.put("status", "cancel");
+		}
+		catch (Exception e) {
+            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
+            CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
+            status.put("status", "error");
+        }
 		return status;
 	}
 	
@@ -123,9 +153,7 @@ public class MainService {
 			matchInfoList.get(0).put("status", "success");
 		}
 		else {
-			 Map<String, Object> emptyMap = new HashMap<>();
-		        emptyMap.put("status", "empty");
-		        matchInfoList.add(emptyMap);
+			 return null;
 		}
 		System.out.println(matchInfoList);
 		return matchInfoList;
@@ -139,7 +167,7 @@ public class MainService {
         LocalDateTime localDateTimeEpisode = LocalDateTime.parse(episode, formatter);
         Map<String, Object> status = new HashMap<>();
         try {
-        	if(MainMapper.checkMatchPickCount(userId, localDateTimeEpisode) > 2) {
+        	if(MainMapper.checkMatchPickCount(userId, localDateTimeEpisode) > 1) {
         		status.put("status", "full");
         	}
         	else{
@@ -161,14 +189,16 @@ public class MainService {
 		 LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
 		 Map<String, Object> status = new HashMap<String, Object>();
 		 // MainMapper.insertPickUserHisotry(userId, localDateTimeEpisode, nickName);
-		 try {MainMapper.deletePickUser(userId, LocalDateTimeEpisode, nickName);
+		 try {
+			 MainMapper.deletePickUser(userId, LocalDateTimeEpisode, nickName);
+			 status.put("status", "cancel");
 		 } catch (Exception e) {
 			 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
 	         CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
 	         status.put("status", "error");
 		 }
-		 status.put("status", "complete");
+		 
 		 return status;
 		 
 	 }
