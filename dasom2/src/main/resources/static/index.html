@@ -27,6 +27,8 @@
         .btn-primary {
             background-color: #e687a6;
             border-color: #e687a6;
+            margin-top: 10px;
+            width: 25%;
         }
 
         .btn-primary:hover {
@@ -49,18 +51,44 @@
         .animate-slideIn {
             animation: slideIn 1s ease-in-out;
         }
+        #text-rights-foot{
+        	text-align: center;
+        }
+        
+        @media (max-width: 800px) {	 /* 핸드폰 화면 크기에 따라 조정 */
+	    	.btn-primary {
+	        	width: 80%;
+	        	margin-top : 0px;
+	    	}
+	    	
+	    	.jumbotron {
+	            background-color: #ffc0cb;
+	            border-color: #e687a6;
+	            display: flex;
+	            flex-direction: column;
+	            justify-content: center;
+	            align-items: center;
+	            height: 80vh;
+	            margin-top : 50px;
+	        }
+		}
+        
     </style>
 </head>
 
 <body>
 
     <div class="jumbotron text-center" style="height: 80vh;">
-        <h1 class="display-4 animate-slideIn" id="welcomeText">다솜 소개팅</h1>
-        <p class="lead animate-slideIn">여러분의 건강한 사랑을 응원합니다</p>
+        <h1 id="welcomeText" class="display-4 animate-slideIn">다솜 소개팅</h1>
+        <p id="welcomeText" class="lead animate-slideIn">여러분의 건강한 사랑을 응원합니다</p>
         <hr class="my-4">
         <a class="btn btn-primary btn-lg animate-slideIn" href="/loginPage" role="button">로그인</a>
-        <a class="btn btn-primary btn-lg animate-slideIn" href="register.user" role="button">회원가입</a>
+        <!-- <a class="btn btn-primary btn-lg animate-slideIn" href="register.user" role="button">회원가입</a> -->
     </div>
+
+	<!-- <footer>
+    	<p id ="text-rights-foot">&copy; 2024 Dasom meeting. All rights reserved.</p>
+	</footer> -->
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-color/2.1.2/jquery.color.min.js"></script>

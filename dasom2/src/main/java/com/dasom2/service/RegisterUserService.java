@@ -45,7 +45,7 @@ public class RegisterUserService {
     public boolean sendEmailVerification(String userId, String email, String token) {
         String subject = "다솜 소개팅 회원가입 이메일 인증";
         String content = "이메일 인증을 위해 아래 링크를 클릭해주세요.\n"
-                       + "http://192.168.11.125:8080/emailVerify?token=" + token + "&userId=" + userId;
+        			   + "http://211.202.209.158:8080/emailVerify?token=" + token + "&userId=" + userId;
         // 핸드폰 핫스팟으로 연결했을때
         // 192.168.62.228
         // plan a 와이파이 연결 했을 떄

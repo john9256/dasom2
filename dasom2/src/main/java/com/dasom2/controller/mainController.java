@@ -89,7 +89,7 @@ public class mainController {
 		return status;
     }
     
-    
+    // 중복된 이성이 있는대도 신청하는 경우
     @ResponseBody
     @PostMapping("/ScheduleSelectionDuplicateInsert")
     public Map<String, Object> ScheduleSelectionDuplicate(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
@@ -99,6 +99,8 @@ public class mainController {
     	return null;
     }
     
+    
+    // 매칭 인원 선택 모달
     @ResponseBody
     @PostMapping("/getMatchingInfo")
     public List<Map<String, Object>> getMatchingInfo(@RequestParam("userId") String userId, HttpSession session) {
@@ -127,5 +129,15 @@ public class mainController {
 		return status;
     }
     
+    // 소개팅 현황 모달
+    @ResponseBody
+    @PostMapping("/getParticipantList")
+    public List<Map<String, Object>> getParticipantList(@RequestParam("userId") String userId, HttpSession session) {
+    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    		
+    		return MainService.getParticipantList(userId);
+    	}
+			return null;
+    }
     
 }

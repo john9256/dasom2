@@ -7,11 +7,16 @@
      font-size: 40px;
      text-align: center;
      color: #ff85a2;
-     text-decoration: none; /* ╧ьаыю╩ а╕╟его©╘ ╦╣е╘╟║ е╛╦╞ ╟║╢игтю╩ ╨╦©╘ащ╢о╢ы. */
+     text-decoration: none; /* О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫о©О©╫ О©╫О©╫е╘О©╫О©╫ е╛О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫щ╢о╢О©╫. */
      font-weight: bold;
     }
 
-    .selectedBtn{
-    	background-color: #ff85a2 !important;
-        border-color: #ff85a2;
-    }
+.selectedBtn{
+	background-color: #ff85a2 !important;
+    border-color: #ff85a2;
+}
+
+a {
+    color: inherit; /* Л⌡░К·≤ Л┐┴Л²└ Л┐│Л├█ */
+    text-decoration: none; /* К╟▒Л╓└ Л═°Й╠╟ (Л└═М┐²Л═│) */
+}

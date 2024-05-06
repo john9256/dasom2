@@ -9,76 +9,11 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/commonCss.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/mainPageCss.css">
     <title>메인페이지</title>
     <style>
-    .full-screen-wrapper {
-        display: flex;
-        justify-content: center; /* Horizontally centers the child */
-        align-items: center; /* Vertically centers the child */
-        height: 100vh; /* Full viewport height */
-    }
-
-    .button-container {
-        display: flex;
-         margin-top: -120px;
-        flex-direction: column; /* Stacks buttons vertically */
-        align-items: center; /* Centers buttons horizontally */
-        gap: 25px; /* Space between buttons */
-        width: 80%; /* .button-container의 너비를 화면의 80%로 설정 */
-    	max-width: 1500px; /* 최대 너비를 500px로 제한 */
-    	justify-content: flex-end; /* 오른쪽 정렬 */
-    }
-
-    .button-container button.btn-main {
-        width: 80%;
-        padding: 17px 0;
-        font-size: 22px;
-        background-color: #ff85a2 !important;
-        border-color: #ff85a2;
-        color: white;
-    }
-
-    .button-container button.btn-main:hover {
-        background-color: pink !important;
-        border-color: pink;
-    }
     
-    .top-text{
-     font-size: 40px;
-     text-align: center;
-     color: #ff85a2;
-     text-decoration: none; /* 밑줄을 제거하여 링크가 클릭 가능함을 보여줍니다. */
-     font-weight: bold;
-    }
-    
-    .top-text a:link, .top-text a:visited {
-    color: #ff85a2; /* 방문하지 않은 링크 */
-    text-decoration: none; /* 밑줄 제거 */
-	}
-	
-    .modal-dialog {
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       height: 100vh;
-    }
-    
-    .modal-content {
-        margin-top: auto;
-        margin-bottom: auto;
-    }
-	.text-right a.btn {
-    margin-top: 0px;
-    background-color: #ff85a2; /* 배경 색상 */
-    border-color: #ff85a2; /* 테두리 색상 */
-    color: white; /* 글자 색상 */
-	}
-	
-	.text-right a.btn:hover {
-	    background-color: pink; /* 호버 시 배경 색상 */
-	    border-color: pink; /* 호버 시 테두리 색상 */
-	}
-</style>
+	</style>
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -90,17 +25,21 @@
 </head>
 <body>
 <div class="container mt-3">
+
+	<div class="text-right">
+        <!-- <a href="/test" class="text-head" >자주 묻는 질문</a> -->
+        <a href="/logout" class="text-head" >로그아웃</a>
+    </div>
+    
     <div class="top-text"><a href="/mainPage">다솜 소개팅</a></div>
-    <div class="text-right">
-        <a href="/logout" class="btn btn-primary" role="button">로그아웃</a>
-    </div>
+    
     <div class="full-screen-wrapper">
-    <div class="button-container">
-        <button id="dateSelectBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">날짜 선택</button>
-        <button id="statusViewBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">현황 화면</button>
-        <button id="matchingBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">두근두근 매칭</button>
-    </div>
-</div>
+	    <div class="button-container">
+	        <button id="dateSelectBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">날짜 선택</button>
+	        <button id="statusViewBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">소개팅 현황</button>
+	        <button id="matchingBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">두근두근 매칭</button>
+	    </div>
+	</div>
 </div>
 
 <!-- Modal -->
@@ -140,6 +79,51 @@ $(document).ready(function() {
     $('#matchingBtn').click(function() {
     	matchingModalContent("${userId}");
     });
+    
+ // 날짜 선택 모달
+ 	function dateSelectModalContent(userId) {
+ 		$(".modal-body").html("");
+ 		$("#modalLabel").html("소개팅 날짜 선택");
+      $.ajax({
+          url: "/getMeetingSchedule",
+          type: "POST",
+          data: {
+              userId: userId
+          },
+          success: function(data) {
+              var content = "";
+              var episode;
+              var location;
+              //var episode = "";
+              
+              data.forEach(function(schedule) {
+              	episode = schedule.episode;
+              	location = schedule.location;
+              	
+                  // 선택 여부에 따라 버튼 텍스트 설정
+                  var buttonText = "";
+                  var selectedCss = " ";
+                  if(schedule.userId === userId) {
+                      buttonText = "선택함";
+                      selectedCss = ' selectedBtn';
+                  } else {
+                      buttonText = "선택";
+                  }
+                  
+                  content += `<p>`+ episode +` (`+ location +`) 
+                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelectionSchedule('${userId}', '`+episode+`')">`+buttonText+`</button>
+                      </p>`;
+              });
+
+              $(".modal-body").html(content);
+              $("#modal").modal('show');
+          },
+          error: function(xhr, status, error) {
+              console.error("Error: " + error);
+              alert("스케줄을 불러오는데 실패했습니다.");
+          }
+      });
+  }
     
     // 두근두근 매칭 모달
     function matchingModalContent(userId) {
@@ -191,51 +175,56 @@ $(document).ready(function() {
         });
     }
     
+ // 소개팅 현황 모달
+    function currentStatusModal(userId) {
+    	$(".modal-body").html("");
+    	$("#modalLabel").html("소개팅 현황");
+    	$.ajax({
+            url: "/getParticipantList",
+            type: "POST",
+            data: {
+                userId: userId
+            },
+            success: function(data) {
+                var content = "";
+                let nickName = "";
+                let episode;
+                $(".modal-body").html("");
+                
+                if(data.length === 0){
+        			$("#modalLabel").html("진행된 소개팅이 없습니다.");
+        		}
+                else{
+	                data.forEach(function(matchInfo) {
+	                	
+	                	nickName = matchInfo.nickName;
+	                	episode = matchInfo.episode;
+	                	
+	                    // 선택 여부에 따라 버튼 텍스트 설정
+	                    var buttonText = "";
+	                    var selectedCss = " ";
+	                    if(matchInfo.pick != null) {
+	                       buttonText = "선택함";
+	                       selectedCss = ' selectedBtn';
+	                    } else {
+	                       buttonText = "선택";
+	                    }
+	                    
+	                    content += `<p>`+ nickName +` 
+	                        
+	                        </p>`;
+	                });
+            	}
+                $(".modal-body").html(content);
+                $("#modal").modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: " + error);
+                alert("데이터를 불러오는데 실패했습니다.");
+            }
+        });
+    }
     
-    // 날짜 선택 모달
- 	function dateSelectModalContent(userId) {
- 		$(".modal-body").html("");
- 		$("#modalLabel").html("소개팅 날짜 선택");
-      $.ajax({
-          url: "/getMeetingSchedule",
-          type: "POST",
-          data: {
-              userId: userId
-          },
-          success: function(data) {
-              var content = "";
-              var episode;
-              var location;
-              //var episode = "";
-              
-              data.forEach(function(schedule) {
-              	episode = schedule.episode;
-              	location = schedule.location;
-              	
-                  // 선택 여부에 따라 버튼 텍스트 설정
-                  var buttonText = "";
-                  var selectedCss = " ";
-                  if(schedule.userId === userId) {
-                      buttonText = "선택함";
-                      selectedCss = ' selectedBtn';
-                  } else {
-                      buttonText = "선택";
-                  }
-                  
-                  content += `<p>`+ episode +` (`+ location +`) 
-                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelectionSchedule('${userId}', '`+episode+`')">`+buttonText+`</button>
-                      </p>`;
-              });
-
-              $(".modal-body").html(content);
-              $("#modal").modal('show');
-          },
-          error: function(xhr, status, error) {
-              console.error("Error: " + error);
-              alert("스케줄을 불러오는데 실패했습니다.");
-          }
-      });
-  }
     
 });
 

@@ -15,7 +15,7 @@ body {
 }
 
 .card {
-	margin-top: 100px;
+	margin-top: 200px;
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -34,6 +34,13 @@ body {
 	border-color: #e687a6;
 }
 
+@media (max-width: 800px) {
+	.card {
+	margin-top: 120px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+}
+
 </style>
 
 </head>
@@ -49,7 +56,7 @@ body {
 					<div class="card-body">
 						<form action="/loginDo" method="post">
 							<div class="form-group">
-								<label for="userId">이름</label> <input type="text"
+								<label for="userId">아이디</label> <input type="text"
 									class="form-control" id="userId" name="userId"
 									placeholder="Enter username">
 							</div>

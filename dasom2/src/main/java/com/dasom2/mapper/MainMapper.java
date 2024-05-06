@@ -18,7 +18,7 @@ public interface MainMapper {
 	int checkDuplication(String userId, LocalDateTime LocalDateTimeEpisode);
 	String checkContinuity(String userId, LocalDateTime LocalDateTimeEpisode);
 	void insertParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
-	void deleteParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
+	int deleteParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
 	String checkHeadCount(String userId, LocalDateTime episode);
 	int checkMatchPickCount(String userId, LocalDateTime episode);
 	String getPassFlagbyUser(String userId);

@@ -72,7 +72,7 @@
 	    )
 	</insert>
     
-    <delete id="deleteParticipantUser">
+    <delete id="deleteParticipantUser" >
         DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = #{episode}
     </delete>
     

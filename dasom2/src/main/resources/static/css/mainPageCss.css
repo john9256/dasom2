@@ -1,0 +1,66 @@
+.full-screen-wrapper {
+        display: flex;
+        justify-content: center; /* Horizontally centers the child */
+        align-items: center; /* Vertically centers the child */
+        height: 100vh; /* Full viewport height */
+    }
+
+    .button-container {
+        display: flex;
+         margin-top: -120px;
+        flex-direction: column; /* Stacks buttons vertically */
+        align-items: center; /* Centers buttons horizontally */
+        gap: 25px; /* Space between buttons */
+        width: 80%; /* .button-container의 너비를 화면의 80%로 설정 */
+    	max-width: 1500px; /* 최대 너비를 500px로 제한 */
+    	justify-content: flex-end; /* 오른쪽 정렬 */
+    }
+
+    .button-container button.btn-main {
+        width: 80%;
+        padding: 17px 0;
+        font-size: 22px;
+        background-color: #ff85a2 !important;
+        border-color: #ff85a2;
+        color: white;
+    }
+
+    .button-container button.btn-main:hover {
+        background-color: pink !important;
+        border-color: pink;
+    }
+    
+    .top-text{
+     font-size: 40px;
+     text-align: center;
+     color: #ff85a2;
+     text-decoration: none; /* 밑줄을 제거하여 링크가 클릭 가능함을 보여줍니다. */
+     font-weight: bold;
+    }
+    
+    .top-text a:link, .top-text a:visited {
+    color: #ff85a2; /* 방문하지 않은 링크 */
+    text-decoration: none; /* 밑줄 제거 */
+	}
+	
+    .modal-dialog {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       height: 100vh;
+    }
+    
+    .modal-content {
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+    
+	.text-right a.text-head {
+    margin-top: 0px;
+    margin-right : 20px;
+    background-color: white; /* 배경 색상 */
+    border-color: white; /* 테두리 색상 */
+    color: #ff85a2; /* 글자 색상 */
+    text-decoration: none;
+    font-weight: bold;
+	}

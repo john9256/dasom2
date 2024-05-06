@@ -75,6 +75,10 @@
         margin-bottom: auto;
     }
 	
+	.second-text{
+		margin-top : 20px;
+	}
+	
 </style>
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
@@ -88,11 +92,10 @@
 <body>
 <div class="container mt-3">
     <div class="top-text"><a href="/mainPage">다솜 소개팅</a></div>
-    <div class="second-text"><a href="/mainPage">호스트가 회원가입을 확인중에 있습니다.<br>이후 서비스 정상 이용 가능하십니다</a></div>
+    <div class="second-text">호스트가 회원가입 검토중에 있습니다.<br>조금만 기다려주세요!</div>
     <div class="full-screen-wrapper">
     <div class="button-container">
     	<button id="guideBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">소개팅 가이드</button>
-        <button id="dateSelectBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">날짜 선택</button>
     </div>
 </div>
 </div>
@@ -121,117 +124,8 @@
 
 
 <script>
-$(document).ready(function() {
-	
-    $('#dateSelectBtn').click(function() {
-    	dateSelectModalContent("${userId}");
-    });
-	
-    $('#statusViewBtn').click(function() {
-    	matchingModalContent("${userId}");
-    });
-    
-    $('#guideBtn').click(function() {
-    	matchingModalContent();
-    });
-    
-    
-    // 소개팅 가이드 모달
- 	function dateSelectModalContent() {
- 		$(".modal-body").html("");
- 		$("#modalLabel").html("소개팅 가이드");
-      $.ajax({
-          url: "/getMeetingSchedule",
-          type: "POST",
-          data: {
-              userId: userId
-          },
-          success: function(data) {
-              var content = "";
-              var episode;
-              var location;
-              //var episode = "";
-              
-              data.forEach(function(schedule) {
-              	episode = schedule.episode;
-              	location = schedule.location;
-              	
-                  // 선택 여부에 따라 버튼 텍스트 설정
-                  var buttonText = "";
-                  var selectedCss = " ";
-                  if(schedule.userId === userId) {
-                      buttonText = "선택함";
-                      selectedCss = ' selectedBtn';
-                  } else {
-                      buttonText = "선택";
-                  }
-                  var buttonClass = schedule.userId === userId ? "btn-selected" : "";
-                  
-                  content += `<p>`+ episode +` (`+ location +`) 
-                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelection('${userId}', '`+episode+`')">`+buttonText+`</button>
-                      </p>`;
-              });
 
-              $(".modal-body").html(content);
-              $("#modal").modal('show');
-          },
-          error: function(xhr, status, error) {
-              console.error("Error: " + error);
-              alert("스케줄을 불러오는데 실패했습니다.");
-          }
-      });
-  }
-    
-});
 
-function toggleSelection(userId, episode) {
-    // 선택된 회차의 버튼 ID를 구성
-    var btnId = "btn_" + episode;
-    var episodeSelected = document.getElementById(btnId).textContent === '선택';
-
-    // 사용자에게 스케줄 선택 확인 요청
-    var userConfirmed;
-    	if(episodeSelected){
-    		userConfirmed = confirm("소개팅을 신청하시겠습니까?");
-    		}
-    	else{
-    		userConfirmed = confirm("소개팅을 취소하시겠습니까?");
-    	}
-
-    // 사용자가 확인을 누른 경우에만 AJAX 통신 실행
-    if(userConfirmed) {
-        $.ajax({
-            url: "/ScheduleSelection",
-            type: "POST",
-            data: {
-                userId: userId,
-                episode: episode,
-                episodeSelected: episodeSelected
-            },
-            success: function(data) {
-            	var btn = document.getElementById(btnId);
-                // 성공 시 버튼 텍스트 업데이트
-            	 if(data.status == "complete") {
-           	        btn.textContent = '선택함';
-           	        btn.className = "btn btn-info btn-sm right-button selectedBtn"; // 선택된 스타일 적용
-           	        alert("소개팅 신청에 성공했습니다.");
-           	    } else if (data.status == "full"){
-           	        alert("남은 자리가 없습니다.");
-           	    } else if(data.status == "cancel") {
-           	        btn.textContent = '선택';
-           	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
-           	        alert("소개팅 신청을 취소했습니다.");
-           	    } else {
-           	        alert("소개팅 신청에 실패했습니다.");
-           	    }
-            },
-            error: function(xhr, status, error) {
-                console.error("Selection update failed: " + error);
-                alert("소개팅 신청에 실패했습니다.");
-            }
-        });
-    }
-}
 
 </script>
 
