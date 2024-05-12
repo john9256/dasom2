@@ -2,6 +2,7 @@ package com.dasom2.mapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,6 +24,7 @@ public interface MainMapper {
 	int checkMatchPickCount(String userId, LocalDateTime episode);
 	String getPassFlagbyUser(String userId);
 	List<matchPersonVO> getMatchingInfo(String userId);
+	List<Map<String, Object>> getParticipantList(String userId);
 	void insertPickUser(String userId, LocalDateTime episode, String nickName);
 	void deletePickUser(String userId, LocalDateTime episode, String nickName);
 	LocalDateTime test();

@@ -136,4 +136,8 @@
     	DELETE FROM MATCHING WHERE USER_ID = #{userId} AND EPISODE = #{episode} AND PICK = #{nickName}
     </delete>
     
+    <select id ="getParticipantList">
+    	SELECT * FROM 
+    </select>
+    
 </mapper>

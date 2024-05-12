@@ -213,24 +213,8 @@ public class MainService implements MainServiceInterface {
 			
 			List<Map<String, Object>> ParticipantList = new ArrayList<>();
 			
-			List<matchPersonVO> matchingInfoList = MainMapper.getMatchingInfo(userId);
-			matchPersonVO matchingInfoVo;
+			ParticipantList = MainMapper.getParticipantList(userId);
 			
-//			if(matchingInfoList.size() != 0) {
-//				for(int i =0; i < matchingInfoList.size(); i++) {
-//					matchingInfoVo = matchingInfoList.get(i);
-//					Map<String, Object> matchInfoMap = new HashMap<String, Object>();
-//					matchInfoMap.put("nickName", matchingInfoVo.getNickName());
-//					matchInfoMap.put("episode", matchingInfoVo.getLocalDateTimeEpisode().format(formatter));
-//					matchInfoMap.put("pick", matchingInfoVo.getPick());
-//					matchingInfoList.add(i, matchInfoMap);
-//				}
-//				matchingInfoList.get(0).put("status", "success");
-//			}
-//			else {
-//				 return null;
-//			}
-//			System.out.println(matchInfoList);
 			return ParticipantList;
 			
 		}
