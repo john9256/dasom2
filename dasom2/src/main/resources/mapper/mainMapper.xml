@@ -137,7 +137,18 @@
     </delete>
     
     <select id ="getParticipantList">
-    	SELECT * FROM 
+    	SELECT A.SEX AS sex, B.JOB_DIVISION AS jobDivision, A.EPISODE AS episode, YEAR(CURDATE()) - YEAR(B.BIRTHDAY) AS year FROM participant_user A
+		INNER JOIN
+		USER_TABLE B
+		ON A.USER_ID = B.USER_ID
+		WHERE EPISODE IN
+		(
+			SELECT episode FROM participant_user 
+			WHERE 1=1
+			AND episode > NOW()
+		)
+		ORDER BY A.CREATETIME ASC
     </select>
+    
     
 </mapper>

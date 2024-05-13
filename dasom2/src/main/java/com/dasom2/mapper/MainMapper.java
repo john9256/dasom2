@@ -24,7 +24,8 @@ public interface MainMapper {
 	int checkMatchPickCount(String userId, LocalDateTime episode);
 	String getPassFlagbyUser(String userId);
 	List<matchPersonVO> getMatchingInfo(String userId);
-	List<Map<String, Object>> getParticipantList(String userId);
+	List<Map<String, Object>> getParticipantList();
+	Map<String, Object> getParticipantCount();
 	void insertPickUser(String userId, LocalDateTime episode, String nickName);
 	void deletePickUser(String userId, LocalDateTime episode, String nickName);
 	LocalDateTime test();

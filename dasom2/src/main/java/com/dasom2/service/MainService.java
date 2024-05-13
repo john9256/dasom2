@@ -206,19 +206,17 @@ public class MainService implements MainServiceInterface {
 		 
 	 }
 	 
-	 
-	// 소개팅 현황 (소개팅 이력) get
+	// 소개팅 현황 get
 	 @Override
 		public List<Map<String, Object>> getParticipantList(String userId){
 			
-			List<Map<String, Object>> ParticipantList = new ArrayList<>();
+			List<Map<String, Object>> participantList = new ArrayList<>();
 			
-			ParticipantList = MainMapper.getParticipantList(userId);
-			
-			return ParticipantList;
+			participantList = MainMapper.getParticipantList();
+			System.out.println(participantList);
+			return participantList;
 			
 		}
-
 	
 }
 

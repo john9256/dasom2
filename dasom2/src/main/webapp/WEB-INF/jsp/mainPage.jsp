@@ -10,6 +10,8 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/commonCss.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/mainPageCss.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <title>메인페이지</title>
     <style>
     
@@ -20,6 +22,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
     <!-- <script src="dashboard.js"></script>  -->
     
 </head>
@@ -36,7 +39,7 @@
     <div class="full-screen-wrapper">
 	    <div class="button-container">
 	        <button id="dateSelectBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">날짜 선택</button>
-	        <button id="statusViewBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">소개팅 현황</button>
+	        <button id="getParticipantList" type="button" class="btn btn-main" data-toggle="modal" data-target="#modalParticipantList">소개팅 현황</button>
 	        <button id="matchingBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">두근두근 매칭</button>
 	    </div>
 	</div>
@@ -62,7 +65,36 @@
   </div>
 </div>
 
-
+<!-- 소개팅 인원 현황 모달 -->
+<div class="modal fade" id="modalParticipantList" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="modalParticipantList">
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="text-center"><i class="fas fa-mars"></i>남자</h6>
+            <div id="maleParticipant" class="text-center">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6 class="text-center"><i class="fas fa-venus"></i>여자</h6>
+            <div id="femaleParticipant" class="text-center">
+            </div>
+          </div>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 
 
 <script>
@@ -72,8 +104,8 @@ $(document).ready(function() {
     	dateSelectModalContent("${userId}");
     });
 	
-    $('#statusViewBtn').click(function() {
-    	/* matchingModalContent("${userId}"); */
+    $('#getParticipantList').click(function() {
+    	getParticipantList("${userId}");
     });
     
     $('#matchingBtn').click(function() {
@@ -176,8 +208,8 @@ $(document).ready(function() {
     }
     
  // 소개팅 현황 모달
-    function currentStatusModal(userId) {
-    	$(".modal-body").html("");
+    function getParticipantList(userId) {
+    	$("#modalParticipantList-body").html("");
     	$("#modalLabel").html("소개팅 현황");
     	$.ajax({
             url: "/getParticipantList",
@@ -186,37 +218,44 @@ $(document).ready(function() {
                 userId: userId
             },
             success: function(data) {
-                var content = "";
-                let nickName = "";
+                var maleContent = "";
+                var femaleContent = "";
+                console.log(data);
+                let sex;
+                let jobDivision;
                 let episode;
-                $(".modal-body").html("");
+                let year;
+                
+                $("#modalParticipantList-body").html("");
                 
                 if(data.length === 0){
-        			$("#modalLabel").html("진행된 소개팅이 없습니다.");
+        			$("#modalLabel").html("진행중인 소개팅이 없습니다.");
         		}
                 else{
-	                data.forEach(function(matchInfo) {
+	                data.forEach(function(participantList) {
 	                	
-	                	nickName = matchInfo.nickName;
-	                	episode = matchInfo.episode;
+	                	sex = participantList.sex;
+	                	jobDivision = participantList.jobDivision;
+	                	year = participantList.year;
+	                	episode = participantList.episode;
 	                	
 	                    // 선택 여부에 따라 버튼 텍스트 설정
 	                    var buttonText = "";
 	                    var selectedCss = " ";
-	                    if(matchInfo.pick != null) {
-	                       buttonText = "선택함";
-	                       selectedCss = ' selectedBtn';
-	                    } else {
-	                       buttonText = "선택";
-	                    }
 	                    
-	                    content += `<p>`+ nickName +` 
-	                        
+	                    if(sex == "남성"){
+	                    maleContent += `<p>`+ year + "  " + jobDivision  + ` 
 	                        </p>`;
+	                    }
+	                    else{
+	                    	femaleContent += `<p>`+ year + "  " + jobDivision  + ` 
+	                        </p>`;
+	                    }
 	                });
             	}
-                $(".modal-body").html(content);
-                $("#modal").modal('show');
+                $("#maleParticipant").html(maleContent);
+                $("#femaleParticipant").html(femaleContent);
+                $("#modalParticipantList").modal('show');
             },
             error: function(xhr, status, error) {
                 console.error("Error: " + error);
