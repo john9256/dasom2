@@ -68,3 +68,9 @@
 	.text-center{
 		text-align: center;
 	}
+	
+	
+	.emoji-icon {
+      height: 1.3em; /* 텍스트 크기와 동일하게 설정 */
+      margin-right: 0.2em; /* 텍스트와 아이콘 사이 간격 설정 */
+    }

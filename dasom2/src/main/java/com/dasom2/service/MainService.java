@@ -212,8 +212,15 @@ public class MainService implements MainServiceInterface {
 			
 			List<Map<String, Object>> participantList = new ArrayList<>();
 			
+			Map<String, Object> temp = new HashMap<>();
+			
 			participantList = MainMapper.getParticipantList();
-			System.out.println(participantList);
+			System.out.println(participantList.get(0).get("year"));
+//			if(participantList.size() > 0) {
+//				for(int i = 0; i < participantList.size(); i ++) {
+//					participantList.get(0).get("year");
+//				}
+//			}
 			return participantList;
 			
 		}

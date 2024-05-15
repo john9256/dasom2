@@ -70,7 +70,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel"></h5>
+        <h5 class="modal-title2" id="modalLabel2"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -78,12 +78,12 @@
       <div id="modalParticipantList">
         <div class="row">
           <div class="col-md-6">
-            <h6 class="text-center"><i class="fas fa-mars"></i>남자</h6>
+            <h6 class="text-center"><img class="emoji-icon" src="/image/1F466_color.png" alt="Boy Face">남자</h6>
             <div id="maleParticipant" class="text-center">
             </div>
           </div>
           <div class="col-md-6">
-            <h6 class="text-center"><i class="fas fa-venus"></i>여자</h6>
+            <h6 class="text-center"><img class="emoji-icon" src="/image/1F467_color.png" alt="Girl Face">여자</h6>
             <div id="femaleParticipant" class="text-center">
             </div>
           </div>
@@ -127,25 +127,29 @@ $(document).ready(function() {
               var episode;
               var location;
               //var episode = "";
-              
-              data.forEach(function(schedule) {
-              	episode = schedule.episode;
-              	location = schedule.location;
-              	
-                  // 선택 여부에 따라 버튼 텍스트 설정
-                  var buttonText = "";
-                  var selectedCss = " ";
-                  if(schedule.userId === userId) {
-                      buttonText = "선택함";
-                      selectedCss = ' selectedBtn';
-                  } else {
-                      buttonText = "선택";
-                  }
-                  
-                  content += `<p>`+ episode +` (`+ location +`) 
-                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelectionSchedule('${userId}', '`+episode+`')">`+buttonText+`</button>
-                      </p>`;
-              });
+              if(data.length === 0){
+      			$("#modalLabel").html("현재 진행 예정인 소개팅이 없습니다.");
+      		}
+              else{
+	              data.forEach(function(schedule) {
+	              	episode = schedule.episode;
+	              	location = schedule.location;
+	              	
+	                  // 선택 여부에 따라 버튼 텍스트 설정
+	                  var buttonText = "";
+	                  var selectedCss = " ";
+	                  if(schedule.userId === userId) {
+	                      buttonText = "선택함";
+	                      selectedCss = ' selectedBtn';
+	                  } else {
+	                      buttonText = "선택";
+	                  }
+	                  
+	                  content += `<p>`+ episode +` (`+ location +`) 
+	                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelectionSchedule('${userId}', '`+episode+`')">`+buttonText+`</button>
+	                      </p>`;
+	              });
+              }
 
               $(".modal-body").html(content);
               $("#modal").modal('show');
@@ -210,7 +214,7 @@ $(document).ready(function() {
  // 소개팅 현황 모달
     function getParticipantList(userId) {
     	$("#modalParticipantList-body").html("");
-    	$("#modalLabel").html("소개팅 현황");
+    	$("#modalLabel2").html("소개팅 현황");
     	$.ajax({
             url: "/getParticipantList",
             type: "POST",
@@ -220,7 +224,7 @@ $(document).ready(function() {
             success: function(data) {
                 var maleContent = "";
                 var femaleContent = "";
-                console.log(data);
+                console.log(data.length);
                 let sex;
                 let jobDivision;
                 let episode;
@@ -229,7 +233,7 @@ $(document).ready(function() {
                 $("#modalParticipantList-body").html("");
                 
                 if(data.length === 0){
-        			$("#modalLabel").html("진행중인 소개팅이 없습니다.");
+        			$("#modalLabel2").html("현재 진행중인 소개팅이 없습니다.");
         		}
                 else{
 	                data.forEach(function(participantList) {
