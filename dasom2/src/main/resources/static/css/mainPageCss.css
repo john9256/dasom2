@@ -60,7 +60,7 @@
 	    margin-right : 20px;
 	    background-color: white; 
 	    border-color: white; 
-	    color: #ff85a2; 
+	    color: #ff85a2;
 	    text-decoration: none;
 	    font-weight: bold;
 	}
@@ -74,3 +74,19 @@
       height: 1.3em; /* 텍스트 크기와 동일하게 설정 */
       margin-right: 0.2em; /* 텍스트와 아이콘 사이 간격 설정 */
     }
+    
+    p{
+    	align-items: center; /* 수직 중앙 정렬 */
+    }
+    
+    @media (max-width: 768px) {
+    .modal-dialog {
+      max-width: 100%;
+      margin: 0;
+    }
+    .col-md-6 {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+  }
+  

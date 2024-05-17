@@ -136,7 +136,7 @@ public class MainService implements MainServiceInterface {
 		}
 	}
 	
-	// 매칭 모달 인원 리스트 get
+	// 두근두근 매칭 모달 인원 리스트 get
 	public List<Map<String, Object>> getMatchingInfo(String userId){
 		
 		List<Map<String, Object>> matchInfoList = new ArrayList<>();
@@ -215,15 +215,37 @@ public class MainService implements MainServiceInterface {
 			Map<String, Object> temp = new HashMap<>();
 			
 			participantList = MainMapper.getParticipantList();
-			System.out.println(participantList.get(0).get("year"));
-//			if(participantList.size() > 0) {
-//				for(int i = 0; i < participantList.size(); i ++) {
-//					participantList.get(0).get("year");
-//				}
-//			}
+			
+			if(participantList.size() > 0) {
+				for(int i = 0; i < participantList.size(); i ++) {
+					
+					participantList.get(i).put("year", classifyAge((int)participantList.get(i).get("year")));
+				}
+			}
 			return participantList;
 			
 		}
 	
+	 public String classifyAge(int age) {
+	        if (age < 10 || age >= 100) {
+	            return "연령대 미정";
+	        }
+	        
+	        int decade = (age / 10) * 10;
+	        int remainder = age % 10;
+	        String ageGroup;
+
+	        if (remainder < 4) {
+	            ageGroup = "초반";
+	        } else if (remainder < 7) {
+	            ageGroup = "중반";
+	        } else {
+	            ageGroup = "후반";
+	        }
+
+	        return decade + "대 " + ageGroup;
+	    }
+	 
+	 
 }
 

@@ -1,13 +1,13 @@
 .right-button{
    float: right;
-   width: 100px
+   width: 100px;
 }
 
 .top-text{
      font-size: 40px;
      text-align: center;
      color: #ff85a2;
-     text-decoration: none; /* ������ �����Ͽ� ��ũ�� Ŭ�� �������� �����ݴϴ�. */
+     text-decoration: none; 
      font-weight: bold;
     }
 
@@ -19,4 +19,21 @@
 a {
     color: inherit; /* 원래 색을 상속 */
     text-decoration: none; /* 밑줄 제거 (선택적) */
+}
+
+@media(max-width: 768px){
+	
+	.mobile-font{
+		font-size: 14px;
+		align-items: center; /* 수직 중앙 정렬 */
+	}
+	
+	.right-button{
+	   float: right;
+	   width: auto;
+	   height: auto;
+	   font-size: 12px !important;
+	   align-items: center !important; /* 수직 중앙 정렬 */
+	}
+	
 }

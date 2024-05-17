@@ -75,25 +75,14 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div id="modalParticipantList">
-        <div class="row">
-          <div class="col-md-6">
-            <h6 class="text-center"><img class="emoji-icon" src="/image/1F466_color.png" alt="Boy Face">남자</h6>
-            <div id="maleParticipant" class="text-center">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h6 class="text-center"><img class="emoji-icon" src="/image/1F467_color.png" alt="Girl Face">여자</h6>
-            <div id="femaleParticipant" class="text-center">
-            </div>
-          </div>
-        </div>
+      <div id="modalParticipantList-body">
+        <!-- 동적으로 생성된 콘텐츠가 여기에 삽입됩니다. -->
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
       </div>
     </div>
   </div>
-</div>
 </div>
 
 
@@ -145,7 +134,7 @@ $(document).ready(function() {
 	                      buttonText = "선택";
 	                  }
 	                  
-	                  content += `<p>`+ episode +` (`+ location +`) 
+	                  content += `<p class="mobile-font">`+ episode +` (`+ location +`) 
 	                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelectionSchedule('${userId}', '`+episode+`')">`+buttonText+`</button>
 	                      </p>`;
 	              });
@@ -196,7 +185,7 @@ $(document).ready(function() {
 	                       buttonText = "선택";
 	                    }
 	                    
-	                    content += `<p>`+ nickName +` 
+	                    content += `<p class="mobile-font">`+ nickName +` 
 	                        <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+nickName+`" onclick="toggleSelectionMatch('${userId}', '`+nickName+`', '`+episode+`')">`+buttonText+`</button>
 	                        </p>`;
 	                });
@@ -213,60 +202,71 @@ $(document).ready(function() {
     
  // 소개팅 현황 모달
     function getParticipantList(userId) {
-    	$("#modalParticipantList-body").html("");
-    	$("#modalLabel2").html("소개팅 현황");
-    	$.ajax({
-            url: "/getParticipantList",
-            type: "POST",
-            data: {
-                userId: userId
-            },
-            success: function(data) {
-                var maleContent = "";
-                var femaleContent = "";
-                console.log(data.length);
-                let sex;
-                let jobDivision;
-                let episode;
-                let year;
+    // 모달 본문 초기화
+    $("#modalParticipantList-body").html("");
+    $("#modalLabel2").html("소개팅 현황");
+    $.ajax({
+        url: "/getParticipantList",
+        type: "POST",
+        data: {
+            userId: userId
+        },
+        success: function(data) {
+            var contentByEpisode = {};
+            console.log("Data length:", data.length);
+            console.log("Received data:", data);
+            
+            $("#modalParticipantList-body").html("");
+            
+            if (data.length === 0) {
+                $("#modalLabel2").html("현재 진행중인 소개팅이 없습니다.");
+            } else {
+                data.forEach(function(participant) {
+                    var episode = participant.episode;
+                    var sex = participant.sex;
+                    var jobDivision = participant.jobDivision;
+                    var year = participant.year;
+                    
+                    if (!contentByEpisode[episode]) {
+                        contentByEpisode[episode] = { male: "", female: "" };
+                    }
+                    
+                    if (sex === "남성") {
+                        contentByEpisode[episode].male += "<p class='mobile-font'>" + year + " " + jobDivision + "</p>";
+                    } else {
+                        contentByEpisode[episode].female += "<p class='mobile-font'>" + year + " " + jobDivision + "</p>";
+                    }
+                });
                 
-                $("#modalParticipantList-body").html("");
+                var modalBodyContent = "";
+                for (var episode in contentByEpisode) {
+                    console.log("Episode:", episode, "Male content:", contentByEpisode[episode].male, "Female content:", contentByEpisode[episode].female);
+                    modalBodyContent += 
+                        "<h5>에피소드 " + episode + "</h5>" +
+                        "<div class='row'>" +
+                            "<div class='col-md-6'>" +
+                                "<h6 class='text-center'><img class='emoji-icon' src='/image/1F466_color.png' alt='Boy Face'>남자</h6>" +
+                                "<div class='text-center'>" + contentByEpisode[episode].male + "</div>" +
+                            "</div>" +
+                            "<div class='col-md-6'>" +
+                                "<h6 class='text-center'><img class='emoji-icon' src='/image/1F467_color.png' alt='Girl Face'>여자</h6>" +
+                                "<div class='text-center'>" + contentByEpisode[episode].female + "</div>" +
+                            "</div>" +
+                        "</div>" +
+                        "<hr>";
+                }
                 
-                if(data.length === 0){
-        			$("#modalLabel2").html("현재 진행중인 소개팅이 없습니다.");
-        		}
-                else{
-	                data.forEach(function(participantList) {
-	                	
-	                	sex = participantList.sex;
-	                	jobDivision = participantList.jobDivision;
-	                	year = participantList.year;
-	                	episode = participantList.episode;
-	                	
-	                    // 선택 여부에 따라 버튼 텍스트 설정
-	                    var buttonText = "";
-	                    var selectedCss = " ";
-	                    
-	                    if(sex == "남성"){
-	                    maleContent += `<p>`+ year + "  " + jobDivision  + ` 
-	                        </p>`;
-	                    }
-	                    else{
-	                    	femaleContent += `<p>`+ year + "  " + jobDivision  + ` 
-	                        </p>`;
-	                    }
-	                });
-            	}
-                $("#maleParticipant").html(maleContent);
-                $("#femaleParticipant").html(femaleContent);
+                console.log("Generated HTML:", modalBodyContent);
+                $("#modalParticipantList-body").html(modalBodyContent);
                 $("#modalParticipantList").modal('show');
-            },
-            error: function(xhr, status, error) {
-                console.error("Error: " + error);
-                alert("데이터를 불러오는데 실패했습니다.");
             }
-        });
-    }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+            alert("데이터를 불러오는데 실패했습니다.");
+        }
+    });
+}
     
     
 });
