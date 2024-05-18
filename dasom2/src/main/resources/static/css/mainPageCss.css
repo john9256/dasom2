@@ -88,5 +88,15 @@
       flex: 0 0 50%;
       max-width: 50%;
     }
+    .modal-title{
+    	font-size: 14px !important;
+    	font-weight: bold;
+    }
+    .btn-secondary{
+    	font-size: 14px !important;
+    }
+    .text-center{
+    	font-size: 14px !important;
+    }
   }
   

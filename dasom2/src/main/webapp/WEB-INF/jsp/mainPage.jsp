@@ -70,7 +70,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title2" id="modalLabel2"></h5>
+        <h5 class="modal-title" id="modalLabel2"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -213,8 +213,6 @@ $(document).ready(function() {
         },
         success: function(data) {
             var contentByEpisode = {};
-            console.log("Data length:", data.length);
-            console.log("Received data:", data);
             
             $("#modalParticipantList-body").html("");
             
@@ -240,9 +238,8 @@ $(document).ready(function() {
                 
                 var modalBodyContent = "";
                 for (var episode in contentByEpisode) {
-                    console.log("Episode:", episode, "Male content:", contentByEpisode[episode].male, "Female content:", contentByEpisode[episode].female);
                     modalBodyContent += 
-                        "<h5>에피소드 " + episode + "</h5>" +
+                        "<div class = 'text-center'>" + episode + "</div>" +
                         "<div class='row'>" +
                             "<div class='col-md-6'>" +
                                 "<h6 class='text-center'><img class='emoji-icon' src='/image/1F466_color.png' alt='Boy Face'>남자</h6>" +
@@ -256,7 +253,6 @@ $(document).ready(function() {
                         "<hr>";
                 }
                 
-                console.log("Generated HTML:", modalBodyContent);
                 $("#modalParticipantList-body").html(modalBodyContent);
                 $("#modalParticipantList").modal('show');
             }

@@ -137,7 +137,8 @@
     </delete>
     
     <select id ="getParticipantList">
-    	SELECT A.SEX AS sex, B.JOB_DIVISION AS jobDivision, A.EPISODE AS episode, YEAR(CURDATE()) - YEAR(B.BIRTHDAY) AS year FROM participant_user A
+    	SELECT A.SEX AS sex, B.JOB_DIVISION AS jobDivision, A.EPISODE AS episode, YEAR(CURDATE()) - YEAR(B.BIRTHDAY) AS year 
+    	FROM participant_user A
 		INNER JOIN
 		USER_TABLE B
 		ON A.USER_ID = B.USER_ID
