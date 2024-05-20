@@ -21,11 +21,22 @@ a {
     text-decoration: none; /* 밑줄 제거 (선택적) */
 }
 
+.mobile-font{
+		align-items: center; /* 수직 중앙 정렬 */
+		margin-bottom : 20px;
+	}
+
+.mobile-font2{
+		align-items: center; /* 수직 중앙 정렬 */
+		margin-bottom : 0px;
+	}
+
 @media(max-width: 768px){
 	
 	.mobile-font{
 		font-size: 14px;
 		align-items: center; /* 수직 중앙 정렬 */
+		margin-bottom : 20px;
 	}
 	
 	.right-button{
@@ -34,6 +45,12 @@ a {
 	   height: auto;
 	   font-size: 12px !important;
 	   align-items: center !important; /* 수직 중앙 정렬 */
+	}
+	
+	.mobile-font2{
+		font-size: 13px;
+		align-items: center; /* 수직 중앙 정렬 */
+		margin-bottom : 0px;
 	}
 	
 }

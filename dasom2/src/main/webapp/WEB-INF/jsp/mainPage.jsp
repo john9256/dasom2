@@ -224,22 +224,21 @@ $(document).ready(function() {
                     var sex = participant.sex;
                     var jobDivision = participant.jobDivision;
                     var year = participant.year;
-                    
                     if (!contentByEpisode[episode]) {
                         contentByEpisode[episode] = { male: "", female: "" };
                     }
                     
                     if (sex === "남성") {
-                        contentByEpisode[episode].male += "<p class='mobile-font'>" + year + " " + jobDivision + "</p>";
+                        contentByEpisode[episode].male += "<p class='mobile-font2'>" + year + " " + jobDivision + "</p>";
                     } else {
-                        contentByEpisode[episode].female += "<p class='mobile-font'>" + year + " " + jobDivision + "</p>";
+                        contentByEpisode[episode].female += "<p class='mobile-font2'>" + year + " " + jobDivision + "</p>";
                     }
                 });
                 
                 var modalBodyContent = "";
                 for (var episode in contentByEpisode) {
                     modalBodyContent += 
-                        "<div class = 'text-center'>" + episode + "</div>" +
+                        "<div class = 'text-head text-center'>" + formatDateTime(episode) + "</div>" +
                         "<div class='row'>" +
                             "<div class='col-md-6'>" +
                                 "<h6 class='text-center'><img class='emoji-icon' src='/image/1F466_color.png' alt='Boy Face'>남자</h6>" +
@@ -401,6 +400,33 @@ function toggleSelectionMatch(userId, nickName, episode) {
         });
     }
 }
+
+
+// 날짜 형식 변환 함수
+function formatDateTime(input) {
+    // Date 객체로 변환
+    var date = new Date(input);
+
+    // 요일 배열
+    var days = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
+    var dayName = days[date.getDay()];
+
+    // 년, 월, 일, 시간, 분 추출
+    var year = String(date.getFullYear()).slice(2); // '2024' -> '24'
+    var month = date.getMonth() + 1; // 0부터 시작하므로 +1 필요
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minutes = date.getMinutes();
+
+    // 오전/오후 결정
+    var ampm = hour >= 12 ? '오후' : '오전';
+    hour = hour % 12;
+    hour = hour ? hour : 12; // 0시를 12시로 변환
+
+    // 포맷된 문자열 반환
+    return year + "년 " + month + "월 " + day + "일 " + dayName + " " + ampm + " " + hour + "시";
+}
+
 </script>
 
 </body>

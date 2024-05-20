@@ -67,8 +67,13 @@
 	
 	.text-center{
 		text-align: center;
+		font-size: 14px ;
 	}
 	
+	.text-head{
+    	font-size: 14px !important;
+    	margin-bottom: 10px;
+    }
 	
 	.emoji-icon {
       height: 1.3em; /* 텍스트 크기와 동일하게 설정 */
@@ -96,7 +101,12 @@
     	font-size: 14px !important;
     }
     .text-center{
-    	font-size: 14px !important;
+    	font-size: 13px !important;
     }
+    .text-head{
+    	font-size: 13px !important;
+    	margin-bottom: 10px;
+    }
+    
   }
   

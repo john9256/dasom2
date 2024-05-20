@@ -23,8 +23,12 @@ public class MainService implements MainServiceInterface {
 	@Autowired
 	CommonMapper CommonMapper;
 	
+	// 입력 형식 지정
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy년 M월 d일 a h시");
 	
+    // 출력 형식 지정
+	private static final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yy년 MM월 dd일 a h시");
+    
 	public List<MeetingScheduleVO> getMeetingSchedule(String userId) {
 		List<MeetingScheduleVO> meetingScheduleInfo = MainMapper.getMeetingSchedule(userId);
 		
@@ -158,7 +162,6 @@ public class MainService implements MainServiceInterface {
 		else {
 			 return null;
 		}
-		System.out.println(matchInfoList);
 		return matchInfoList;
 		
 	}
@@ -215,7 +218,6 @@ public class MainService implements MainServiceInterface {
 			Map<String, Object> temp = new HashMap<>();
 			
 			participantList = MainMapper.getParticipantList();
-			System.out.println(participantList.get(0).get("episode"));
 			if(participantList.size() > 0) {
 				for(int i = 0; i < participantList.size(); i ++) {
 					
@@ -226,6 +228,7 @@ public class MainService implements MainServiceInterface {
 			
 		}
 	
+	 // 초 중 후반 나이대 구분 함수
 	 public String classifyAge(int age) {
 	        if (age < 10 || age >= 100) {
 	            return "연령대 미정";
@@ -246,6 +249,20 @@ public class MainService implements MainServiceInterface {
 	        return decade + "대 " + ageGroup;
 	    }
 	 
-	 
+	 public class TypeChecker {
+		    public static void checkType(Object obj) {
+		        if (obj instanceof String) {
+		            System.out.println("The object is a String.");
+		        } else if (obj instanceof Integer) {
+		            System.out.println("The object is an Integer.");
+		        } else if (obj instanceof Double) {
+		            System.out.println("The object is a Double.");
+		        } else if (obj instanceof Boolean) {
+		            System.out.println("The object is a Boolean.");
+		        } else {
+		            System.out.println("Unknown type: " + obj.getClass().getName());
+		        }
+		    }
+		}
 }
 
