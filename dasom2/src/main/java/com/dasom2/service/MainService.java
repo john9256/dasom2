@@ -15,7 +15,7 @@ import com.dasom2.vo.MeetingScheduleVO;
 import com.dasom2.vo.matchPersonVO;
 
 @Service
-public class MainService implements MainServiceInterface { 
+public class MainService { 
 	
 	@Autowired
 	MainMapper MainMapper;
@@ -210,7 +210,7 @@ public class MainService implements MainServiceInterface {
 	 }
 	 
 	// 소개팅 현황 get
-	 @Override
+	 
 		public List<Map<String, Object>> getParticipantList(String userId){
 			
 			List<Map<String, Object>> participantList = new ArrayList<>();
@@ -220,7 +220,8 @@ public class MainService implements MainServiceInterface {
 			participantList = MainMapper.getParticipantList();
 			if(participantList.size() > 0) {
 				for(int i = 0; i < participantList.size(); i ++) {
-					
+					System.out.println(participantList.size());
+					System.out.println(participantList);
 					participantList.get(i).put("year", classifyAge((int)participantList.get(i).get("year")));
 				}
 			}
