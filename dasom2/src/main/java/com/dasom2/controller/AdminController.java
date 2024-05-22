@@ -32,7 +32,25 @@ public class AdminController {
 	
 	@ResponseBody
     @PostMapping("/getUserInfo")
-    public List<Map<String, Object>> getUserInfo(@RequestParam("userId") String userId, HttpSession session) {
+    public List<Map<String, Object>> getUserInfo(HttpSession session) {
+		
+		if (session.getAttribute("userId") == "ksw") {
+            return ";
+        }
+    }
+	
+	@ResponseBody
+    @PostMapping("/getScheduleInfo")
+    public List<Map<String, Object>> getScheduleInfo(@RequestParam("userId") String userId, HttpSession session) {
+		
+		if (session.getAttribute("userId") == "ksw") {
+            return "adminPage";
+        }
+    }
+	
+	@ResponseBody
+    @PostMapping("/setPassFlag")
+    public List<Map<String, Object>> setPassFlag(@RequestParam("userId") String userId, HttpSession session) {
 		
 		if (session.getAttribute("userId") == "ksw") {
             return "adminPage";
