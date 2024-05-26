@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dasom2.service.AdminService;
+
 import jakarta.servlet.http.HttpSession;
 
 
@@ -27,34 +29,32 @@ public class AdminController {
 		if (session.getAttribute("userId") == "ksw") {
             return "adminPage";
         }
-    	
+		return "mainPage";
     }
 	
 	@ResponseBody
-    @PostMapping("/getUserInfo")
-    public List<Map<String, Object>> getUserInfo(HttpSession session) {
+    @PostMapping("/getUserInfoAdmin")
+    public List<Map<String, Object>> getUserInfoAdmin(HttpSession session, @RequestParam(value = "userId", required = false) String userId) {
 		
-		if (session.getAttribute("userId") == "ksw") {
-            return ";
-        }
+		if (session.getAttribute("userId").equals("aa")) {
+	        if (userId == null || userId.isEmpty()) {
+	            // userId가 주어지지 않은 경우 기본값 사용
+	            return adminService.getUserInfoAdmin();
+	        } else {
+	            // userId가 주어진 경우 해당 값을 사용
+	            return adminService.getUserInfoAdmin(userId);
+	        }
+	    }
+	    return null;
     }
 	
 	@ResponseBody
-    @PostMapping("/getScheduleInfo")
-    public List<Map<String, Object>> getScheduleInfo(@RequestParam("userId") String userId, HttpSession session) {
+    @PostMapping("/getScheduleInfoAdmin")
+    public List<Map<String, Object>> getScheduleInfoAdmin(HttpSession session) {
 		
 		if (session.getAttribute("userId") == "ksw") {
-            return "adminPage";
+            return adminService.getScheduleInfoAdmin();
         }
+		return null;
     }
-	
-	@ResponseBody
-    @PostMapping("/setPassFlag")
-    public List<Map<String, Object>> setPassFlag(@RequestParam("userId") String userId, HttpSession session) {
-		
-		if (session.getAttribute("userId") == "ksw") {
-            return "adminPage";
-        }
-    }
-	
 }

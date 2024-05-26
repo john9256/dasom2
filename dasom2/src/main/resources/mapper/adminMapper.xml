@@ -1,0 +1,131 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dasom2.mapper.MainMapper">
+	
+	
+    <select id="getMeetingSchedule" resultType="MeetingScheduleVO" parameterType="String">
+        SELECT A.EPISODE AS LocalDateTimeEpisode, B.USER_ID AS userId, A.LOCATION AS location FROM MEETING_SCHEDULE A
+        LEFT OUTER JOIN
+        (SELECT * FROM PARTICIPANT_USER WHERE USER_ID = #{userId}) B
+        ON A.EPISODE = B.EPISODE
+        WHERE A.COMPLETE_FLAG = 'N'
+        <!-- 현재 시간보다 세시간 넘게 남은 소개팅 날짜만 가져옴 -->
+        AND A.EPISODE > DATE_ADD(NOW(), INTERVAL 3 HOUR)
+        ORDER BY A.EPISODE ASC
+    </select>
+    
+    <select id="checkHeadCount">
+        SELECT episode from MEETING_SCHEDULE
+		WHERE EPISODE = #{episode}
+		AND 
+		HEADCOUNT/2 <![CDATA[>]]> (
+		SELECT COUNT(*) FROM PARTICIPANT_USER A
+		WHERE A.EPISODE = #{episode}
+		AND A.SEX = (SELECT SEX FROM USER_TABLE WHERE USER_ID = #{userId})
+		)
+    </select>
+    
+    
+    <insert id="insertParticipantUser">
+	    INSERT INTO PARTICIPANT_USER(USER_ID, EPISODE, SEX, NICKNAME) 
+	    VALUES (
+	        #{userId},
+	        #{episode},
+	        (SELECT SEX FROM USER_TABLE WHERE USER_ID = #{userId}),
+	        (
+	            SELECT VALUE1 
+	            FROM (
+	                SELECT VALUE1 
+	                FROM CRITERIA_DATA
+	                WHERE DIVISION = (
+	                    SELECT CASE 
+	                               WHEN SEX = '남성' THEN 'male_nickname'
+	                               ELSE 'female_nickname'
+	                           END
+	                    FROM USER_TABLE 
+	                    WHERE USER_ID = #{userId}
+	                )
+	                AND VALUE1 NOT IN (
+	                    SELECT NICKNAME 
+	                    FROM PARTICIPANT_USER 
+	                    WHERE EPISODE = #{episode}
+	                )
+	                ORDER BY RAND()
+	                LIMIT 1
+	            ) AS AA
+	        )
+	    )
+	</insert>
+    
+    <delete id="deleteParticipantUser" >
+        DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = #{episode}
+    </delete>
+    
+    <select id="getPassFlagbyUser" resultType="String" parameterType="String">
+    	SELECT pass_flag FROM user_manage WHERE user_id = #{userId} AND PASS_FLAG = 'Y'
+    </select>
+    
+    <select id="getMatchingInfo" resultType="matchPersonVO" parameterType="String">
+    	SELECT  A.USER_ID AS PICKED_USER_ID, NICKNAME, B.PICK, B.PICK_TYPE, A.EPISODE AS localDateTimeEpisode
+		FROM PARTICIPANT_USER A
+        
+        LEFT OUTER JOIN 
+        
+        (SELECT * FROM MATCHING A WHERE A.USER_ID = #{userId}) B
+        ON A.NICKNAME = B.PICK
+        AND A.EPISODE = B.EPISODE
+
+		WHERE SEX <![CDATA[<>]]>
+			(
+				SELECT SEX 
+				FROM USER_TABLE
+				WHERE USER_ID = #{userId}
+			)
+		AND A.EPISODE = (SELECT AA.EPISODE FROM
+							(
+								SELECT EPISODE, ROW_NUMBER() OVER () AS ROWNUM 
+						        FROM PARTICIPANT_USER 
+						        WHERE USER_ID = #{userId}
+						        <!-- AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND NOW() -->
+						        AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND DATE_ADD(NOW(), INTERVAL 5 HOUR)
+								ORDER BY EPISODE DESC
+							)AA
+							WHERE AA.ROWNUM =1
+						)
+    </select>
+    
+    <select id = "checkChace">
+    	SELECT CHANCE FROM USER_MANAGE WHERE USER_ID = #{userId}
+    </select>
+    
+    <update id = "minusChance">
+    	UPDATE USER_MANAGE SET CHANCE = CHANCE -1 WHERE USER_ID = #{userId}
+    </update>
+    
+    <update id = "plusChance">
+    	UPDATE USER_MANAGE SET CHANCE = CHANCE +1 WHERE USER_ID = #{userId}
+    </update>
+    
+    <select id="checkMatchPickCount">
+        SELECT COUNT(*) 
+        FROM MATCHING
+		WHERE USER_ID = #{userId}
+		AND EPISODE = #{episode}
+    </select>
+    
+    <select id ="getParticipantList">
+    	SELECT A.SEX AS sex, B.JOB_DIVISION AS jobDivision, A.EPISODE AS episode, YEAR(CURDATE()) - YEAR(B.BIRTHDAY) AS year 
+    	FROM participant_user A
+		INNER JOIN
+		USER_TABLE B
+		ON A.USER_ID = B.USER_ID
+		WHERE EPISODE IN
+		(
+			SELECT episode FROM participant_user 
+			WHERE 1=1
+			AND episode > NOW()
+		)
+		ORDER BY A.CREATETIME ASC
+    </select>
+    
+    
+</mapper>
