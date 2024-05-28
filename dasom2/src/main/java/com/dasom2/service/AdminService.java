@@ -25,20 +25,23 @@ public class AdminService {
 	private static final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yy년 MM월 dd일 a h시");
     
 	
-	// 회원 정보 전체 조회 관리자
+	// 회원 정보 조회
 	public List<Map<String, Object>> getUserInfoAdmin(){
 		return AdminMapper.getUserInfoAdmin();
 	}
 	
-	// 특정 회원 정보 조회 관리자
-	public List<Map<String, Object>> getUserInfoAdmin(String userId){
-	    return AdminMapper.getUserInfoAdminByUserId(userId);
-	}
-	
-	// 미팅 스케줄 조회 관리자
+	// 스케줄 조회 
 	public List<Map<String, Object>> getScheduleInfoAdmin(){
 		return AdminMapper.getScheduleInfoAdmin();
 	}
+	
+	// 매칭 정보
+	public List<Map<String, Object>> getMatchingInfoAdmin(){
+		return AdminMapper.getScheduleInfoAdmin();
+	}
+	
+		
+	
 	
 }
 

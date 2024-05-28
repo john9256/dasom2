@@ -10,7 +10,7 @@ public interface AdminMapper {
     
 	List<Map<String, Object>> getUserInfoAdmin();
 	List<Map<String, Object>> getScheduleInfoAdmin();
-	List<Map<String, Object>> getUserInfoAdminByUserId(String userId);
+	List<Map<String, Object>> getMatchingInfoAdmin();
 	
 //	List<MeetingScheduleVO> getMeetingSchedule(String userId);
 //	int checkChace(String userId);
