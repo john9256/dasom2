@@ -13,7 +13,7 @@ import com.dasom2.mapper.CommonMapper;
 public class AdminService { 
 	
 	@Autowired
-	AdminMapper AdminMapper;
+	AdminMapper adminMapper;
 	
 	@Autowired
 	CommonMapper CommonMapper;
@@ -27,17 +27,17 @@ public class AdminService {
 	
 	// 회원 정보 조회
 	public List<Map<String, Object>> getUserInfoAdmin(){
-		return AdminMapper.getUserInfoAdmin();
+		return adminMapper.getUserInfoAdmin();
 	}
 	
 	// 스케줄 조회 
 	public List<Map<String, Object>> getScheduleInfoAdmin(){
-		return AdminMapper.getScheduleInfoAdmin();
+		return adminMapper.getScheduleInfoAdmin();
 	}
 	
 	// 매칭 정보
 	public List<Map<String, Object>> getMatchingInfoAdmin(){
-		return AdminMapper.getScheduleInfoAdmin();
+		return adminMapper.getScheduleInfoAdmin();
 	}
 	
 		

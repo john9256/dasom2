@@ -3,7 +3,7 @@
 	
 	
 	<select id="getUserInfoAdmin">
-        SELECT A.USER_ID AS userId, A.USER_NAME AS userName, A.EMAIL AS email, A.phone_number AS phoneNumber, A.SEX AS sex, A.birthday AS birthday, A.job_division AS jobDivision, B.PASS_FLAG AS passFlag,B.CHANCE AS chance
+        SELECT A.USER_ID AS userId, A.USER_NAME AS userName, A.SEX AS sex, A.height AS height, A.birthday AS birthday, A.job_division AS jobDivision, B.PASS_FLAG AS passFlag,B.CHANCE AS chance, A.phone_number AS phoneNumber
         FROM USER_TABLE A
         INNER JOIN
         USER_MANAGE B
@@ -55,7 +55,7 @@
     </select>
     
     
-    
+    <!-- 
     
     <select id="checkHeadCount">
         SELECT episode from MEETING_SCHEDULE
@@ -129,7 +129,7 @@
 								SELECT EPISODE, ROW_NUMBER() OVER () AS ROWNUM 
 						        FROM PARTICIPANT_USER 
 						        WHERE USER_ID = #{userId}
-						        <!-- AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND NOW() -->
+						        AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND NOW()
 						        AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND DATE_ADD(NOW(), INTERVAL 5 HOUR)
 								ORDER BY EPISODE DESC
 							)AA
@@ -170,6 +170,6 @@
 		)
 		ORDER BY A.CREATETIME ASC
     </select>
-    
+     -->
     
 </mapper>
