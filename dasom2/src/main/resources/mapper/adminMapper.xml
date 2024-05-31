@@ -23,36 +23,19 @@
 		ORDER BY A.EPISODE ASC , C.SEX ASC, C.USER_NAME ASC
     </select>
     
+    <select id="getMatchingInfoAdmin" resultType="matchPersonVO" parameterType="String">
+    	SELECT A.USER_ID userId, B.PICK pick, B.USER_ID pickedUserId, A.EPISODE localDateTimeEpisode, B.CREATETIME
+                        FROM PARTICIPANT_USER A
+                        LEFT OUTER JOIN
+                        MATCHING B
+                        ON A.USER_ID = B.USER_ID
+                        AND A.EPISODE = B.EPISODE
+    </select>
+    
+    
     <!-- 위는 완료 쿼리 -->
     
-    <select id="getMatchingInfoAdmin" resultType="matchPersonVO" parameterType="String">
-    	SELECT  A.USER_ID AS PICKED_USER_ID, NICKNAME, B.PICK, B.PICK_TYPE, A.EPISODE AS localDateTimeEpisode
-		FROM PARTICIPANT_USER A
-        
-        LEFT OUTER JOIN 
-        
-        (SELECT * FROM MATCHING A WHERE A.USER_ID = #{userId}) B
-        ON A.NICKNAME = B.PICK
-        AND A.EPISODE = B.EPISODE
-
-		WHERE SEX <![CDATA[<>]]>
-			(
-				SELECT SEX 
-				FROM USER_TABLE
-				WHERE USER_ID = #{userId}
-			)
-		AND A.EPISODE = (SELECT AA.EPISODE FROM
-							(
-								SELECT EPISODE, ROW_NUMBER() OVER () AS ROWNUM 
-						        FROM PARTICIPANT_USER 
-						        WHERE USER_ID = #{userId}
-						        <!-- AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND NOW() -->
-						        AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND DATE_ADD(NOW(), INTERVAL 5 HOUR)
-								ORDER BY EPISODE DESC
-							)AA
-							WHERE AA.ROWNUM =1
-						)
-    </select>
+    
     
     
     <!-- 

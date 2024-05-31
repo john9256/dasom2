@@ -129,7 +129,7 @@
     </select>
     
     <insert id="insertPickUser">
-    	INSERT INTO MATCHING(USER_ID, PICK, EPISODE) VALUES(#{userId},#{nickName},#{episode})
+    	INSERT INTO MATCHING(USER_ID, PICK, PICKED_USER, EPISODE, CREATETIME) VALUES(#{userId},#{nickName}, (SELECT USER_ID FROM PARTICIPANT_USER WHERE EPISODE = #{episode} AND NICKNAME = #{nickName}), #{episode}, SYSDATE())
     </insert>
     
     <delete id="deletePickUser">
