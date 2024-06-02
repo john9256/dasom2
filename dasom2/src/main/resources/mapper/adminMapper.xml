@@ -1,9 +1,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dasom2.mapper.MainMapper">
+<mapper namespace="com.dasom2.mapper.AdminMapper">
 	
 	
 	<select id="getUserInfoAdmin">
-        SELECT A.USER_ID AS userId, A.USER_NAME AS userName, A.SEX AS sex, A.height AS height, A.birthday AS birthday, A.job_division AS jobDivision, B.PASS_FLAG AS passFlag,B.CHANCE AS chance, A.phone_number AS phoneNumber
+        SELECT A.USER_ID AS userId, A.USER_NAME AS userName, A.SEX AS sex, A.height AS height, DATE_FORMAT(A.birthday, '%y년') AS birthday, A.job_division AS jobDivision, B.PASS_FLAG AS passFlag, A.RESIDENCE AS residence, B.CHANCE AS chance, A.phone_number AS phoneNumber
         FROM USER_TABLE A
         INNER JOIN
         USER_MANAGE B
@@ -11,8 +11,8 @@
         ORDER BY USER_NAME ASC
     </select>
 	
-    <select id="getScheduleInfoAdmin" resultType="MeetingScheduleVO" parameterType="String">
-        SELECT A.EPISODE AS LocalDateTimeEpisode, B.USER_ID AS userId, A.LOCATION AS location , C.USER_NAME AS userName, C.SEX AS sex, C.BIRTHDAY AS birthDay, C.JOB_DIVISION AS jobDivision, C.RESIDENCE AS residence
+    <select id="getScheduleInfoAdmin">
+        SELECT DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, B.USER_ID AS userId, A.LOCATION AS location , C.USER_NAME AS userName, C.SEX AS sex, DATE_FORMAT(C.birthday, '%y년') AS birthday, C.JOB_DIVISION AS jobDivision
 		FROM MEETING_SCHEDULE A
 		LEFT OUTER JOIN
 		(SELECT * FROM PARTICIPANT_USER) B
@@ -20,16 +20,17 @@
 		LEFT OUTER JOIN
 		(SELECT * FROM USER_TABLE) C
 		ON B.USER_ID = C.USER_ID
-		ORDER BY A.EPISODE ASC , C.SEX ASC, C.USER_NAME ASC
+		ORDER BY A.EPISODE DESC , C.SEX ASC, C.USER_NAME ASC
     </select>
     
-    <select id="getMatchingInfoAdmin" resultType="matchPersonVO" parameterType="String">
-    	SELECT A.USER_ID userId, B.PICK pick, B.USER_ID pickedUserId, A.EPISODE localDateTimeEpisode, B.CREATETIME
-                        FROM PARTICIPANT_USER A
-                        LEFT OUTER JOIN
-                        MATCHING B
-                        ON A.USER_ID = B.USER_ID
-                        AND A.EPISODE = B.EPISODE
+    <select id="getMatchingInfoAdmin" >
+    	SELECT A.USER_ID userId, B.PICK pick, B.USER_ID pickedUserId, DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, DATE_FORMAT(B.CREATETIME, '%y년 %m월 %d일 %p %h시') createtime
+		FROM PARTICIPANT_USER A
+		LEFT OUTER JOIN
+		MATCHING B
+		ON A.USER_ID = B.USER_ID
+		AND A.EPISODE = B.EPISODE
+        ORDER BY A.EPISODE DESC
     </select>
     
     

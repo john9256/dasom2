@@ -40,8 +40,13 @@ public class AdminService {
 		return adminMapper.getScheduleInfoAdmin();
 	}
 	
-		
+	public int increaseChance(String userId) {
+		return adminMapper.increaseChance(userId);
+	}
 	
+	public int decreaseChance(String userId) {
+		return adminMapper.decreaseChance(userId);
+	}
 	
 }
 

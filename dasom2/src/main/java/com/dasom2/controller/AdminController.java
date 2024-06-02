@@ -30,7 +30,11 @@ public class AdminController {
 	// 관리자 화면
 	@GetMapping("/adminPage")
     public String adminPage(Model model, HttpSession session) {
-    	System.out.println(session.getAttribute("userId"));
+		
+		if (session.getAttribute("userId") == null) {
+            return "redirect:/loginPage";
+        }
+		
 		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
             return "adminPage";
         }
@@ -70,18 +74,23 @@ public class AdminController {
 		return null;
     }
 	
-	// 신청 기간 지난 미팅에 인원 강제 할당
+	// chance 1회 부여
 	@ResponseBody
-    @PostMapping("/ScheduleSelectionInsertAdmin")
-    public Map<String, Object> ScheduleSelectionInsertAdmin(@RequestParam("userId") String userId, @RequestParam("episode") String episode, @RequestParam("episodeSelected") Boolean episodeSelected, HttpSession session) {
+    @PostMapping("/increaseChance")
+    public Map<String, Object> increaseChance(@RequestParam("userId") String userId, HttpSession session) {
     	
-    	 if(episodeSelected == true) {
-    		 
-    		 return MainService.insertParticipantUser(userId, episode, episodeSelected); 
-    	 }
-    	 else {
-    		 return MainService.deleteParticipantUser(userId, episode, episodeSelected);
-    	 }
+		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+            return adminService.increaseChance();
+        }
     }
 	
+	// chance 1회 부여
+	@ResponseBody
+    @PostMapping("/decreaseChance")
+    public Map<String, Object> decreaseChance(@RequestParam("userId") String userId, HttpSession session) {
+    	
+		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+            return adminService.decreaseChance();
+        }
+    }
 }
