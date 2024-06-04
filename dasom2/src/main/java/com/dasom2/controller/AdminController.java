@@ -1,5 +1,6 @@
 package com.dasom2.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,19 +79,23 @@ public class AdminController {
 	@ResponseBody
     @PostMapping("/increaseChance")
     public Map<String, Object> increaseChance(@RequestParam("userId") String userId, HttpSession session) {
-    	
+		Map<String, Object> status = new HashMap<String, Object>();
 		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
-            return adminService.increaseChance();
+            return adminService.increaseChance(userId);
         }
+		status.put("status", "fail");
+		return status;
     }
 	
 	// chance 1회 부여
 	@ResponseBody
     @PostMapping("/decreaseChance")
     public Map<String, Object> decreaseChance(@RequestParam("userId") String userId, HttpSession session) {
-    	
+		Map<String, Object> status = new HashMap<String, Object>();
 		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
-            return adminService.decreaseChance();
+            return adminService.decreaseChance(userId);
         }
+		status.put("status", "fail");
+		return status;
     }
 }

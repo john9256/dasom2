@@ -1,5 +1,6 @@
 package com.dasom2.service;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,6 @@ public class AdminService {
     // 출력 형식 지정
 	private static final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yy년 MM월 dd일 a h시");
     
-	
 	// 회원 정보 조회
 	public List<Map<String, Object>> getUserInfoAdmin(){
 		return adminMapper.getUserInfoAdmin();
@@ -40,12 +40,42 @@ public class AdminService {
 		return adminMapper.getScheduleInfoAdmin();
 	}
 	
-	public int increaseChance(String userId) {
-		return adminMapper.increaseChance(userId);
+	public Map<String, Object> increaseChance(String userId) {
+		Map<String, Object> status = new HashMap<String, Object>();
+		try {
+			int count = adminMapper.increaseChance(userId);
+			if(count == 1) {
+				status.put("status", "increase");
+			}
+			else {
+				status.put("status", "fail");
+			}
+		} catch (Exception e) {
+			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
+	         CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
+	         status.put("status", "error");
+		}
+			return status;
 	}
 	
-	public int decreaseChance(String userId) {
-		return adminMapper.decreaseChance(userId);
+	public Map<String, Object> decreaseChance(String userId) {
+		Map<String, Object> status = new HashMap<String, Object>();
+		try {
+			int count = adminMapper.decreaseChance(userId);
+				if(count == 1) {
+					status.put("status", "decrease");
+				}
+				else {
+					status.put("status", "fail");
+				}
+		} catch (Exception e) {
+			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
+	         CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
+	         status.put("status", "error");
+		}
+			return status;
 	}
 	
 }

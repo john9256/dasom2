@@ -110,7 +110,6 @@
             // chance 증가/감소 버튼 이벤트 핸들러 추가
             $('.increase-chance').on('click', function() {
                 var userId = $(this).data('userid');
-                var episode = $(this).data('episode');
                 $.ajax({
                     url: '/increaseChance',
                     type: 'POST',
