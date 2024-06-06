@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface AdminMapper {
@@ -13,7 +14,7 @@ public interface AdminMapper {
 	List<Map<String, Object>> getMatchingInfoAdmin();
 	int increaseChance(String userId);
 	int decreaseChance(String userId);
-	int changePassFlag(String userId, String passFlag);
+	int changePassFlag(@Param("userId") String userId, @Param("passFlag") String passFlag);
 	
 //	List<MeetingScheduleVO> getMeetingSchedule(String userId);
 //	int checkChace(String userId);

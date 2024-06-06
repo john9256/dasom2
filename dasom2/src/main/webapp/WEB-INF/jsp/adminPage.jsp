@@ -5,21 +5,16 @@
     <meta charset="UTF-8">
     <title>Admin Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <style>
         .container-fluid {
             width: 100%;
             padding-left: 10px;
             padding-right: 10px;
         }
-        .filter-input {
-            width: 100px;
-        }
-        .table-responsive {
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-         .chance-buttons {
+        .chance-buttons {
             display: inline-flex;
             margin-left: 10px;
         }
@@ -37,15 +32,24 @@
             <button type="button" class="btn btn-success" id="matchingInfoBtn">매칭 정보</button>
         </div>
         <div id="dataTable" class="table-responsive">
-            <!-- 테이블이 여기에 동적으로 삽입됩니다 -->
+            <table id="adminTable" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <!-- 테이블 헤더는 자바스크립트에서 동적으로 설정됩니다 -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 테이블 데이터는 자바스크립트에서 동적으로 설정됩니다 -->
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
     $(document).ready(function() {
-        const userInfoColumns = ["userId", "userName", "sex", "height", "birthday", "jobDivision", "residence", "passFlag", "chance", "phoneNumber"];
-        const scheduleInfoColumns = ["episode", "userId", "userName", "location", "sex", "birthday", "jobDivision"];
-        const matchingInfoColumns = ["userId", "pick", "pickedUserId", "episode", "createtime"];
+        var userInfoColumns = ["userId", "userName", "sex", "height", "birthday", "jobDivision", "residence", "passFlag", "chance", "phoneNumber"];
+        var scheduleInfoColumns = ["episode", "userId", "userName", "location", "sex", "birthday", "jobDivision"];
+        var matchingInfoColumns = ["userId", "pick", "pickedUserId", "episode", "createtime"];
 
         $('#userInfoBtn').click(function() {
             $.post('/getUserInfoAdmin', function(data) {
@@ -71,100 +75,79 @@
                 return;
             }
 
-            let table = '<table class="table table-bordered table-striped">';
-            table += '<thead class="thead-dark"><tr>';
-            
-            // 테이블 헤더 및 필터 입력 상자 생성
-            columnOrder.forEach(function(key) {
-                table += '<th>' + key + '<br><input type="text" class="filter-input form-control" data-column="' + key + '"></th>';
-            });
-            table += '</tr></thead><tbody>';
+            // 테이블 헤더 생성
+            var tableHeader = '<tr>';
+            for (var i = 0; i < columnOrder.length; i++) {
+                tableHeader += '<th>' + columnOrder[i] + '</th>';
+            }
+            tableHeader += '</tr>';
+            $('#adminTable thead').html(tableHeader);
 
-            // 테이블 바디 생성
-            data.forEach(function(row) {
-                table += '<tr>';
-                columnOrder.forEach(function(key) {
+            // DataTables 초기화
+            var tableData = data.map(function(row) {
+                return columnOrder.map(function(key) {
                     if (key === 'chance') {
-                        table += '<td>' + (row[key] !== undefined ? row[key] : '') +
+                        return (row[key] !== undefined ? row[key] : '') + 
                             '<div class="chance-buttons">' +
                             '<button class="btn btn-sm btn-success increase-chance" data-userid="' + row['userId'] + '">+</button>' +
                             '<button class="btn btn-sm btn-danger decrease-chance" data-userid="' + row['userId'] + '">-</button>' +
-                            '</div></td>';
-                    }
-                    else if (key === 'passFlag'){
-                    	table += '<td>' + (row[key] !== undefined ? row[key] : '') +
-                        '<div class="passFlag-buttons">' +
-                        '<button class="btn btn-sm btn-success change-passFlag" data-userid="' + row['userId'] + '">+</button>' +
-                        '</div></td>';
-                    }
-                    
-                    else {
-                        table += '<td>' + (row[key] !== undefined ? row[key] : '') + '</td>';
-                    }
-                });
-                table += '</tr>';
-            });
-            table += '</tbody></table>';
-
-            $('#dataTable').html(table);
-
-            // 필터 기능 추가
-            $('.filter-input').on('keyup', function() {
-                var column = $(this).data('column');
-                var value = $(this).val().toLowerCase();
-                filterTable(column, value);
-            });
-
-            // chance 증가/감소 버튼 이벤트 핸들러 추가
-            $('.increase-chance').on('click', function() {
-                var userId = $(this).data('userid');
-                $.ajax({
-                    url: '/increaseChance',
-                    type: 'POST',
-                    data: { userId: userId },
-                    success: function(response) {
-                        alert(userId + ' 유저의 티켓이 증가했습니다.');
-                        // 성공 시, 테이블을 다시 로드하거나 변경된 값을 업데이트
+                            '</div>';
+                    } else if (key === 'passFlag') {
+                        return (row[key] !== undefined ? row[key] : '') +
+                            '<div class="passFlag-buttons">' +
+                            '<button class="btn btn-sm btn-success change-passFlag" data-passflag="' + row['passFlag'] + '" data-userid="' + row['userId'] + '">+</button>' +
+                            '</div>';
+                    } else {
+                        return row[key] !== undefined ? row[key] : '';
                     }
                 });
             });
 
-            $('.decrease-chance').on('click', function() {
-                var userId = $(this).data('userid');
-                $.ajax({
-                    url: '/decreaseChance',
-                    type: 'POST',
-                    data: { userId: userId },
-                    success: function(response) {
-                        alert( userId + ' 유저의 티켓이 감소했습니다.');
-                        // 성공 시, 테이블을 다시 로드하거나 변경된 값을 업데이트
-                    }
-                });
-            });
-            
-            $('.change-passFlag').on('click', function() {
-                var userId = $(this).data('userid');
-                var passFlag = $(this).data('passFlag');
-                $.ajax({
-                    url: '/changePassFlag',
-                    type: 'POST',
-                    data: { 
-                    userId: userId, 
-                    passFlag: passFlag
-                    },
-                    success: function(response) {
-                        alert( userId + ' 유저의 티켓이 감소했습니다.');
-                        // 성공 시, 테이블을 다시 로드하거나 변경된 값을 업데이트
-                    }
-                });
-            });
-        }
+            $('#adminTable').DataTable({
+                destroy: true,
+                data: tableData,
+                columns: columnOrder.map(function(key) {
+                    return { title: key };
+                }),
+                initComplete: function() {
+                    // chance 증가/감소 버튼 이벤트 핸들러 추가
+                    $('.increase-chance').on('click', function() {
+                        var userId = $(this).data('userid');
+                        $.ajax({
+                            url: '/increaseChance',
+                            type: 'POST',
+                            data: { userId: userId },
+                            success: function(response) {
+                                alert(userId + ' 유저의 티켓이 증가했습니다.');
+                            }
+                        });
+                    });
 
-        function filterTable(column, value) {
-            $('table tbody tr').filter(function() {
-                $(this).toggle($(this).find('td').filter(function() {
-                    return $(this).index() === $('th:contains("' + column + '")').index();
-                }).text().toLowerCase().indexOf(value) > -1);
+                    $('.decrease-chance').on('click', function() {
+                        var userId = $(this).data('userid');
+                        $.ajax({
+                            url: '/decreaseChance',
+                            type: 'POST',
+                            data: { userId: userId },
+                            success: function(response) {
+                                alert(userId + ' 유저의 티켓이 감소했습니다.');
+                            }
+                        });
+                    });
+
+                    $('.change-passFlag').on('click', function() {
+                        var userId = $(this).data('userid');
+                        var passFlag = $(this).data('passflag');
+                        $.ajax({
+                            url: '/changePassFlag',
+                            type: 'POST',
+                            data: { userId: userId, passFlag: passFlag },
+                            success: function(response) {
+                                alert(userId + ' 유저의 패스 플래그가 변경되었습니다.');
+                            }
+                        });
+                    });
+                }
             });
         }
     });
