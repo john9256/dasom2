@@ -90,7 +90,15 @@
                             '<button class="btn btn-sm btn-success increase-chance" data-userid="' + row['userId'] + '">+</button>' +
                             '<button class="btn btn-sm btn-danger decrease-chance" data-userid="' + row['userId'] + '">-</button>' +
                             '</div></td>';
-                    } else {
+                    }
+                    else if (key === 'passFlag'){
+                    	table += '<td>' + (row[key] !== undefined ? row[key] : '') +
+                        '<div class="passFlag-buttons">' +
+                        '<button class="btn btn-sm btn-success change-passFlag" data-userid="' + row['userId'] + '">+</button>' +
+                        '</div></td>';
+                    }
+                    
+                    else {
                         table += '<td>' + (row[key] !== undefined ? row[key] : '') + '</td>';
                     }
                 });
@@ -115,7 +123,7 @@
                     type: 'POST',
                     data: { userId: userId },
                     success: function(response) {
-                        alert('Chance increased for user ' + userId);
+                        alert(userId + ' 유저의 티켓이 증가했습니다.');
                         // 성공 시, 테이블을 다시 로드하거나 변경된 값을 업데이트
                     }
                 });
@@ -128,7 +136,24 @@
                     type: 'POST',
                     data: { userId: userId },
                     success: function(response) {
-                        alert('Chance decreased for user ' + userId);
+                        alert( userId + ' 유저의 티켓이 감소했습니다.');
+                        // 성공 시, 테이블을 다시 로드하거나 변경된 값을 업데이트
+                    }
+                });
+            });
+            
+            $('.change-passFlag').on('click', function() {
+                var userId = $(this).data('userid');
+                var passFlag = $(this).data('passFlag');
+                $.ajax({
+                    url: '/changePassFlag',
+                    type: 'POST',
+                    data: { 
+                    userId: userId, 
+                    passFlag: passFlag
+                    },
+                    success: function(response) {
+                        alert( userId + ' 유저의 티켓이 감소했습니다.');
                         // 성공 시, 테이블을 다시 로드하거나 변경된 값을 업데이트
                     }
                 });

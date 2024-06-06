@@ -78,5 +78,23 @@ public class AdminService {
 			return status;
 	}
 	
+	public Map<String, Object> changePassFlag(String userId, String passFlag) {
+		Map<String, Object> status = new HashMap<String, Object>();
+		try {
+			int count = adminMapper.changePassFlag(userId, passFlag);
+				if(count == 1) {
+					status.put("status", "changed");
+				}
+				else {
+					status.put("status", "fail");
+				}
+		} catch (Exception e) {
+			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
+	         CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
+	         status.put("status", "error");
+		}
+			return status;
+	}
 }
 

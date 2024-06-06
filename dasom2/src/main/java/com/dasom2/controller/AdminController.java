@@ -98,4 +98,17 @@ public class AdminController {
 		status.put("status", "fail");
 		return status;
     }
+	
+	// passFlag 값 변경
+		@ResponseBody
+	    @PostMapping("/changePassFlag")
+	    public Map<String, Object> changePassFlag(@RequestParam("userId") String userId, @RequestParam("passFlag") String passFlag, HttpSession session) {
+			Map<String, Object> status = new HashMap<String, Object>();
+			if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+	            return adminService.changePassFlag(userId, passFlag);
+	        }
+			status.put("status", "fail");
+			return status;
+	    }
+		
 }
