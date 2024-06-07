@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Page</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
@@ -49,7 +49,7 @@
     $(document).ready(function() {
         var userInfoColumns = ["userId", "userName", "sex", "height", "birthday", "jobDivision", "residence", "passFlag", "chance", "phoneNumber"];
         var scheduleInfoColumns = ["episode", "userId", "userName", "location", "sex", "birthday", "jobDivision"];
-        var matchingInfoColumns = ["userId", "pick", "pickedUserId", "episode", "createtime"];
+        var matchingInfoColumns = ["episode", "userId", "pick", "pickedUserId",  "createtime"];
 
         $('#userInfoBtn').click(function() {
             $.post('/getUserInfoAdmin', function(data) {
@@ -70,6 +70,16 @@
         });
 
         function createTable(data, columnOrder) {
+            // 기존 DataTable 삭제
+            if ($.fn.DataTable.isDataTable('#adminTable')) {
+                $('#adminTable').DataTable().clear().destroy();
+            }
+
+            // 테이블 헤더와 본문 비우기
+            $('#adminTable thead').empty();
+            $('#adminTable tbody').empty();
+
+            // 데이터가 없는 경우
             if (!data || data.length === 0) {
                 $('#dataTable').html('<p>No data available</p>');
                 return;
@@ -83,19 +93,19 @@
             tableHeader += '</tr>';
             $('#adminTable thead').html(tableHeader);
 
-            // DataTables 초기화
+            // 테이블 데이터 생성
             var tableData = data.map(function(row) {
                 return columnOrder.map(function(key) {
                     if (key === 'chance') {
-                        return (row[key] !== undefined ? row[key] : '') + 
+                        return (row[key] !== undefined ? row[key] : '') +
                             '<div class="chance-buttons">' +
                             '<button class="btn btn-sm btn-success increase-chance" data-userid="' + row['userId'] + '">+</button>' +
                             '<button class="btn btn-sm btn-danger decrease-chance" data-userid="' + row['userId'] + '">-</button>' +
                             '</div>';
                     } else if (key === 'passFlag') {
                         return (row[key] !== undefined ? row[key] : '') +
-                            '<div class="passFlag-buttons">' +
-                            '<button class="btn btn-sm btn-success change-passFlag" data-passflag="' + row['passFlag'] + '" data-userid="' + row['userId'] + '">+</button>' +
+                            '<div class="chance-buttons">' +
+                            '<button class="btn btn-sm btn-success change-passFlag" data-passflag="' + row['passFlag'] + '" data-userid="' + row['userId'] + '">o</button>' +
                             '</div>';
                     } else {
                         return row[key] !== undefined ? row[key] : '';
@@ -103,6 +113,7 @@
                 });
             });
 
+            // DataTable 초기화
             $('#adminTable').DataTable({
                 destroy: true,
                 data: tableData,
@@ -118,8 +129,17 @@
                             type: 'POST',
                             data: { userId: userId },
                             success: function(response) {
-                                alert(userId + ' 유저의 티켓이 증가했습니다.');
-                            }
+                            	if(response.status == "increase"){
+	                                var cell = $(this).closest('td');
+	                                var chanceValue = parseInt(cell.text(), 10);
+	                                cell.contents().first()[0].textContent = chanceValue + 1;
+	                                alert(userId + ' 유저의 티켓이 증가했습니다.');
+                            	}
+                            }.bind(this),
+                            error: function(xhr, status, error) {
+				                console.error("Selection update failed: " + error);
+				                alert("티켓 증가처리에 실패했습니다.");
+			            	}
                         });
                     });
 
@@ -130,28 +150,46 @@
                             type: 'POST',
                             data: { userId: userId },
                             success: function(response) {
-                                alert(userId + ' 유저의 티켓이 감소했습니다.');
-                            }
+                            	if(response.status == "decrease"){
+	                                var cell = $(this).closest('td');
+	                                var chanceValue = parseInt(cell.text(), 10);
+	                                cell.contents().first()[0].textContent = chanceValue - 1;
+	                                alert(userId + ' 유저의 티켓이 감소했습니다.');
+                            	}
+                            }.bind(this),
+                            error: function(xhr, status, error) {
+				                console.error("Selection update failed: " + error);
+				                alert("티켓 감소처리에 실패했습니다.");
+			            	}
                         });
                     });
-
+					
                     $('.change-passFlag').on('click', function() {
-                        var userId = $(this).data('userid');
+                    	var userId = $(this).data('userid');
                         var passFlag = $(this).data('passflag');
+                        
+                        if (passFlag === "Y") {
+                            newPassFlag = "N";
+                        } else {
+                            newPassFlag = "Y";
+                        }
                         $.ajax({
                             url: '/changePassFlag',
                             type: 'POST',
                             data: { userId: userId, passFlag: passFlag },
                             success: function(response) {
+                                var cell = $(this).closest('td');
+                                cell.contents().first()[0].textContent = newPassFlag;
                                 alert(userId + ' 유저의 패스 플래그가 변경되었습니다.');
-                            }
+                            }.bind(this)
                         });
                     });
                 }
             });
         }
     });
-    </script>
+</script>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

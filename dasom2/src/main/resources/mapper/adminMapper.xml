@@ -41,21 +41,25 @@
     	UPDATE USER_MANAGE A SET A.CHANCE = A.CHANCE - 1 WHERE USER_ID = #{userId}
     </update>
     
-    <update id="changePassFlag" parameterType="String">
+    <!-- <update id="changePassFlag" parameterType="String">
 	    UPDATE USER_MANAGE A
+	    SET PASS_FLAG = 'N'
+	    WHERE USER_ID = #{userId}
+	    AND PASS_FLAG = #{passFlag}
+	</update> -->
+	
+	<update id="changePassFlag">
+	    UPDATE USER_MANAGE
 	    <set>
-	        <choose>
-	            <when test="passFlag == 'N'">
-	                A.PASS_FLAG = 'Y'
-	            </when>
-	            <when test="passFlag == 'Y'">
-	                A.PASS_FLAG = 'N'
-	            </when>
-	        </choose>
+	        <if test='passFlag == "N"'>
+	            PASS_FLAG = 'Y'
+	        </if>
+	        <if test='passFlag == "Y"'>
+	            PASS_FLAG = 'N'
+	        </if>
 	    </set>
 	    WHERE USER_ID = #{userId}
 	</update>
-
     
     <!-- 위는 완료 쿼리 -->
     

@@ -37,7 +37,7 @@ public class AdminService {
 	
 	// 매칭 정보
 	public List<Map<String, Object>> getMatchingInfoAdmin(){
-		return adminMapper.getScheduleInfoAdmin();
+		return adminMapper.getMatchingInfoAdmin();
 	}
 	
 	public Map<String, Object> increaseChance(String userId) {
