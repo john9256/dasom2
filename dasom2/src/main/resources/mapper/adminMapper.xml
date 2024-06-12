@@ -23,7 +23,7 @@
 		ORDER BY A.EPISODE DESC , C.SEX ASC, C.USER_NAME ASC
     </select>
     
-    <select id="getMatchingInfoAdmin" >
+    <select id="getMatchingInfoAdmin">
     	SELECT A.USER_ID userId, B.PICK pick, B.USER_ID pickedUserId, DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, DATE_FORMAT(B.CREATETIME, '%y년 %m월 %d일 %p %h시') createtime
 		FROM PARTICIPANT_USER A
 		LEFT OUTER JOIN
@@ -31,6 +31,10 @@
 		ON A.USER_ID = B.USER_ID
 		AND A.EPISODE = B.EPISODE
         ORDER BY A.EPISODE DESC
+    </select>
+     
+    <select id="getScheduleAdmin">
+    	select episode,complete_flag completeFlag, headCount, location FROM MEETING_SCHEDULE
     </select>
     
     <update id="increaseChance">

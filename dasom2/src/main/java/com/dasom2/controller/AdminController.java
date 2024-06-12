@@ -75,6 +75,17 @@ public class AdminController {
 		return null;
     }
 	
+	// 단순 스케줄 get
+		@ResponseBody
+	    @PostMapping("/getScheduleAdmin")
+	    public List<Map<String, Object>> getScheduleAdmin(HttpSession session) {
+			
+			if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+	            return adminService.getScheduleAdmin();
+	        }
+			return null;
+	    }
+	
 	// chance 1회 부여
 	@ResponseBody
     @PostMapping("/increaseChance")

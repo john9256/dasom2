@@ -40,6 +40,11 @@ public class AdminService {
 		return adminMapper.getMatchingInfoAdmin();
 	}
 	
+	// 스케줄 조회 
+		public List<Map<String, Object>> getScheduleAdmin(){
+			return adminMapper.getScheduleAdmin();
+		}
+	
 	public Map<String, Object> increaseChance(String userId) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		try {
