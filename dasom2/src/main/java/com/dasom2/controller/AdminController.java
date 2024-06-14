@@ -98,7 +98,7 @@ public class AdminController {
 		return status;
     }
 	
-	// chance 1회 부여
+	// chance 1회 감소
 	@ResponseBody
     @PostMapping("/decreaseChance")
     public Map<String, Object> decreaseChance(@RequestParam("userId") String userId, HttpSession session) {
@@ -111,15 +111,27 @@ public class AdminController {
     }
 	
 	// passFlag 값 변경
-		@ResponseBody
-	    @PostMapping("/changePassFlag")
-	    public Map<String, Object> changePassFlag(@RequestParam("userId") String userId, @RequestParam("passFlag") String passFlag, HttpSession session) {
-			Map<String, Object> status = new HashMap<String, Object>();
-			if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
-	            return adminService.changePassFlag(userId, passFlag);
-	        }
-			status.put("status", "fail");
-			return status;
-	    }
-		
+	@ResponseBody
+    @PostMapping("/changePassFlag")
+    public Map<String, Object> changePassFlag(@RequestParam("userId") String userId, @RequestParam("passFlag") String passFlag, HttpSession session) {
+		Map<String, Object> status = new HashMap<String, Object>();
+		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+            return adminService.changePassFlag(userId, passFlag);
+        }
+		status.put("status", "fail");
+		return status;
+    }
+	
+	// 스케줄 삭제
+	@ResponseBody
+    @PostMapping("/deleteSchedule")
+    public Map<String, Object> deleteSchedule(@RequestParam("episode") String episode, HttpSession session) {
+		Map<String, Object> status = new HashMap<String, Object>();
+		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+            return adminService.deleteSchedule(episode);
+        }
+		status.put("status", "fail");
+		return status;
+    }
+
 }

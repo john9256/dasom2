@@ -33,7 +33,7 @@
             <button type="button" class="btn btn-primary" id="userInfoBtn">유저정보</button>
             <button type="button" class="btn btn-secondary" id="scheduleInfoBtn">스케줄 정보</button>
             <button type="button" class="btn btn-success" id="matchingInfoBtn">매칭 정보</button>
-            <button type="button" class="btn btn-success" id="scheduleBtn">스케줄 관리</button>
+            <button type="button" class="btn btn-warning" id="scheduleBtn">스케줄 관리</button>
         </div>
         <div id="dataTable" class="table-responsive">
             <table id="adminTable" class="display" style="width:100%">
@@ -47,9 +47,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="scheduleControl" class="mt-4">
-            <button type="button" class="btn btn-primary" id="addScheduleBtn">스케줄 추가</button>
-        </div>
+        
     </div>
 
     <script>
@@ -60,17 +58,16 @@
         var scheduleColumns = ["episode", "completeFlag", "headCount", "location"];
 
         var episodeColors = {};
+        var colors = ['#FF000033', '#FFA50033', '#FFFF0033', '#00800033', '#0000FF33'];
+        var colorIndex = 0;
 
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color + '33'; // 투명도 20%
+        function getNextColor() {
+            var color = colors[colorIndex];
+            colorIndex = (colorIndex + 1) % colors.length;
+            return color;
         }
 
-        function createTable(data, columnOrder) {
+        function createTable(data, columnOrder, isScheduleTable = false) {
             // 기존 DataTable 삭제
             if ($.fn.DataTable.isDataTable('#adminTable')) {
                 $('#adminTable').DataTable().clear().destroy();
@@ -79,10 +76,22 @@
             // 테이블 헤더와 본문 비우기
             $('#adminTable thead').empty();
             $('#adminTable tbody').empty();
-
+            $('#addScheduleBtn').remove();
+            $('#data-inform').remove();
+            
+         	// 스케줄 관리 탭인 경우
+            if (isScheduleTable) {
+                var scheduleBtnContent = `
+                    <div id="scheduleControl" class="mt-4">
+                        <button type="button" class="btn btn-primary" id="addScheduleBtn">스케줄 추가</button>
+                    </div>`;
+                $('#dataTable').append(scheduleBtnContent);
+            }
+            
             // 데이터가 없는 경우
             if (!data || data.length === 0) {
-                $('#dataTable').html('<p>No data available</p>');
+            	var dataContent = `<p id ="data-inform">No data available</p>`;
+                $('#dataTable').append(dataContent);
                 return;
             }
 
@@ -114,8 +123,12 @@
                     }
                 });
 
-                // 삭제 버튼 추가
-                rowData.push('<button class="btn btn-sm btn-danger delete-schedule" data-episode="' + row['episode'] + '">삭제</button>');
+                // 삭제 버튼 추가 (스케줄 관리 테이블일 때만 추가)
+                if (isScheduleTable) {
+                    rowData.push('<button class="btn btn-sm btn-danger delete-schedule" data-episode="' + row['episode'] + '">삭제</button>');
+                } else {
+                    rowData.push(''); // 빈 셀 추가
+                }
 
                 return rowData;
             });
@@ -130,7 +143,7 @@
                 rowCallback: function(row, data, index) {
                     var episode = data[0];
                     if (!episodeColors[episode]) {
-                        episodeColors[episode] = getRandomColor();
+                        episodeColors[episode] = getNextColor();
                     }
                     $(row).css('background-color', episodeColors[episode]);
                 },
@@ -204,29 +217,31 @@
                         });
                     });
 
-                    // 삭제 버튼 이벤트 핸들러 추가
-                    $('.delete-schedule').on('click', function() {
-                        var episode = $(this).data('episode');
-                        if (confirm(episode + ' 스케줄을 삭제하시겠습니까?')) {
-                            $.ajax({
-                                url: '/deleteSchedule',
-                                type: 'POST',
-                                data: { episode: episode },
-                                success: function(response) {
-                                    if(response.status == "success"){
-                                        alert('스케줄이 삭제되었습니다.');
-                                        $('#scheduleBtn').click(); // 스케줄 리스트 새로고침
-                                    } else {
-                                        alert('스케줄 삭제에 실패했습니다.');
+                    // 삭제 버튼 이벤트 핸들러 추가 (스케줄 관리 테이블일 때만 추가)
+                    if (isScheduleTable) {
+                        $('.delete-schedule').on('click', function() {
+                            var episode = $(this).data('episode');
+                            if (confirm(episode + ' 스케줄을 삭제하시겠습니까?')) {
+                                $.ajax({
+                                    url: '/deleteSchedule',
+                                    type: 'POST',
+                                    data: { episode: episode },
+                                    success: function(response) {
+                                        if(response.status == "success"){
+                                            alert('스케줄이 삭제되었습니다.');
+                                            $('#scheduleBtn').click(); // 스케줄 리스트 새로고침
+                                        } else {
+                                            alert('스케줄 삭제에 실패했습니다.');
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error("Schedule deletion failed: " + error);
+                                        alert("스케줄 삭제에 실패했습니다.");
                                     }
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error("Schedule deletion failed: " + error);
-                                    alert("스케줄 삭제에 실패했습니다.");
-                                }
-                            });
-                        }
-                    });
+                                });
+                            }
+                        });
+                    }
                 }
             });
         }
@@ -251,7 +266,7 @@
 
         $('#scheduleBtn').click(function() {
             $.post('/getScheduleAdmin', function(data) {
-                createTable(data, scheduleColumns);
+                createTable(data, scheduleColumns, true); // 스케줄 테이블임을 나타내는 플래그 전달
             });
         });
 
@@ -288,4 +303,3 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
