@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dasom2.mapper.AdminMapper;
 import com.dasom2.mapper.CommonMapper; 
@@ -102,23 +103,25 @@ public class AdminService {
 				return status;
 	}
 	
+	@Transactional
 	public Map<String, Object> deleteSchedule(String episode) {
-		Map<String, Object> status = new HashMap<String, Object>();
-		try {
-			int count = adminMapper.deleteSchedule(episode);
-				if(count == 1) {
-					status.put("status", "success");
-				}
-				else {
-					status.put("status", "fail");
-				}
-		} catch (Exception e) {
-			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
-	         CommonMapper.insertErrorLog("admin", methodName, e.getMessage());
-	         status.put("status", "error");
-		}
-				return status;
+	    Map<String, Object> status = new HashMap<String, Object>();
+	    try {
+	        int count = adminMapper.deleteSchedule(episode);
+	        adminMapper.deleteAllParticipantByEpisode(episode);
+	        if(count == 1) {
+	            status.put("status", "success");
+	        } else {
+	            status.put("status", "fail");
+	        }
+	    } catch (Exception e) {
+	        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	        String methodName = stackTrace[1].getMethodName();
+	        CommonMapper.insertErrorLog("admin", methodName, e.getMessage());
+	        status.put("status", "error");
+	        throw e; // 트랜잭션 롤백을 위해 예외를 다시 던짐
+	    }
+	    return status;
 	}
 	
 }

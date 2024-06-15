@@ -17,6 +17,7 @@ public interface AdminMapper {
 	int decreaseChance(String userId);
 	int changePassFlag(@Param("userId") String userId, @Param("passFlag") String passFlag);
 	int deleteSchedule(String episode);
+	int deleteAllParticipantByEpisode(String episode);
 	
 //	List<MeetingScheduleVO> getMeetingSchedule(String userId);
 //	int checkChace(String userId);

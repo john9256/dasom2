@@ -3,11 +3,20 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Admin Page</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+     -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    
+	<title>Admin Page</title>
     <style>
         .container-fluid {
             width: 100%;
@@ -49,7 +58,46 @@
         </div>
         
     </div>
-
+    
+	
+	<!-- Modal -->
+	<div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="exampleModalLabel">Add New Schedule</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <form id="addScheduleForm">
+	                    <div class="form-group">
+	                        <label for="newEpisode">Episode</label>
+	                        <input type="text" class="form-control" id="newEpisode" required>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="newCompleteFlag">Complete Flag</label>
+	                        <input type="text" class="form-control" id="newCompleteFlag" required>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="newHeadCount">Head Count</label>
+	                        <input type="number" class="form-control" id="newHeadCount" required>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="newLocation">Location</label>
+	                        <input type="text" class="form-control" id="newLocation" required>
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	                <button type="button" class="btn btn-primary" id="saveScheduleBtn">Save</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
     <script>
     $(document).ready(function() {
         var userInfoColumns = ["userId", "userName", "sex", "height", "birthday", "jobDivision", "residence", "passFlag", "chance", "phoneNumber"];
@@ -66,7 +114,9 @@
             colorIndex = (colorIndex + 1) % colors.length;
             return color;
         }
-
+		
+       
+        
         function createTable(data, columnOrder, isScheduleTable = false) {
             // 기존 DataTable 삭제
             if ($.fn.DataTable.isDataTable('#adminTable')) {
@@ -87,6 +137,10 @@
                     </div>`;
                 $('#dataTable').append(scheduleBtnContent);
             }
+         	
+            $("#addScheduleBtn").click(function() {
+                $('#addScheduleModal').modal('show');
+            });
             
             // 데이터가 없는 경우
             if (!data || data.length === 0) {
@@ -269,13 +323,14 @@
                 createTable(data, scheduleColumns, true); // 스케줄 테이블임을 나타내는 플래그 전달
             });
         });
+        
+        // 스케줄 추가
+        $('#saveScheduleBtn').click(function() {
+            var newEpisode = $('#newEpisode').val();
+            var newCompleteFlag = $('#newCompleteFlag').val();
+            var newHeadCount = $('#newHeadCount').val();
+            var newLocation = $('#newLocation').val();
 
-        // 스케줄 추가 기능
-        $('#addScheduleBtn').click(function() {
-            var newEpisode = prompt("추가할 스케줄의 episode 번호를 입력하세요:");
-            var newCompleteFlag = prompt("추가할 스케줄의 completeFlag 값을 입력하세요:");
-            var newHeadCount = prompt("추가할 스케줄의 headCount 값을 입력하세요:");
-            var newLocation = prompt("추가할 스케줄의 location 값을 입력하세요:");
             if (newEpisode && newCompleteFlag && newHeadCount && newLocation) {
                 $.ajax({
                     url: '/addSchedule',
@@ -288,14 +343,19 @@
                         } else {
                             alert('스케줄 추가에 실패했습니다.');
                         }
+                        $('#addScheduleModal').modal('hide');
                     },
                     error: function(xhr, status, error) {
                         console.error("Schedule addition failed: " + error);
                         alert("스케줄 추가에 실패했습니다.");
+                        $('#addScheduleModal').modal('hide');
                     }
                 });
+            } else {
+                alert("모든 필드를 입력해주세요.");
             }
         });
+        
     });
     </script>
 
