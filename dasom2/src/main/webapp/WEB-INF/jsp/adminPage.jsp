@@ -76,10 +76,10 @@
 	                        <label for="newEpisode">Episode</label>
 	                        <input type="text" class="form-control" id="newEpisode" required>
 	                    </div>
-	                    <div class="form-group">
+	                    <!-- <div class="form-group">
 	                        <label for="newCompleteFlag">Complete Flag</label>
 	                        <input type="text" class="form-control" id="newCompleteFlag" required>
-	                    </div>
+	                    </div> -->
 	                    <div class="form-group">
 	                        <label for="newHeadCount">Head Count</label>
 	                        <input type="number" class="form-control" id="newHeadCount" required>
@@ -281,7 +281,7 @@
                                     type: 'POST',
                                     data: { episode: episode },
                                     success: function(response) {
-                                        if(response.status == "success"){
+                                        if(response.status == "complete"){
                                             alert('스케줄이 삭제되었습니다.');
                                             $('#scheduleBtn').click(); // 스케줄 리스트 새로고침
                                         } else {
@@ -327,17 +327,17 @@
         // 스케줄 추가
         $('#saveScheduleBtn').click(function() {
             var newEpisode = $('#newEpisode').val();
-            var newCompleteFlag = $('#newCompleteFlag').val();
+            // var newCompleteFlag = $('#newCompleteFlag').val();
             var newHeadCount = $('#newHeadCount').val();
             var newLocation = $('#newLocation').val();
 
-            if (newEpisode && newCompleteFlag && newHeadCount && newLocation) {
+            if (newEpisode && newHeadCount && newLocation) {
                 $.ajax({
                     url: '/addSchedule',
                     type: 'POST',
-                    data: { episode: newEpisode, completeFlag: newCompleteFlag, headCount: newHeadCount, location: newLocation },
+                    data: { episode: newEpisode, headCount: newHeadCount, location: newLocation },
                     success: function(response) {
-                        if(response.status == "success"){
+                        if(response.status == "complete"){
                             alert('스케줄이 추가되었습니다.');
                             $('#scheduleBtn').click(); // 스케줄 리스트 새로고침
                         } else {

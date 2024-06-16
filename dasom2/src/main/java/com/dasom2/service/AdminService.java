@@ -110,7 +110,7 @@ public class AdminService {
 	        int count = adminMapper.deleteSchedule(episode);
 	        adminMapper.deleteAllParticipantByEpisode(episode);
 	        if(count == 1) {
-	            status.put("status", "success");
+	            status.put("status", "complete");
 	        } else {
 	            status.put("status", "fail");
 	        }
@@ -122,6 +122,25 @@ public class AdminService {
 	        throw e; // 트랜잭션 롤백을 위해 예외를 다시 던짐
 	    }
 	    return status;
+	}
+	
+	public Map<String, Object> addSchedule(String episode, int headCount, String location) {
+		Map<String, Object> status = new HashMap<String, Object>();
+		try {
+			int count = adminMapper.addSchedule(episode, headCount, location);
+				if(count == 1) {
+					status.put("status", "complete");
+				}
+				else {
+					status.put("status", "fail");
+				}
+		} catch (Exception e) {
+			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
+	         CommonMapper.insertErrorLog("admin", methodName, e.getMessage());
+	         status.put("status", "error");
+		}
+				return status;
 	}
 	
 }

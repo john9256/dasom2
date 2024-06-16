@@ -66,4 +66,8 @@
     	DELETE FROM PARTICIPANT_USER WHERE EPISODE = REPLACE(#{episode}, 'T', ' ')
     </delete>
     
+    <insert id ="addSchedule">
+    	INSERT INTO MEETING_SCHEDULE(EPISODE, HEADCOUNT, LOCATION) VALUES(REPLACE(#{episode}, 'T', ' '), #{headCount}, #{location})
+    </insert>
+    
 </mapper>

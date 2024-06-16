@@ -133,5 +133,17 @@ public class AdminController {
 		status.put("status", "fail");
 		return status;
     }
-
+	
+	// 스케줄 추가
+		@ResponseBody
+	    @PostMapping("/addSchedule")
+	    public Map<String, Object> addSchedule(String episode, int headCount, String location, HttpSession session) {
+			Map<String, Object> status = new HashMap<String, Object>();
+			if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+	            return adminService.addSchedule(episode, headCount, location);
+	        }
+			status.put("status", "fail");
+			return status;
+	    }
+	
 }
