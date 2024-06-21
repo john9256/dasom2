@@ -41,7 +41,7 @@ public class mainController {
 	}
 	
 	//메인페이지
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused") 
 	@GetMapping("/mainPage")
     public String mainPage(Model model, HttpSession session) {
         // 로그인이 필요한 경우 로그인 페이지로 리디렉션
