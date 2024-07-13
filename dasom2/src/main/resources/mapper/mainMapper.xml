@@ -80,6 +80,10 @@
     	SELECT pass_flag FROM user_manage WHERE user_id = #{userId} AND PASS_FLAG = 'Y'
     </select>
     
+    <select id = "checkUserInfoExist">
+    	SELECT COUNT(*) FROM user_table WHERE user_id = #{userId} AND phone_number IS NULL
+    </select>
+    
     <select id="getMatchingInfo" resultType="matchPersonVO" parameterType="String">
     	SELECT  A.USER_ID AS PICKED_USER_ID, NICKNAME, B.PICK, B.PICK_TYPE, A.EPISODE AS localDateTimeEpisode
 		FROM PARTICIPANT_USER A

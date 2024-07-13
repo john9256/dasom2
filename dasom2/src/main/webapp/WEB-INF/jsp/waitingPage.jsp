@@ -92,40 +92,21 @@
 <body>
 <div class="container mt-3">
     <div class="top-text"><a href="/mainPage">다솜 소개팅</a></div>
-    <div class="second-text">호스트가 회원가입 검토중에 있습니다.<br>조금만 기다려주세요!</div>
+    <div class="second-text">기본 인적 사항을 기재해주세요!</div>
     <div class="full-screen-wrapper">
     <div class="button-container">
-    	<button id="guideBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">소개팅 가이드</button>
+    	<button id="registerUserInfo" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">소개팅 준비하기</button>
     </div>
 </div>
 </div>
-
-<!-- Modal -->
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- 내용은 JavaScript를 통해 동적으로 로드 -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
 
 <script>
 
-
+	$(document).ready(function() {
+	    $('#registerUserInfo').click(function() {
+	        window.location.href = '/register.user';
+	    });
+	});
 
 </script>
 

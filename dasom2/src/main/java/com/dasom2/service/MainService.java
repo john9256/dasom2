@@ -140,6 +140,15 @@ public class MainService {
 		}
 	}
 	
+	public Boolean checkUserInfoExist(String userId) {
+		if(MainMapper.checkUserInfoExist(userId) > 0) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	// 두근두근 매칭 모달 인원 리스트 get
 	public List<Map<String, Object>> getMatchingInfo(String userId){
 		

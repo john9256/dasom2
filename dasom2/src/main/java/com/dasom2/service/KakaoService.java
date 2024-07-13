@@ -11,8 +11,13 @@ public class KakaoService {
     @Autowired
     private KakaoMapper kakaoMapper;
 
-    public void saveUser(UserVO user) {
-        kakaoMapper.saveUser(user);
+    public void saveUser(String userId) {
+        kakaoMapper.saveUser(userId);
     }
+    
+    public int checkUserExist(String userId) {
+    	return kakaoMapper.checkUserExist(userId);
+    }
+    
 }
 

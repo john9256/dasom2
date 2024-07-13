@@ -31,8 +31,8 @@
 
 	<div class="text-right">
         <!-- <a href="/test" class="text-head" >자주 묻는 질문</a> -->
-        <a href="/logout" class="text-head" >로그아웃</a>
-        <a href="/logout/kakao" class="text-head" >카카오 로그아웃</a>
+        <!-- <a href="/logout" class="text-head" >로그아웃</a> -->
+        <!-- <a href="/" class="text-head" >카카오 로그아웃</a> -->
         
     </div>
     

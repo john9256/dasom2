@@ -1,7 +1,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dasom2.mapper.KakaoMapper">
     <insert id="saveUser">
-        INSERT INTO user_table (user_id, kakao_uuid)
-        VALUES (#{kakaoId}, #{kakaoUuid})
+        INSERT INTO user_table (user_id)
+        VALUES (#{kakaoId})
     </insert>
+    
+    <select id="checkUserExist">
+    	SELECT COUNT(*) FROM user_table WHERE user_id = #{kakaoId}
+    </select>
 </mapper>

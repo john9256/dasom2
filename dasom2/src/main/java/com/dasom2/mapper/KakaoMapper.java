@@ -6,5 +6,6 @@ import com.dasom2.vo.UserVO;
 
 @Mapper
 public interface KakaoMapper {
-    void saveUser(UserVO user);
+    void saveUser(String kakaoId);
+    int checkUserExist(String kakaoId);
 }

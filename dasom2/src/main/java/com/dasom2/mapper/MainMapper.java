@@ -29,4 +29,5 @@ public interface MainMapper {
 	void insertPickUser(String userId, LocalDateTime episode, String nickName);
 	void deletePickUser(String userId, LocalDateTime episode, String nickName);
 	LocalDateTime test();
+	int checkUserInfoExist(String userId);
 }
