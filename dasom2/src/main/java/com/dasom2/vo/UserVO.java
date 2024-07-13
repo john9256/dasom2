@@ -3,6 +3,9 @@ package com.dasom2.vo;
 public class UserVO {
 	
 	String userId;
+	String kakaoId;
+	String kakaoUuid;
+	
 	String ip;
 	String passFlag;
 	String email;
@@ -46,4 +49,16 @@ public class UserVO {
 		this.chance = chance;
 	}
 	
+	public String getKakaoId() {
+		return kakaoId;
+	}
+	public void setKakaoId(String kakaoId) {
+		this.kakaoId = kakaoId;
+	}
+	public String getKakaoUuid() {
+		return kakaoUuid;
+	}
+	public void setKakaoUuid(String kakaoUuid) {
+		this.kakaoUuid = kakaoUuid;
+	}
 }

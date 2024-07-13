@@ -1,0 +1,62 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    margin-top: -100px;
+}
+
+.kakaoLoginFrame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#loginBtn {
+    width: 50%;
+    max-width: 750px; /* Optional: To restrict maximum width */
+    min-width: 300px; /* Minimum width to prevent being too small */
+    border: 2px solid #F7E600; /* Add border */
+    border-radius: 10px; /* Rounded corners */
+    padding: 10px; /* Padding for better appearance */
+}
+
+@media (max-width: 768px) {
+    .header {
+        font-size: 1.2em;
+    }
+    
+    #loginBtn {
+        width: 60%;
+        max-width: 500px;
+        min-width: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        font-size: 1em;
+    }
+    
+    #loginBtn {
+        width: 70%;
+        max-width: 400px;
+        min-width: 200px;
+    }
+}

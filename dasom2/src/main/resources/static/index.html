@@ -53,6 +53,7 @@
         }
         #text-rights-foot{
         	text-align: center;
+        	margin-top:50px;
         }
         
         @media (max-width: 800px) {	 /* 핸드폰 화면 크기에 따라 조정 */
@@ -80,15 +81,20 @@
 
     <div class="jumbotron text-center" style="height: 80vh;">
         <h1 id="welcomeText" class="display-4 animate-slideIn">다솜 소개팅</h1>
-        <p id="welcomeText" class="lead animate-slideIn">여러분의 건강한 사랑을 응원합니다</p>
+        <p id="welcomeText" class="lead animate-slideIn">여러분의 건강한 사랑을 응원합니다</p> 
         <hr class="my-4">
-        <a class="btn btn-primary btn-lg animate-slideIn" href="/loginPage" role="button">로그인</a>
+        <a class="btn btn-primary btn-lg animate-slideIn" href="/login/kakao" role="button">카카오로 로그인</a>        
+                
+        <!-- 아래는 기존방법 -->
+        <!-- <a class="btn btn-primary btn-lg animate-slideIn" href="https://kauth.kakao.com/oauth/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=http://localhost:8080/login/callback&response_type=code&scope=talk_message" role="button">카카오로 로그인</a> -->
+        <!-- <a class="btn btn-primary btn-lg animate-slideIn" href="/loginPage" role="button">로그인</a> -->
         <!-- <a class="btn btn-primary btn-lg animate-slideIn" href="register.user" role="button">회원가입</a> -->
+        
     </div>
 
-	<!-- <footer>
+	<footer>
     	<p id ="text-rights-foot">&copy; 2024 Dasom meeting. All rights reserved.</p>
-	</footer> -->
+	</footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-color/2.1.2/jquery.color.min.js"></script>

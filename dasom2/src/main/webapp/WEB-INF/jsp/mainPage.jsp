@@ -32,6 +32,8 @@
 	<div class="text-right">
         <!-- <a href="/test" class="text-head" >자주 묻는 질문</a> -->
         <a href="/logout" class="text-head" >로그아웃</a>
+        <a href="/logout/kakao" class="text-head" >카카오 로그아웃</a>
+        
     </div>
     
     <div class="top-text"><a href="/mainPage">다솜 소개팅</a></div>
