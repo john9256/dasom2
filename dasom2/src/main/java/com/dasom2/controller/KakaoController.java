@@ -10,15 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.dasom2.service.KakaoService;
 import com.dasom2.vo.UserVO;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -32,9 +29,6 @@ public class KakaoController {
     
     @Value("${kakao.redirect-uri}")
     private String redirectUri;
-    
-    @Value("${kakao.logout.url}")
-    private String kakaoLogoutUrl;
     
     @Value("${main.page.url}")
     private String mainPageUrl;

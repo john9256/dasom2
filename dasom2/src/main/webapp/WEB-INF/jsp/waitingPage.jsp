@@ -19,6 +19,7 @@
     }
 
     .button-container {
+    	margin-top: -200px;
         display: flex;
         flex-direction: column; /* Stacks buttons vertically */
         align-items: center; /* Centers buttons horizontally */
@@ -26,13 +27,14 @@
         width: 80%; /* .button-container의 너비를 화면의 80%로 설정 */
     	max-width: 1500px; /* 최대 너비를 500px로 제한 */
     	justify-content: flex-end; /* 오른쪽 정렬 */
+    	
     }
 
     .button-container button.btn-main {
         width: 80%;
         padding: 17px 0;
         font-size: 22px;
-        background-color: #ff85a2 !important;
+        background-color: #ff85a2 !important; 
         border-color: #ff85a2;
         color: white;
     }

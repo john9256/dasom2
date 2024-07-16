@@ -1,53 +1,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dasom2.mapper.RegisterUserMapper">
 
-    <select id="checkUserId" resultType="Int" parameterType="String">
-        SELECT COUNT(*) FROM user_table WHERE user_id = #{userId}
-    </select>
+    
     <select id="getResidenceData" resultType="String" parameterType="String">
         SELECT value1 FROM criteria_data WHERE division = #{division}
     </select>
-    <select id="checkEmail" resultType="Int" parameterType="String">
-        SELECT COUNT(*) FROM user_table WHERE email = #{email}
-    </select>
-    <insert id="insertEmailSendLog" parameterType="String">
-        INSERT INTO email_send_log(user_id, email, ip) VALUES(#{userId}, #{email}, #{currentIp})
-    </insert>
-    <select id="checkEmailVerified" resultType="boolean" parameterType="String">
-        SELECT AA.verification_flag FROM
-		(
-			SELECT verification_flag, ROW_NUMBER() OVER () AS ROWNUM FROM email_verification WHERE user_id = #{userId} AND email = #{email} ORDER BY createtime DESC
-		) AA
-		WHERE AA.ROWNUM = 1;
-    </select>
-    <insert id="saveEmailAndToken" parameterType="map">
-        INSERT INTO email_verification(user_id, email, token) VALUES(#{userId}, #{email}, #{token})
-    </insert>
-    <select id="getEmailByToken" resultType="String" parameterType="String">
-        SELECT email 
-        FROM (
-		    SELECT ROW_NUMBER() OVER (ORDER BY CREATETIME DESC) AS ROWNUM, A.* 
-		    FROM email_verification A 
-		    WHERE A.CREATETIME > NOW() - INTERVAL 10 MINUTE
-			) B
-		WHERE ROWNUM = 1
-		AND TOKEN = #{token}
-		AND USER_ID = #{userId}
-    </select>
-    <update id="updateEmailVerification" parameterType="String">
-        UPDATE email_verification SET verification_flag = TRUE WHERE email = #{email} AND token = #{token}
-    </update>
-    <insert id="insertUser" parameterType="RegisterUserVO">
-        insert into user_table(user_id, password, user_name, phone_number, email, sex, birthday, height, company_name, job_division, residence, job_residence) 
-        VALUES(#{userId}, #{password}, #{userName}, #{phoneNumber}, #{email}, #{sex}, STR_TO_DATE(CONCAT(#{birthday}, '-01-01'), '%Y-%m-%d'), #{height}, #{companyName}, #{jobDivision}, #{residence}, #{jobResidence})
-    </insert>
-
-    <insert id="insertUserImage" parameterType="RegisterUserImageVO">
-        insert into user_image(user_id, id_card_path, business_card_path, self_image_path) 
-        VALUES(#{userId}, #{idCardPath}, #{businessCardPath}, #{selfImagePath})
+    
+    <insert id="registerUserInfo" parameterType="RegisterUserVO">
+        UPDATE user_table SET 
+        user_name = #{userName}, 
+        phone_number = #{phoneNumber}, 
+        sex = #{sex}, 
+        birthday = STR_TO_DATE(CONCAT(#{birthday}, '-01-01'), '%Y-%m-%d'),
+        height = #{height},
+        job_division = #{jobDivision},
+        residence = #{residence}
+        WHERE user_id =#{userId}
     </insert>
     
-    <insert id="insertUserManage" parameterType="String">
+    <insert id ="insertUserManage">
     	INSERT INTO USER_MANAGE (USER_ID, CHANCE) VALUE(#{userId}, 0)
     </insert>
     

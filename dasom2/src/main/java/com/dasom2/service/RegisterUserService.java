@@ -1,18 +1,10 @@
 package com.dasom2.service;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.dasom2.mapper.CommonMapper;
 import com.dasom2.mapper.RegisterUserMapper;
-import com.dasom2.vo.RegisterUserImageVO;
 import com.dasom2.vo.RegisterUserVO;
 
 @Service
@@ -27,113 +19,13 @@ public class RegisterUserService {
 	@Autowired
     private JavaMailSender emailSender;
 	
-//	@Autowired
-//	private FileStorageService FileStorageService;
-
-    
-    // 아이디 중복 체크
-    public boolean checkUserId(String userId) {
-        return RegisterUserMapper.checkUserId(userId) == 0;
-    }
-    
-    // 이메일 중복 체크 - 존재 하면 true 반환
-    public boolean checkEmailExist(String email) {
-        return RegisterUserMapper.checkEmail(email) > 0;
-    }
-    
-    // 이메일 발송
-    public boolean sendEmailVerification(String userId, String email, String token) {
-        String subject = "다솜 소개팅 회원가입 이메일 인증";
-        String content = "이메일 인증을 위해 아래 링크를 클릭해주세요.\n"
-        			   + "http://211.202.209.158:8080/emailVerify?token=" + token + "&userId=" + userId;
-        // 핸드폰 핫스팟으로 연결했을때
-        // 192.168.62.228
-        // plan a 와이파이 연결 했을 떄
-        // 192.168.9.14
-        
-        try {
-	        SimpleMailMessage message = new SimpleMailMessage();
-	        message.setTo(email);
-	        message.setSubject(subject);
-	        message.setText(content);
-	        emailSender.send(message);
-	        
-	        // 토큰과 이메일 저장
-	        Map<String, Object> params = new HashMap<>();
-	        params.put("userId", userId);
-	        params.put("email", email);
-	        params.put("token", token);
-	        RegisterUserMapper.saveEmailAndToken(params);
-	        return true;
-        }
-        catch (Exception e) {
-        	e.printStackTrace();
-        	String methodName = e.getStackTrace()[0].getMethodName();
-        	CommonMapper.insertErrorLog(methodName, email, e.getMessage());
-            return false;
-		}
-        
-    }
-    
-    // 이메일 인증 
-    public boolean verifyEmailByToken(String token, String userId) {
-    	String successEmail="";
-    	successEmail = RegisterUserMapper.getEmailByToken(token, userId);
-    	System.out.println(successEmail);
-    	if(!successEmail.equalsIgnoreCase("") && successEmail != null) {
-    		try {
-    			RegisterUserMapper.updateEmailVerification(successEmail, token);
-    		}
-    		catch (Exception e) {
-    			e.printStackTrace();
-    			CommonMapper.insertErrorLog("verifyEmailByToken 메서드", successEmail, e.getMessage());
-    			return false;
-			}
-    		return true;
-    	}
-    	else {
-    		return false;
-    	}
-    }
-    
-    // 회원 가입시 이메일 인증 여부 확인
-    public boolean checkEmailVerified(String email, String userId) {
-    	boolean check = false;
-    	check = RegisterUserMapper.checkEmailVerified(email, userId);
-    		return check;
-    }
-    
-    // 이메일 발송 로그
-    public void insertEmailSendLog(String userId, String email, String currentIp) {
-    	RegisterUserMapper.insertEmailSendLog(userId, email, currentIp);
-    }
-    
-    // 유저 등록 서비스
-    public void registerUser(RegisterUserVO user) {
+    // 유저 인적사항 등록
+    public void registerUserInfo(RegisterUserVO user) {
     	
-    	// 비밀번호 암호화
-    	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    	String encodedPassword = passwordEncoder.encode(user.getPassword());
-    	user.setPassword(encodedPassword);
-    	
-    	// 저장
-        RegisterUserMapper.insertUser(user);
+        RegisterUserMapper.registerUserInfo(user);
     }
     
-    // 유저 등록시 사진 업로드 기능
-    public void registerUserImages(RegisterUserVO user, MultipartFile idCardImage, MultipartFile businessCardImage, MultipartFile selfImage) throws IOException {
-        // 여기에 사용자 정보를 데이터베이스에 저장하는 로직 추가 (생략)
-
-        // 이미지 파일 저장
-        String idCardPath = FileStorageService.saveFile(idCardImage, user.getUserId() + "_idCard");
-        String businessCardPath = FileStorageService.saveFile(businessCardImage, user.getUserId() + "_businessCard");
-        String selfImagePath = FileStorageService.saveFile(selfImage, user.getUserId() + "_selfImage");
-
-        // 이미지 경로 정보를 데이터베이스에 저장
-        RegisterUserImageVO userImage = new RegisterUserImageVO(user.getUserId(), idCardPath, businessCardPath, selfImagePath);
-        RegisterUserMapper.insertUserImage(userImage);
-    }
-    
+    // 유저 관리 데이터 등록
     public void registerUserManage(String userId) {
     	RegisterUserMapper.insertUserManage(userId);
     }

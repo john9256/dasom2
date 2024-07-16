@@ -2,10 +2,8 @@ package com.dasom2.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.dasom2.vo.UserVO;
-
 @Mapper
 public interface KakaoMapper {
-    void saveUser(String kakaoId);
-    int checkUserExist(String kakaoId);
+    void saveUser(String userId);
+    int checkUserExist(String userId);
 }

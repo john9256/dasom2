@@ -2,10 +2,10 @@
 <mapper namespace="com.dasom2.mapper.KakaoMapper">
     <insert id="saveUser">
         INSERT INTO user_table (user_id)
-        VALUES (#{kakaoId})
+        VALUES (#{userId})
     </insert>
     
     <select id="checkUserExist">
-    	SELECT COUNT(*) FROM user_table WHERE user_id = #{kakaoId}
+    	SELECT COUNT(*) FROM user_table WHERE user_id = #{userId}
     </select>
 </mapper>
