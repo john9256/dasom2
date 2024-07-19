@@ -41,9 +41,6 @@
                 <div class="card-body">
                     <form id="registerForm" action="/register" method="post" enctype="multipart/form-data">
                         
-                        <!-- userId를 숨겨진 필드로 추가 -->
-                        <input type="hidden" name="userId" id="userId" value="${userId}">
-
                         <div class="form-group">
                             <label for="userName">이름:</label>
                             <input type="text" class="form-control" name="userName" id="userName" required>
@@ -92,6 +89,7 @@
                         </div>
                         
                         <button type="submit" class="btn btn-primary">회원가입</button>
+                        <a href="/mainPage" class="btn btn-primary">취소</a>
                     </form>
                 </div>
             </div>
@@ -105,6 +103,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
+	
+	var isUpdate = "${isUpdate}";
     // 거주지 데이터 로드
     $.ajax({
         type: 'GET',
@@ -112,14 +112,42 @@ $(document).ready(function() {
         data: { criteria: "residence" },
         success: function(data) {
             data.forEach(function(item) {
-                $('#residence').append($('<option>', { 
+                $('#residence').append($('<option>', {
                     value: item.value1, 
                     text: item.value1
                 }));
             });
         }
     });
+	
+ // 업데이트 모드 확인 및 데이터 로드
+    if(isUpdate == "Y") {
+        $.ajax({
+            type: 'GET',
+            url: '/getUserInfoForUpdate',
+            success: function(data) {
+                // 데이터를 각각의 필드에 설정
+                if (data.userName) {
+                    $("#userName").val(data.userName);
+                }
+                if (data.phoneNumber) {
+                    $("#phoneNumber").val(data.phoneNumber);
+                }
+                if (data.height) {
+                    $("#height").val(data.height);
+                }
+                if (data.jobDivision) {
+                    $("#jobDivision").val(data.jobDivision);
+                }
+            },
+            error: function() {
+                // 오류 처리 (옵션)
+                console.error("Error loading user data");
+            }
+        });
+    }
 
+    
     // 폼 제출 전 검증
     $("#registerForm").submit(function(e) {
         // 기본 제출 동작 방지

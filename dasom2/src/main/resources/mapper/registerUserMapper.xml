@@ -22,4 +22,14 @@
     	INSERT INTO USER_MANAGE (USER_ID, CHANCE) VALUE(#{userId}, 0)
     </insert>
     
+    <select id="getUserInfoForUpdate" resultType="RegisterUserVO">
+    	SELECT A.USER_NAME AS userName, A.height AS height, A.job_division AS jobDivision, A.phone_number AS phoneNumber
+    	FROM USER_TABLE A
+    	WHERE A.USER_ID = #{userId}
+    </select>
+    
+    <select id="checkUserManageTable">
+    	SELECT COUNT(*) FROM USER_MANAGE WHERE USER_ID = #{userId}
+    </select>
+    
 </mapper>

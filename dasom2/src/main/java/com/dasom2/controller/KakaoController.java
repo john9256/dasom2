@@ -33,6 +33,7 @@ public class KakaoController {
     @Value("${main.page.url}")
     private String mainPageUrl;
     
+    // 카카오로 api 호출
     @GetMapping("/login/kakao")
     public RedirectView kakaoLogin() {
         String kakaoLoginUrl = 
@@ -43,24 +44,29 @@ public class KakaoController {
         return new RedirectView(kakaoLoginUrl);
     }
     
+    // api 에서 받은 data insert
     @GetMapping("/login/callback")
     public RedirectView kakaoLoginCallback(@RequestParam String code, HttpSession session) {
         String accessToken = getAccessToken(code);
         
         UserVO user = getKakaoUser(accessToken);
         String userId = user.getKakaoId();
+        String profileImageUrl = user.getProfileImageUrl();
+        
         session.setAttribute("userId", userId);
         session.setAttribute("accessToken", accessToken);
         
         if(kakaoService.checkUserExist(userId) > 0) {
+        	kakaoService.updateUser(profileImageUrl);
         	return new RedirectView(mainPageUrl);
         }
         else {
-        	kakaoService.saveUser(userId);
+        	kakaoService.saveUser(userId, profileImageUrl);
         }
         return new RedirectView(mainPageUrl);
      }
     
+    // 토큰 발급
     private String getAccessToken(String code) {
         String tokenUrl = "https://kauth.kakao.com/oauth/token";
         RestTemplate restTemplate = new RestTemplate();
@@ -80,6 +86,7 @@ public class KakaoController {
         return jsonObject.getString("access_token");
     }
     
+    // 카카오로 부터 data get
     private UserVO getKakaoUser(String accessToken) {
         String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
         RestTemplate restTemplate = new RestTemplate();
@@ -93,48 +100,18 @@ public class KakaoController {
         String responseBody = response.getBody();
         
         JSONObject jsonObject = new JSONObject(responseBody);
-
-        Long id = jsonObject.getLong("id");
-        System.out.println("아이디 값" + id);
         
-        // 응답 데이터 로그 출력
-        System.out.println("Kakao User Info Response: " + responseBody);
-
+        Long id = jsonObject.getLong("id");
+        
+        // Extract profile image URL
+        JSONObject kakaoAccount = jsonObject.getJSONObject("kakao_account");
+        JSONObject profile = kakaoAccount.getJSONObject("profile");
+        String profileImageUrl = profile.getString("profile_image_url");
+        
         UserVO user = new UserVO();
         user.setKakaoId(id.toString());
+        user.setProfileImageUrl(profileImageUrl);
         return user;
     }
-    
-//    @GetMapping("/logout/kakao")
-//    public RedirectView kakaoLogout(HttpSession session, HttpServletRequest request, RedirectAttributes attributes) {
-//        String accessToken = (String) session.getAttribute("accessToken");
-//        if (accessToken != null && logoutFromKakao(accessToken)) {
-//            session.invalidate();
-//            // 클라이언트 세션 명확히 종료
-//            request.getSession(true).invalidate();
-//            return new RedirectView("/login");
-//        } else {
-//            attributes.addFlashAttribute("errorMessage", "로그아웃 실패. 다시 시도해 주세요.");
-//            return new RedirectView("/error");
-//        }
-//    }
-//
-//    private boolean logoutFromKakao(String accessToken) {
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Authorization", "Bearer " + accessToken);
-//
-//        HttpEntity<String> request = new HttpEntity<>(headers);
-//        try {
-//            ResponseEntity<String> response = restTemplate.exchange(kakaoLogoutUrl, HttpMethod.POST, request, String.class);
-//            return response.getStatusCode().is2xxSuccessful();
-//        } catch (Exception e) {
-//            System.err.println("Kakao Logout Error: " + e.getMessage());
-//            return false;
-//        }
-//    }
-    
-    
     
 }

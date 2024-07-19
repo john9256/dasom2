@@ -30,6 +30,8 @@
 <div class="container mt-3">
 
 	<div class="text-right">
+	
+		<a href="/register.user?param='y'" class="text-head" >회원 정보 수정</a>
         <!-- <a href="/test" class="text-head" >자주 묻는 질문</a> -->
         <!-- <a href="/logout" class="text-head" >로그아웃</a> -->
         <!-- <a href="/" class="text-head" >카카오 로그아웃</a> -->
@@ -119,7 +121,7 @@ $(document).ready(function() {
               var location;
               //var episode = "";
               if(data.length === 0){
-      			$("#modalLabel").html("현재 진행 예정인 소개팅이 없습니다.");
+      			$("#modalLabel").html("진행 예정인 소개팅이 없습니다.");
       		}
               else{
 	              data.forEach(function(schedule) {
@@ -167,9 +169,11 @@ $(document).ready(function() {
                 let nickName = "";
                 let episode;
                 $(".modal-body").html("");
+                var userName = "${userName}";
+                console.log(userName)
                 
                 if(data.length === 0){
-        			$("#modalLabel").html("현재 " + userId + " 님이 진행중인 소개팅이 없습니다.");
+        			$("#modalLabel").html("현재 " + userName + " 님이 진행중인 소개팅이 없습니다.");
         		}
                 else{
 	                data.forEach(function(matchInfo) {

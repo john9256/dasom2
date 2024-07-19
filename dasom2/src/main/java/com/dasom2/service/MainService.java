@@ -247,15 +247,19 @@ public class MainService {
 	        String ageGroup;
 
 	        if (remainder < 4) {
-	            ageGroup = "초반";
+	            ageGroup = "초";
 	        } else if (remainder < 7) {
-	            ageGroup = "중반";
+	            ageGroup = "중";
 	        } else {
-	            ageGroup = "후반";
+	            ageGroup = "후";
 	        }
 
-	        return decade + "대 " + ageGroup;
+	        return decade + "" + ageGroup;
 	    }
+	 
+	 public String getUserNameByUserId(String userId) {
+		 return MainMapper.getUserNameByUserId(userId);
+	 }
 	 
 	 public class TypeChecker {
 		    public static void checkType(Object obj) {

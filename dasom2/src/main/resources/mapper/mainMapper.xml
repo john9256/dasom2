@@ -155,5 +155,8 @@
 		ORDER BY A.CREATETIME ASC
     </select>
     
+    <select id="getUserNameByUserId">
+    	SELECT USER_NAME AS userName FROM USER_TABLE WHERE USER_ID = #{userId}
+    </select>
     
 </mapper>

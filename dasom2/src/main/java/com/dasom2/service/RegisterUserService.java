@@ -30,5 +30,19 @@ public class RegisterUserService {
     	RegisterUserMapper.insertUserManage(userId);
     }
     
+    public RegisterUserVO getUserInfoForUpdate(String userId) {
+    	return RegisterUserMapper.getUserInfoForUpdate(userId);
+    }
+    
+    // user_manage 테이블에 이미 있는지 확인
+    public boolean checkUserManageTable(String userId) {
+    	if(RegisterUserMapper.checkUserManageTable(userId) > 0) {
+    		return false;
+    	}
+    	else {
+    		return true;
+    	}
+    }
+    
 }
 

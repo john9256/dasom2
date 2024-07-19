@@ -48,12 +48,12 @@ public class mainController {
     	
     	model.addAttribute("userId", session.getAttribute("userId"));
     	model.addAttribute("accessToken", session.getAttribute("accessToken"));
+    	model.addAttribute("userName", MainService.getUserNameByUserId(String.valueOf(session.getAttribute("userId"))));
     	
         if (session.getAttribute("userId") == null) {
             return "redirect:/login/kakao";
         }
         
-        // 소개팅 신청 서류 합격 인원에게만 메인 페이지 보여주기
 //        if(MainService.getPassFlagbyUser(String.valueOf(session.getAttribute("userId")))) 
         if(MainService.checkUserInfoExist(String.valueOf(session.getAttribute("userId")))) 
         {

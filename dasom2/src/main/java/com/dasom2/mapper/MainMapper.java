@@ -30,4 +30,5 @@ public interface MainMapper {
 	void deletePickUser(String userId, LocalDateTime episode, String nickName);
 	LocalDateTime test();
 	int checkUserInfoExist(String userId);
+	String getUserNameByUserId(String userId);
 }

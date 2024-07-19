@@ -8,8 +8,16 @@ public class UserVO {
 	String passFlag;
 	String email;
 	String phoneNumber;
+	String profileImageUrl;
 	int chance;
 	
+	
+	public String getProfileImageUrl() {
+		return profileImageUrl;
+	}
+	public void setProfileImageUrl(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
+	}
 	public String getUserId() {
 		return userId;
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,15 +29,18 @@ public class AdminController {
 	@Autowired
 	MainService MainService;
 	
+	@Value("${kakao-admin-id}")
+    private String adminId;
+	
 	// 관리자 화면
 	@GetMapping("/adminPage")
     public String adminPage(Model model, HttpSession session) {
 		
 		if (session.getAttribute("userId") == null) {
-            return "redirect:/loginPage";
+            return "redirect:/login/kakao";
         }
 		
-		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+		if (session.getAttribute("userId").toString().equalsIgnoreCase(adminId)) {
             return "adminPage";
         }
 		return "mainPage";
@@ -47,7 +51,7 @@ public class AdminController {
     @PostMapping("/getUserInfoAdmin")
     public List<Map<String, Object>> getUserInfoAdmin(HttpSession session) {
 		
-		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+		if (session.getAttribute("userId").toString().equalsIgnoreCase(adminId)) {
 	            return adminService.getUserInfoAdmin();
 	    }
 	    return null;
@@ -58,7 +62,7 @@ public class AdminController {
     @PostMapping("/getScheduleInfoAdmin")
     public List<Map<String, Object>> getScheduleInfoAdmin(HttpSession session) {
 		
-		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+		if (session.getAttribute("userId").toString().equalsIgnoreCase(adminId)) {
             return adminService.getScheduleInfoAdmin();
         }
 		return null;
@@ -69,7 +73,7 @@ public class AdminController {
     @PostMapping("/getMatchingInfoAdmin")
     public List<Map<String, Object>> getMatchingInfoAdmin(HttpSession session) {
 		
-		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+		if (session.getAttribute("userId").toString().equalsIgnoreCase(adminId)) {
             return adminService.getMatchingInfoAdmin();
         }
 		return null;
@@ -80,7 +84,7 @@ public class AdminController {
 	    @PostMapping("/getScheduleAdmin")
 	    public List<Map<String, Object>> getScheduleAdmin(HttpSession session) {
 			
-			if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+			if (session.getAttribute("userId").toString().equalsIgnoreCase(adminId)) {
 	            return adminService.getScheduleAdmin();
 	        }
 			return null;
@@ -91,7 +95,7 @@ public class AdminController {
     @PostMapping("/increaseChance")
     public Map<String, Object> increaseChance(@RequestParam("userId") String userId, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
-		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+		if (session.getAttribute("userId").toString().equalsIgnoreCase(adminId)) {
             return adminService.increaseChance(userId);
         }
 		status.put("status", "fail");
@@ -103,7 +107,7 @@ public class AdminController {
     @PostMapping("/decreaseChance")
     public Map<String, Object> decreaseChance(@RequestParam("userId") String userId, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
-		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+		if (session.getAttribute("userId").toString().equalsIgnoreCase(adminId)) {
             return adminService.decreaseChance(userId);
         }
 		status.put("status", "fail");
@@ -115,7 +119,7 @@ public class AdminController {
     @PostMapping("/changePassFlag")
     public Map<String, Object> changePassFlag(@RequestParam("userId") String userId, @RequestParam("passFlag") String passFlag, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
-		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+		if (session.getAttribute("userId").toString().equalsIgnoreCase(adminId)) {
             return adminService.changePassFlag(userId, passFlag);
         }
 		status.put("status", "fail");
@@ -127,7 +131,7 @@ public class AdminController {
     @PostMapping("/deleteSchedule")
     public Map<String, Object> deleteSchedule(@RequestParam("episode") String episode, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
-		if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+		if (session.getAttribute("userId").toString().equalsIgnoreCase(adminId)) {
             return adminService.deleteSchedule(episode);
         }
 		status.put("status", "fail");
@@ -139,7 +143,7 @@ public class AdminController {
 	    @PostMapping("/addSchedule")
 	    public Map<String, Object> addSchedule(String episode, int headCount, String location, HttpSession session) {
 			Map<String, Object> status = new HashMap<String, Object>();
-			if (session.getAttribute("userId").toString().equalsIgnoreCase("ksw")) {
+			if (session.getAttribute("userId").toString().equalsIgnoreCase(adminId)) {
 	            return adminService.addSchedule(episode, headCount, location);
 	        }
 			status.put("status", "fail");
