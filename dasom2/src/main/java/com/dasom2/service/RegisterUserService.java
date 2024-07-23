@@ -19,9 +19,9 @@ public class RegisterUserService {
 	@Autowired
     private JavaMailSender emailSender;
 	
-    // 유저 인적사항 등록
+    // 유저 인적사항 등록 , 이력 적치
     public void registerUserInfo(RegisterUserVO user) {
-    	
+    	RegisterUserMapper.registerUserInfoHistory(user);
         RegisterUserMapper.registerUserInfo(user);
     }
     

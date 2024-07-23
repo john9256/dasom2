@@ -41,6 +41,16 @@ public class AdminService {
 		return adminMapper.getMatchingInfoAdmin();
 	}
 	
+	// admin check
+	public boolean checkAdmin(String adminId) {
+		if(adminMapper.checkAdmin(adminId) > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	// 스케줄 조회 
 		public List<Map<String, Object>> getScheduleAdmin(){
 			return adminMapper.getScheduleAdmin();

@@ -13,6 +13,7 @@ public interface AdminMapper {
 	List<Map<String, Object>> getScheduleInfoAdmin();
 	List<Map<String, Object>> getMatchingInfoAdmin();
 	List<Map<String, Object>> getScheduleAdmin();
+	int checkAdmin(String adminId);
 	int increaseChance(String userId);
 	int decreaseChance(String userId);
 	int changePassFlag(@Param("userId") String userId, @Param("passFlag") String passFlag);

@@ -66,7 +66,7 @@ public class RegisterUserController {
             return "redirect:/login/kakao";
         }
 		
-		// 회원 정보 update
+		// 회원 정보 update , 이력 적치
 		RegisterUserService.registerUserInfo(user);
 		
 		// 회원 manage 테이블 insert - 이미 있으면 안함

@@ -6,7 +6,7 @@
         SELECT value1 FROM criteria_data WHERE division = #{division}
     </select>
     
-    <insert id="registerUserInfo" parameterType="RegisterUserVO">
+    <update id="registerUserInfo" parameterType="RegisterUserVO">
         UPDATE user_table SET 
         user_name = #{userName}, 
         phone_number = #{phoneNumber}, 
@@ -16,6 +16,21 @@
         job_division = #{jobDivision},
         residence = #{residence}
         WHERE user_id =#{userId}
+    </update>
+    
+    <insert id="registerUserInfoHistory" parameterType="RegisterUserVO">
+    	INSERT INTO user_table_register_history 
+    	VALUES(
+    	#{userId}, 
+    	#{userName}, 
+    	#{phoneNumber}, 
+    	#{sex}, 
+    	STR_TO_DATE(CONCAT(#{birthday}, '-01-01'),'%Y-%m-%d'), 
+    	#{height},
+    	#{jobDivision},
+    	#{residence},
+    	SYSDATE()
+    	)
     </insert>
     
     <insert id ="insertUserManage">

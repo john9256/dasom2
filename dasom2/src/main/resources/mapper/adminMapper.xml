@@ -2,6 +2,11 @@
 <mapper namespace="com.dasom2.mapper.AdminMapper">
 	
 	
+	<select id="checkAdmin">
+		SELECT COUNT(*) FROM USER_MANAGE WHERE USER_ID =#{userId}
+		AND ADMIN_FLAG ='Y'
+	</select>
+	
 	<select id="getUserInfoAdmin">
         SELECT A.USER_ID AS userId, A.USER_NAME AS userName, A.SEX AS sex, A.height AS height, DATE_FORMAT(A.birthday, '%y년') AS birthday, A.job_division AS jobDivision, B.PASS_FLAG AS passFlag, A.RESIDENCE AS residence, B.CHANCE AS chance, A.phone_number AS phoneNumber
         FROM USER_TABLE A
