@@ -4,7 +4,12 @@
     <select id="getCriteriaData" resultType="map" parameterType="String">
         SELECT value1 FROM criteria_data WHERE division = #{criteria}
     </select>
+    
     <insert id="insertErrorLog" parameterType="String">
         INSERT INTO error_log(user_id, method_name, error_message) VALUES(#{userId}, #{methodName}, SUBSTRING(#{errorMessage}, 1, 499))
+    </insert>
+    
+    <insert id = "stackHistory">
+    	INSERT INTO LOG_HISTORY
     </insert>
 </mapper>

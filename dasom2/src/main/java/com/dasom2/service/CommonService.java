@@ -17,7 +17,11 @@ public class CommonService {
 	public List<Map<String, Object>> getCriteriaData(String criteria) {
 		return CommonMapper.getCriteriaData(criteria);
 		
-	} 
+	}
+	
+	public int stackHistory(String userId, String type) {
+		return CommonMapper.stackHistory(userId, type);
+	}
     
 }
 

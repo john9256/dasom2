@@ -20,7 +20,6 @@ public interface AdminMapper {
 	int deleteSchedule(String episode);
 	int deleteAllParticipantByEpisode(String episode);
 	int addSchedule(String episode, int headCount, String location);
-	
 //	List<MeetingScheduleVO> getMeetingSchedule(String userId);
 //	int checkChace(String userId);
 //	void minusChance(String userId);

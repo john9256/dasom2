@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dasom2.service.AdminService;
+import com.dasom2.service.CommonService;
 import com.dasom2.service.MainService;
 
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +30,9 @@ public class AdminController {
 	
 	@Autowired
 	MainService MainService;
+	
+	@Autowired
+	CommonService commonService;
 	
 	@Value("${kakao-admin-id}")
     private String adminId;
@@ -97,8 +101,9 @@ public class AdminController {
     public Map<String, Object> increaseChance(@RequestParam("userId") String userId, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-//			adminService.stackHistory(userId, );
+			if(commonService.stackHistory(userId, "increaseChance") == 1) {
             return adminService.increaseChance(userId);
+			}
         }
 		status.put("status", "fail");
 		return status;
@@ -111,8 +116,9 @@ public class AdminController {
     public Map<String, Object> decreaseChance(@RequestParam("userId") String userId, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-//			adminService.stackHistory(userId, );
+			if(commonService.stackHistory(userId, "decreaseChance") == 1) {
             return adminService.decreaseChance(userId);
+			}
         }
 		status.put("status", "fail");
 		return status;
