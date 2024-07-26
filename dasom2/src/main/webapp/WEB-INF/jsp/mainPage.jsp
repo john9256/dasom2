@@ -310,7 +310,9 @@ function toggleSelectionSchedule(userId, episode) {
            	        alert("남은 자리가 없습니다.");
            	    } else if (data.status == "continuity"){
            	        alert("소개팅 중복 매칭 방지를 위해 \n 주 1회 참여 가능합니다.");
-           	    } else if(data.status == "cancel") {
+           	    } else if (data.status == "hack"){
+           	        alert("잘못된 접근입니다.");
+           	    }else if(data.status == "cancel") {
            	        btn.textContent = '선택';
            	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
            	        alert("소개팅 신청을 취소했습니다.");
@@ -391,7 +393,9 @@ function toggleSelectionMatch(userId, nickName, episode) {
            	        alert("선택을 완료했습니다.");
            	    } else if (data.status == "full"){
            	        alert("이미 두명을 선택했습니다.");
-           	    } else if(data.status == "cancel") {
+           	    } else if (data.status == "hack"){
+           	        alert("잘못된 접근입니다.");
+           	    }else if(data.status == "cancel") {
            	        btn.textContent = '선택';
            	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
            	        alert("선택을 취소했습니다.");

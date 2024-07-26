@@ -34,9 +34,6 @@ public class AdminController {
 	@Autowired
 	CommonService commonService;
 	
-	@Value("${kakao-admin-id}")
-    private String adminId;
-	
 	// 관리자 화면
 	@GetMapping("/adminPage")
     public String adminPage(Model model, HttpSession session) {
@@ -100,13 +97,21 @@ public class AdminController {
     @PostMapping("/increaseChance")
     public Map<String, Object> increaseChance(@RequestParam("userId") String userId, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-			if(commonService.stackHistory(userId, "increaseChance") == 1) {
-            return adminService.increaseChance(userId);
-			}
-        }
-		status.put("status", "fail");
-		return status;
+		
+		try {
+		
+			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+				commonService.stackAdminHistory(session.getAttribute("userId").toString(), userId, "increaseChance");
+	            return adminService.increaseChance(userId);
+	        }
+			status.put("status", "not admin");
+			return status;
+			
+		}
+		catch (Exception e) {
+			throw e;
+		}
+		
     }
 	
 	// chance 1회 감소
@@ -115,13 +120,21 @@ public class AdminController {
     @PostMapping("/decreaseChance")
     public Map<String, Object> decreaseChance(@RequestParam("userId") String userId, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-			if(commonService.stackHistory(userId, "decreaseChance") == 1) {
-            return adminService.decreaseChance(userId);
-			}
-        }
-		status.put("status", "fail");
-		return status;
+		
+		try {
+			
+			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+				commonService.stackAdminHistory(session.getAttribute("userId").toString(), userId, "decreaseChance");
+				return adminService.decreaseChance(userId);
+	        }
+			status.put("status", "not admin");
+			return status;
+			
+		}
+		catch (Exception e) {
+			throw e;
+		}
+		
     }
 	
 	// passFlag 값 변경
@@ -138,11 +151,14 @@ public class AdminController {
 	
 	// 스케줄 삭제
 	@ResponseBody
+	@Transactional(rollbackFor = {Exception.class})
     @PostMapping("/deleteSchedule")
     public Map<String, Object> deleteSchedule(@RequestParam("episode") String episode, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-            return adminService.deleteSchedule(episode);
+			if(commonService.stackAdminHistory(session.getAttribute("userId").toString(), episode, "deleteSchedule") == 1) {
+				return adminService.deleteSchedule(episode);
+			}
         }
 		status.put("status", "fail");
 		return status;
@@ -150,11 +166,14 @@ public class AdminController {
 	
 	// 스케줄 추가
 	@ResponseBody
+	@Transactional(rollbackFor = {Exception.class})
     @PostMapping("/addSchedule")
     public Map<String, Object> addSchedule(String episode, int headCount, String location, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-            return adminService.addSchedule(episode, headCount, location);
+			if(commonService.stackAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule") == 1) {
+				return adminService.addSchedule(episode, headCount, location);
+			}
         }
 		status.put("status", "fail");
 		return status;

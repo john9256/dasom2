@@ -235,7 +235,7 @@ public class MainService {
 			return participantList;
 			
 		}
-	
+		
 	 // 초 중 후반 나이대 구분 함수
 	 public String classifyAge(int age) {
 	        if (age < 10 || age >= 100) {

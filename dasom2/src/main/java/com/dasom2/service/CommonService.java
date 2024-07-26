@@ -19,8 +19,8 @@ public class CommonService {
 		
 	}
 	
-	public int stackHistory(String userId, String type) {
-		return CommonMapper.stackHistory(userId, type);
+	public int stackAdminHistory(String adminId, String targetUser, String type) {
+		return CommonMapper.stackAdminHistory(adminId, targetUser, type);
 	}
     
 }
