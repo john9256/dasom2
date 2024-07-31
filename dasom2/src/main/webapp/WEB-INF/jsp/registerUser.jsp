@@ -139,6 +139,9 @@ $(document).ready(function() {
                 if (data.jobDivision) {
                     $("#jobDivision").val(data.jobDivision);
                 }
+                if (data.residence) {
+                    $("#residence").val(data.residence);
+                }
             },
             error: function() {
                 // 오류 처리 (옵션)

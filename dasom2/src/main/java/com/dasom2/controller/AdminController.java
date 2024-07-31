@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -99,14 +98,12 @@ public class AdminController {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try {
-		
 			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
 				commonService.stackAdminHistory(session.getAttribute("userId").toString(), userId, "increaseChance");
 	            return adminService.increaseChance(userId);
 	        }
 			status.put("status", "not admin");
 			return status;
-			
 		}
 		catch (Exception e) {
 			throw e;
@@ -122,14 +119,12 @@ public class AdminController {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try {
-			
 			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
 				commonService.stackAdminHistory(session.getAttribute("userId").toString(), userId, "decreaseChance");
 				return adminService.decreaseChance(userId);
 	        }
 			status.put("status", "not admin");
 			return status;
-			
 		}
 		catch (Exception e) {
 			throw e;
@@ -155,6 +150,7 @@ public class AdminController {
     @PostMapping("/deleteSchedule")
     public Map<String, Object> deleteSchedule(@RequestParam("episode") String episode, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
+		try {
 		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
 			if(commonService.stackAdminHistory(session.getAttribute("userId").toString(), episode, "deleteSchedule") == 1) {
 				return adminService.deleteSchedule(episode);
@@ -162,6 +158,10 @@ public class AdminController {
         }
 		status.put("status", "fail");
 		return status;
+		}
+		catch (Exception e) {
+			throw e;
+		}
     }
 	
 	// 스케줄 추가
@@ -170,13 +170,18 @@ public class AdminController {
     @PostMapping("/addSchedule")
     public Map<String, Object> addSchedule(String episode, int headCount, String location, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-			if(commonService.stackAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule") == 1) {
-				return adminService.addSchedule(episode, headCount, location);
-			}
-        }
-		status.put("status", "fail");
-		return status;
+		try {
+			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+				if(commonService.stackAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule") == 1) {
+					return adminService.addSchedule(episode, headCount, location);
+				}
+	        }
+			status.put("status", "fail");
+			return status;
+		}
+		catch (Exception e) {
+			throw e;
+		}
     }
 	
 }

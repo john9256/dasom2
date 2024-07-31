@@ -71,6 +71,7 @@ public class AdminService {
 	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
 	         CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
 	         status.put("status", "error");
+	         throw e;
 		}
 			return status;
 	}
@@ -90,6 +91,7 @@ public class AdminService {
 	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
 	         CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
 	         status.put("status", "error");
+	         throw e;
 		}
 			return status;
 	}

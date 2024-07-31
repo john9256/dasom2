@@ -42,9 +42,10 @@
     
     <div class="full-screen-wrapper">
 	    <div class="button-container">
-	        <button id="dateSelectBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">날짜 선택</button>
 	        <button id="getParticipantList" type="button" class="btn btn-main" data-toggle="modal" data-target="#modalParticipantList">소개팅 현황</button>
+	        <button id="dateSelectBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">날짜 선택</button>
 	        <button id="matchingBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">두근두근 매칭</button>
+	        <button id="matchingResultBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">매치 결과</button>
 	    </div>
 	</div>
 </div>
@@ -105,6 +106,75 @@ $(document).ready(function() {
     	matchingModalContent("${userId}");
     });
     
+    $('#matchingResultBtn').click(function() {
+    	matchingResultModalContent("${userId}");
+    });
+    
+    
+ // 소개팅 현황 모달
+    function getParticipantList(userId) {
+    // 모달 본문 초기화
+    $("#modalParticipantList-body").html("");
+    $("#modalLabel2").html("소개팅 현황");
+    $.ajax({
+        url: "/getParticipantList",
+        type: "POST",
+        data: {
+            userId: userId
+        },
+        success: function(data) {
+            var contentByEpisode = {};
+            
+            $("#modalParticipantList-body").html("");
+            
+            if (data.length === 0) {
+                $("#modalLabel2").html("현재 진행중인 소개팅이 없습니다.");
+            } else {
+                data.forEach(function(participant) {
+                    var episode = participant.episode;
+                    var sex = participant.sex;
+                    var jobDivision = participant.jobDivision;
+                    var year = participant.year;
+                    if (!contentByEpisode[episode]) {
+                        contentByEpisode[episode] = { male: "", female: "" };
+                    }
+                    
+                    if (sex === "남성") {
+                        contentByEpisode[episode].male += "<p class='mobile-font2'>" + year + " " + jobDivision + "</p>";
+                    } else {
+                        contentByEpisode[episode].female += "<p class='mobile-font2'>" + year + " " + jobDivision + "</p>";
+                    }
+                });
+                
+                var modalBodyContent = "";
+                for (var episode in contentByEpisode) {
+                    modalBodyContent += 
+                        "<div class = 'text-head text-center'>" + formatDateTime(episode) + "</div>" +
+                        "<div class='row'>" +
+                            "<div class='col-md-6'>" +
+                                "<h6 class='text-center'><img class='emoji-icon' src='/image/1F466_color.png' alt='Boy Face'>남자</h6>" +
+                                "<div class='text-center'>" + contentByEpisode[episode].male + "</div>" +
+                            "</div>" +
+                            "<div class='col-md-6'>" +
+                                "<h6 class='text-center'><img class='emoji-icon' src='/image/1F467_color.png' alt='Girl Face'>여자</h6>" +
+                                "<div class='text-center'>" + contentByEpisode[episode].female + "</div>" +
+                            "</div>" +
+                        "</div>" +
+                        "<hr>";
+                }
+                
+                $("#modalParticipantList-body").html(modalBodyContent);
+                $("#modalParticipantList").modal('show');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+            alert("데이터를 불러오는데 실패했습니다.");
+        }
+    });
+}
+ 
+ 
  // 날짜 선택 모달
  	function dateSelectModalContent(userId) {
  		$(".modal-body").html("");
@@ -206,68 +276,58 @@ $(document).ready(function() {
         });
     }
     
- // 소개팅 현황 모달
-    function getParticipantList(userId) {
-    // 모달 본문 초기화
-    $("#modalParticipantList-body").html("");
-    $("#modalLabel2").html("소개팅 현황");
-    $.ajax({
-        url: "/getParticipantList",
-        type: "POST",
-        data: {
-            userId: userId
-        },
-        success: function(data) {
-            var contentByEpisode = {};
-            
-            $("#modalParticipantList-body").html("");
-            
-            if (data.length === 0) {
-                $("#modalLabel2").html("현재 진행중인 소개팅이 없습니다.");
-            } else {
-                data.forEach(function(participant) {
-                    var episode = participant.episode;
-                    var sex = participant.sex;
-                    var jobDivision = participant.jobDivision;
-                    var year = participant.year;
-                    if (!contentByEpisode[episode]) {
-                        contentByEpisode[episode] = { male: "", female: "" };
-                    }
-                    
-                    if (sex === "남성") {
-                        contentByEpisode[episode].male += "<p class='mobile-font2'>" + year + " " + jobDivision + "</p>";
-                    } else {
-                        contentByEpisode[episode].female += "<p class='mobile-font2'>" + year + " " + jobDivision + "</p>";
-                    }
-                });
+    
+ // 매치 결과 모달
+    function matchingResultModalContent(userId) {
+    	$(".modal-body").html("");
+    	$("#modalLabel").html("매치 결과!");
+    	$.ajax({
+            url: "/getMatchingResultInfo",
+            type: "POST",
+            data: {
+                userId: userId
+            },
+            success: function(data) {
+                var content = "";
+                let nickName = "";
+                let episode;
+                $(".modal-body").html("");
+                var userName = "${userName}";
+                console.log(userName)
                 
-                var modalBodyContent = "";
-                for (var episode in contentByEpisode) {
-                    modalBodyContent += 
-                        "<div class = 'text-head text-center'>" + formatDateTime(episode) + "</div>" +
-                        "<div class='row'>" +
-                            "<div class='col-md-6'>" +
-                                "<h6 class='text-center'><img class='emoji-icon' src='/image/1F466_color.png' alt='Boy Face'>남자</h6>" +
-                                "<div class='text-center'>" + contentByEpisode[episode].male + "</div>" +
-                            "</div>" +
-                            "<div class='col-md-6'>" +
-                                "<h6 class='text-center'><img class='emoji-icon' src='/image/1F467_color.png' alt='Girl Face'>여자</h6>" +
-                                "<div class='text-center'>" + contentByEpisode[episode].female + "</div>" +
-                            "</div>" +
-                        "</div>" +
-                        "<hr>";
-                }
-                
-                $("#modalParticipantList-body").html(modalBodyContent);
-                $("#modalParticipantList").modal('show');
+                if(data.length === 0){
+        			$("#modalLabel").html("매치 결과가 없습니다.");
+        		}
+                else{
+	                data.forEach(function(matchInfo) {
+	                	
+	                	nickName = matchInfo.nickName;
+	                	episode = matchInfo.episode;
+	                	
+	                    // 선택 여부에 따라 버튼 텍스트 설정
+	                    var buttonText = "";
+	                    var selectedCss = " ";
+	                    if(matchInfo.pick != null) {
+	                       buttonText = "선택함";
+	                       selectedCss = ' selectedBtn';
+	                    } else {
+	                       buttonText = "선택";
+	                    }
+	                    
+	                    content += `<p class="mobile-font">`+ nickName +` 
+	                        </p>`;
+	                });
+            	}
+                $(".modal-body").html(content);
+                $("#modal").modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: " + error);
+                alert("데이터를 불러오는데 실패했습니다.");
             }
-        },
-        error: function(xhr, status, error) {
-            console.error("Error:", error);
-            alert("데이터를 불러오는데 실패했습니다.");
-        }
-    });
-}
+        });
+    }
+ 	
     
     
 });
