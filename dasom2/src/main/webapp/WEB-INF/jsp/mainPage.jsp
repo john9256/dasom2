@@ -280,7 +280,7 @@ $(document).ready(function() {
  // 매치 결과 모달
     function matchingResultModalContent(userId) {
     	$(".modal-body").html("");
-    	$("#modalLabel").html("매치 결과!");
+    	$("#modalLabel").html("기다리시던 매치 결과가 나왔어요!");
     	$.ajax({
             url: "/getMatchingResultInfo",
             type: "POST",
@@ -292,8 +292,6 @@ $(document).ready(function() {
                 let nickName = "";
                 let episode;
                 $(".modal-body").html("");
-                var userName = "${userName}";
-                console.log(userName)
                 
                 if(data.length === 0){
         			$("#modalLabel").html("매치 결과가 없습니다.");
@@ -302,19 +300,11 @@ $(document).ready(function() {
 	                data.forEach(function(matchInfo) {
 	                	
 	                	nickName = matchInfo.nickName;
-	                	episode = matchInfo.episode;
+	                	phoneNumber = matchInfo.phoneNumber;
 	                	
 	                    // 선택 여부에 따라 버튼 텍스트 설정
-	                    var buttonText = "";
-	                    var selectedCss = " ";
-	                    if(matchInfo.pick != null) {
-	                       buttonText = "선택함";
-	                       selectedCss = ' selectedBtn';
-	                    } else {
-	                       buttonText = "선택";
-	                    }
 	                    
-	                    content += `<p class="mobile-font">`+ nickName +` 
+	                    content += `<p class="mobile-font">`+ nickName + phoneNumber +` 
 	                        </p>`;
 	                });
             	}

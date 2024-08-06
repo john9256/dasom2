@@ -66,7 +66,7 @@ public class mainController {
         }
     }
     
-    // 소개팅 스케줄 날짜 선택 모달 data
+    // 소개팅 스케줄 날짜 선택 모달
     @ResponseBody
     @PostMapping("/getMeetingSchedule")
     public List<MeetingScheduleVO> getMeetingSchedule(@RequestParam("userId") String userId, HttpSession session) {
@@ -87,13 +87,24 @@ public class mainController {
 			return null;
     }
     
- // 소개팅 현황 모달
+    // 소개팅 현황 모달
     @ResponseBody
     @PostMapping("/getParticipantList")
     public List<Map<String, Object>> getParticipantList(@RequestParam("userId") String userId, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     		
     		return MainService.getParticipantList(userId);
+    	}
+			return null;
+    }
+    
+    // 매치 결과 모달
+    @ResponseBody
+    @PostMapping("/getMatchingResultInfo")
+    public List<Map<String, Object>> getMatchingResultInfo(@RequestParam("userId") String userId, HttpSession session) {
+    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    		
+    		return MainService.getMatchingResultInfo(userId);
     	}
 			return null;
     }

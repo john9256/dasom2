@@ -218,7 +218,7 @@ public class MainService {
 		 
 	 }
 	 
-	// 소개팅 현황 get
+	 	// 소개팅 현황 get
 	 
 		public List<Map<String, Object>> getParticipantList(String userId){
 			
@@ -233,6 +233,14 @@ public class MainService {
 				}
 			}
 			return participantList;
+			
+		}
+		
+		// 매치 결과 get
+		 
+		public List<Map<String, Object>> getMatchingResultInfo(String userId){
+			
+			return MainMapper.getMatchingResultInfo(userId);
 			
 		}
 		
