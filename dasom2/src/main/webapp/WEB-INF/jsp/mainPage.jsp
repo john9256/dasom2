@@ -42,8 +42,8 @@
     
     <div class="full-screen-wrapper">
 	    <div class="button-container">
-	        <button id="getParticipantList" type="button" class="btn btn-main" data-toggle="modal" data-target="#modalParticipantList">소개팅 현황</button>
 	        <button id="dateSelectBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">날짜 선택</button>
+	        <button id="getParticipantList" type="button" class="btn btn-main" data-toggle="modal" data-target="#modalParticipantList">소개팅 현황</button>
 	        <button id="matchingBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">두근두근 매칭</button>
 	        <button id="matchingResultBtn" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">매치 결과</button>
 	    </div>
@@ -277,7 +277,7 @@ $(document).ready(function() {
     }
     
     
- // 매치 결과 모달
+ 	// 매치 결과 모달
     function matchingResultModalContent(userId) {
     	$(".modal-body").html("");
     	$("#modalLabel").html("기다리시던 매치 결과가 나왔어요!");

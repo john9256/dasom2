@@ -22,6 +22,10 @@ public class CommonService {
 	public int stackAdminHistory(String adminId, String targetUser, String type) {
 		return CommonMapper.stackAdminHistory(adminId, targetUser, type);
 	}
+	
+	public List<String> getUserListByEpisode(String episode) {
+		return CommonMapper.getUserListByEpisode(episode);
+	}
     
 }
 

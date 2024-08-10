@@ -16,4 +16,8 @@
     <insert id = "stackHistory">
     	INSERT INTO LOG_HISTORY(user_id, log_type) VALUES(#{adminId}, #{type})
     </insert>
+    
+    <select id = "getUserListByEpisode">
+    	SELECT USER_ID AS userId FROM PARTICIPANT_USER WHERE EPISODE = #{episode}
+    </select>
 </mapper>

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dasom2.mapper.CommonMapper;
 import com.dasom2.mapper.MainMapper;
@@ -39,6 +40,7 @@ public class MainService {
 		return meetingScheduleInfo;
 	}
 	
+	@Transactional(rollbackFor = {Exception.class})
 	public Map<String, Object> insertParticipantUser(String userId, String episode, Boolean episodeSelected) {
 		// 스케줄에 인원수가 남으면 참가인원에 insert
 		LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
@@ -50,30 +52,25 @@ public class MainService {
 			// 참여 가능 횟수 확인
 			if(MainMapper.checkChace(userId) <= 0) {
 				status.put("status", "noChance");
-				return status;
 			}
 			// 최대 인원 수 제한
 			else if(MainMapper.checkHeadCount(userId, LocalDateTimeEpisode) == null) {
 				// MainMapper.insertParticipantUserHistory(userId, LocalDateTimeEpisode, episodeSelected);
 				status.put("status", "full");
-				return status;
 			}
 			// 소개팅 연속 참여 불가
 			else if(MainMapper.checkContinuity(userId, LocalDateTimeEpisode) != null) {
 				status.put("status", "continuity");
-				return status;
 			}
 			// 소개팅 참가 인원 중복 배제
 			else if(duplicateCount != 0) {
 				status.put("status", "duplicate");
 				status.put("duplicateCount", duplicateCount);
-				return status;
 			}
 			else {
 				MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
 				MainMapper.minusChance(userId);
 				status.put("status", "complete");
-				return status;
 			}
         	
         } catch (Exception e) {
@@ -81,13 +78,14 @@ public class MainService {
             String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
             CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
             status.put("status", "error");
+            throw e;
         }
 		
 		return status;
 		
-		
 	}
 	
+	@Transactional(rollbackFor = {Exception.class})
 	public Map<String, Object> insertParticipantUserDupliacate(String userId, String episode, Boolean episodeSelected) {
 		// 스케줄에 인원수가 남으면 참가인원에 insert
 		LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
@@ -103,12 +101,14 @@ public class MainService {
 	            String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
 	            CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
 	            status.put("status", "error");
+	            throw e;
 	        }
 			
 			return status;
 		
 	}
 	
+	@Transactional(rollbackFor = {Exception.class})
 	public Map<String, Object> deleteParticipantUser(String userId, String episode, Boolean episodeSelected) {
 		LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
 		Map<String, Object> status = new HashMap<String, Object>();
@@ -127,6 +127,7 @@ public class MainService {
             String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
             CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
             status.put("status", "error");
+            throw e;
         }
 		return status;
 	}

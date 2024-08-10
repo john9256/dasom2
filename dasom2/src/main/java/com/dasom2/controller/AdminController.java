@@ -153,6 +153,12 @@ public class AdminController {
 		try {
 		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
 			if(commonService.stackAdminHistory(session.getAttribute("userId").toString(), episode, "deleteSchedule") == 1) {
+				
+				// 스케줄 삭제시 신청했던 인원들의 chance 값 다시 돌려줌
+				for (String userId : commonService.getUserListByEpisode(episode)) {
+					adminService.increaseChance(userId);
+				}
+				
 				return adminService.deleteSchedule(episode);
 			}
         }

@@ -12,4 +12,5 @@ public interface CommonMapper {
     void insertErrorLog(String userId, String methodName, String errorMessage);
     int stackHistory(String userId, String type);
     int stackAdminHistory(String adminId, String targetUser, String type);
+    List<String> getUserListByEpisode(String episode);
 }
