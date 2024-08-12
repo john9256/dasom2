@@ -99,7 +99,7 @@ public class AdminController {
 		
 		try {
 			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-				commonService.stackAdminHistory(session.getAttribute("userId").toString(), userId, "increaseChance");
+				commonService.logAdminHistory(session.getAttribute("userId").toString(), userId, "increaseChance");
 	            return adminService.increaseChance(userId);
 	        }
 			status.put("status", "not admin");
@@ -120,7 +120,7 @@ public class AdminController {
 		
 		try {
 			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-				commonService.stackAdminHistory(session.getAttribute("userId").toString(), userId, "decreaseChance");
+				commonService.logAdminHistory(session.getAttribute("userId").toString(), userId, "decreaseChance");
 				return adminService.decreaseChance(userId);
 	        }
 			status.put("status", "not admin");
@@ -152,7 +152,7 @@ public class AdminController {
 		Map<String, Object> status = new HashMap<String, Object>();
 		try {
 		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-			if(commonService.stackAdminHistory(session.getAttribute("userId").toString(), episode, "deleteSchedule") == 1) {
+			if(commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "deleteSchedule") == 1) {
 				
 				// 스케줄 삭제시 신청했던 인원들의 chance 값 다시 돌려줌
 				for (String userId : commonService.getUserListByEpisode(episode)) {
@@ -178,7 +178,7 @@ public class AdminController {
 		Map<String, Object> status = new HashMap<String, Object>();
 		try {
 			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-				if(commonService.stackAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule") == 1) {
+				if(commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule") == 1) {
 					return adminService.addSchedule(episode, headCount, location);
 				}
 	        }

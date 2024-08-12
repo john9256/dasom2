@@ -68,9 +68,13 @@ public class MainService {
 				status.put("duplicateCount", duplicateCount);
 			}
 			else {
-				MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
-				MainMapper.minusChance(userId);
-				status.put("status", "complete");
+				if(MainMapper.minusChance(userId) == 1){
+					MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
+					status.put("status", "complete");
+				}
+				else {
+					status.put("status", "error");
+				}
 			}
         	
         } catch (Exception e) {
@@ -92,9 +96,13 @@ public class MainService {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 			try {
-				MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
-				MainMapper.minusChance(userId);
-				status.put("status", "complete");
+				if(MainMapper.minusChance(userId) == 1) {
+					MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
+					status.put("status", "complete");
+				}
+				else {
+					status.put("status", "error");
+				}
 			}
 			catch (Exception e) {
 	            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
@@ -114,8 +122,7 @@ public class MainService {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try{
-			if(MainMapper.deleteParticipantUser(userId, LocalDateTimeEpisode, episodeSelected) > 0) {
-				MainMapper.plusChance(userId);
+			if(MainMapper.deleteParticipantUser(userId, LocalDateTimeEpisode, episodeSelected) > 0 && MainMapper.plusChance(userId) == 1) {
 				status.put("status", "cancel");
 			}
 			else {

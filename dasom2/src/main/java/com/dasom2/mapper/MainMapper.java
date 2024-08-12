@@ -14,8 +14,8 @@ public interface MainMapper {
     
 	List<MeetingScheduleVO> getMeetingSchedule(String userId);
 	int checkChace(String userId);
-	void minusChance(String userId);
-	void plusChance(String userId);
+	int minusChance(String userId);
+	int plusChance(String userId);
 	int checkDuplication(String userId, LocalDateTime LocalDateTimeEpisode);
 	String checkContinuity(String userId, LocalDateTime LocalDateTimeEpisode);
 	void insertParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
