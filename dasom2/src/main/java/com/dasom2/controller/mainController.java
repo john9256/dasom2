@@ -140,7 +140,7 @@ public class mainController {
 
 		try {
 			if (userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
-				return MainService.insertParticipantUserDupliacate(userId, episode, episodeSelected);
+				return MainService.insertParticipantUserDuplicate(userId, episode, episodeSelected);
 			}
 			status.put("status", "hack");
 			return status;

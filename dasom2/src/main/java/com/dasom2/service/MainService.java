@@ -69,6 +69,7 @@ public class MainService {
 			}
 			else {
 				if(MainMapper.minusChance(userId) == 1){
+					CommonMapper.logUserHistory(userId, userId, "participate");
 					MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
 					status.put("status", "complete");
 				}
@@ -90,13 +91,14 @@ public class MainService {
 	}
 	
 	@Transactional(rollbackFor = {Exception.class})
-	public Map<String, Object> insertParticipantUserDupliacate(String userId, String episode, Boolean episodeSelected) {
+	public Map<String, Object> insertParticipantUserDuplicate(String userId, String episode, Boolean episodeSelected) {
 		// 스케줄에 인원수가 남으면 참가인원에 insert
 		LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 			try {
 				if(MainMapper.minusChance(userId) == 1) {
+					CommonMapper.logUserHistory(userId, userId, "duplicateParticipate");
 					MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
 					status.put("status", "complete");
 				}
@@ -123,6 +125,7 @@ public class MainService {
 		
 		try{
 			if(MainMapper.deleteParticipantUser(userId, LocalDateTimeEpisode, episodeSelected) > 0 && MainMapper.plusChance(userId) == 1) {
+				CommonMapper.logUserHistory(userId, userId, "cancelParticipate");
 				status.put("status", "cancel");
 			}
 			else {
@@ -194,6 +197,7 @@ public class MainService {
         		status.put("status", "full");
         	}
         	else{
+        		CommonMapper.logUserHistory(userId, nickName, "pick");
         		MainMapper.insertPickUser(userId, localDateTimeEpisode, nickName);
         		status.put("status", "complete");
         	}
@@ -213,6 +217,7 @@ public class MainService {
 		 Map<String, Object> status = new HashMap<String, Object>();
 		 // MainMapper.insertPickUserHisotry(userId, localDateTimeEpisode, nickName);
 		 try {
+			 CommonMapper.logUserHistory(userId, nickName, "cancelPick");
 			 MainMapper.deletePickUser(userId, LocalDateTimeEpisode, nickName);
 			 status.put("status", "cancel");
 		 } catch (Exception e) {

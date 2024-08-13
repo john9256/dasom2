@@ -9,12 +9,12 @@
         INSERT INTO error_log(user_id, method_name, error_message) VALUES(#{userId}, #{methodName}, SUBSTRING(#{errorMessage}, 1, 499))
     </insert>
     
-    <insert id = "stackAdminHistory">
-    	INSERT INTO LOG_HISTORY(user_id, target, log_type) VALUES(#{adminId}, #{targetUser}, #{type})
+    <insert id = "logAdminHistory">
+    	INSERT INTO LOG_HISTORY(user_id, target, log_type, admin_division) VALUES(#{adminId}, #{target}, #{type}, 'admin')
     </insert>
     
-    <insert id = "stackHistory">
-    	INSERT INTO LOG_HISTORY(user_id, log_type) VALUES(#{adminId}, #{type})
+    <insert id = "logUserHistory">
+    	INSERT INTO LOG_HISTORY(user_id, target, log_type, admin_division) VALUES(#{adminId}, #{target}, #{type}, 'user')
     </insert>
     
     <select id = "getUserListByEpisode">
