@@ -39,10 +39,11 @@
     <div class="container-fluid mt-4">
         <h2>Admin Page</h2>
         <div class="btn-group mb-4" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-primary" id="userInfoBtn">유저정보</button>
+            <button type="button" class="btn btn-primary" id="userInfoBtn">유저 정보</button>
             <button type="button" class="btn btn-secondary" id="scheduleInfoBtn">스케줄 정보</button>
             <button type="button" class="btn btn-success" id="matchingInfoBtn">매칭 정보</button>
             <button type="button" class="btn btn-warning" id="scheduleBtn">스케줄 관리</button>
+            <button type="button" class="btn btn-warning" id="logBtn">로그 정보</button>
         </div>
         <div id="dataTable" class="table-responsive">
             <table id="adminTable" class="display" style="width:100%">
@@ -104,6 +105,7 @@
         var scheduleInfoColumns = ["episode", "userId", "userName", "location", "sex", "birthday", "jobDivision"];
         var matchingInfoColumns = ["episode", "userId", "pick", "pickedUserId",  "createtime"];
         var scheduleColumns = ["episode", "completeFlag", "headCount", "location"];
+        var logColumns = ["userId", "userName", "phoneNumber", "sex", "target", "logType", "adminDivision", "createTime"];
 
         var episodeColors = {};
         var colors = ['#FF000033', '#FFA50033', '#FFFF0033', '#00800033', '#0000FF33'];
@@ -321,6 +323,12 @@
         $('#scheduleBtn').click(function() {
             $.post('/getScheduleAdmin', function(data) {
                 createTable(data, scheduleColumns, true); // 스케줄 테이블임을 나타내는 플래그 전달
+            });
+        });
+        
+        $('#logBtn').click(function() {
+            $.post('/getLogAdmin', function(data) {
+                createTable(data, logColumns, true); // 스케줄 테이블임을 나타내는 플래그 전달
             });
         });
         

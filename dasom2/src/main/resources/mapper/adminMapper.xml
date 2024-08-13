@@ -38,6 +38,10 @@
         ORDER BY A.EPISODE DESC
     </select>
      
+     <select id="getLogAdmin">
+    	SELECT 
+    </select>
+     
     <select id="getScheduleAdmin">
     	select episode,complete_flag completeFlag, headCount, location FROM MEETING_SCHEDULE
     </select>

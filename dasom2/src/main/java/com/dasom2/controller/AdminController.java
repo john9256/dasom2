@@ -80,15 +80,26 @@ public class AdminController {
     }
 	
 	// 단순 스케줄 get
-		@ResponseBody
-	    @PostMapping("/getScheduleAdmin")
-	    public List<Map<String, Object>> getScheduleAdmin(HttpSession session) {
-			
-			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-	            return adminService.getScheduleAdmin();
-	        }
-			return null;
-	    }
+	@ResponseBody
+    @PostMapping("/getScheduleAdmin")
+    public List<Map<String, Object>> getScheduleAdmin(HttpSession session) {
+		
+		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+            return adminService.getScheduleAdmin();
+        }
+		return null;
+    }
+	
+	// 단순 스케줄 get
+	@ResponseBody
+    @PostMapping("/getLogAdmin")
+    public List<Map<String, Object>> getLogAdmin(HttpSession session) {
+		
+		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+            return adminService.getLogAdmin();
+        }
+		return null;
+    }
 	
 	// chance 1회 부여
 	@ResponseBody
