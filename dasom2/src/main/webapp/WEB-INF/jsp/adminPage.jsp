@@ -43,7 +43,7 @@
             <button type="button" class="btn btn-secondary" id="scheduleInfoBtn">스케줄 정보</button>
             <button type="button" class="btn btn-success" id="matchingInfoBtn">매칭 정보</button>
             <button type="button" class="btn btn-warning" id="scheduleBtn">스케줄 관리</button>
-            <button type="button" class="btn btn-warning" id="logBtn">로그 정보</button>
+            <button type="button" class="btn btn-danger"  id="logBtn">로그 정보</button>
         </div>
         <div id="dataTable" class="table-responsive">
             <table id="adminTable" class="display" style="width:100%">
@@ -105,7 +105,7 @@
         var scheduleInfoColumns = ["episode", "userId", "userName", "location", "sex", "birthday", "jobDivision"];
         var matchingInfoColumns = ["episode", "userId", "pick", "pickedUserId",  "createtime"];
         var scheduleColumns = ["episode", "completeFlag", "headCount", "location"];
-        var logColumns = ["userId", "userName", "phoneNumber", "sex", "target", "logType", "adminDivision", "createTime"];
+        var logColumns = ["userId", "userName", "sex", "phoneNumber", "target", "logType", "adminDivision", "createTime"];
 
         var episodeColors = {};
         var colors = ['#FF000033', '#FFA50033', '#FFFF0033', '#00800033', '#0000FF33'];
@@ -328,7 +328,7 @@
         
         $('#logBtn').click(function() {
             $.post('/getLogAdmin', function(data) {
-                createTable(data, logColumns, true); // 스케줄 테이블임을 나타내는 플래그 전달
+                createTable(data, logColumns); // 스케줄 테이블임을 나타내는 플래그 전달
             });
         });
         

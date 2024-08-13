@@ -39,7 +39,12 @@
     </select>
      
      <select id="getLogAdmin">
-    	SELECT 
+    	SELECT A.USER_ID userId, B.USER_NAME userName, B.SEX sex, B.PHONE_NUMBER phoneNumber, A.TARGET target, A.LOG_TYPE logType, A.ADMIN_DIVISION adminDivision, A.CREATETIME createTime
+		FROM
+		LOG_HISTORY A
+		LEFT OUTER JOIN
+		USER_TABLE B
+		ON A.USER_ID = B.USER_ID
     </select>
      
     <select id="getScheduleAdmin">

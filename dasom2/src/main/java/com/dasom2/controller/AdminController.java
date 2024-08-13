@@ -190,6 +190,7 @@ public class AdminController {
 		try {
 			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
 				if(commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule") == 1) {
+					System.out.println(commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule"));
 					return adminService.addSchedule(episode, headCount, location);
 				}
 	        }
