@@ -90,13 +90,24 @@ public class AdminController {
 		return null;
     }
 	
-	// 단순 스케줄 get
+	// 로그 get
 	@ResponseBody
     @PostMapping("/getLogAdmin")
     public List<Map<String, Object>> getLogAdmin(HttpSession session) {
 		
 		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
             return adminService.getLogAdmin();
+        }
+		return null;
+    }
+	
+	// 에러 로그 get
+	@ResponseBody
+    @PostMapping("/getErrorLogAdmin")
+    public List<Map<String, Object>> getErrorLogAdmin(HttpSession session) {
+		
+		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+            return adminService.getErrorLogAdmin();
         }
 		return null;
     }

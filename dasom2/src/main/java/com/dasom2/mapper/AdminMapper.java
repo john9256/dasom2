@@ -14,6 +14,7 @@ public interface AdminMapper {
 	List<Map<String, Object>> getMatchingInfoAdmin();
 	List<Map<String, Object>> getScheduleAdmin();
 	List<Map<String, Object>> getLogAdmin();
+	List<Map<String, Object>> getErrorLogAdmin();
 	int checkAdmin(String adminId);
 	int increaseChance(String userId);
 	int decreaseChance(String userId);

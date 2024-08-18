@@ -57,9 +57,15 @@ public class AdminService {
 		}
 		
 	// 로그 조회 
-			public List<Map<String, Object>> getLogAdmin(){
-				return adminMapper.getLogAdmin();
+		public List<Map<String, Object>> getLogAdmin(){
+			return adminMapper.getLogAdmin();
+		}
+	
+	// 로그 조회 
+			public List<Map<String, Object>> getErrorLogAdmin(){
+				return adminMapper.getErrorLogAdmin();
 			}
+			
 	// 해당 회원 찬스 증가
 	public Map<String, Object> increaseChance(String userId) {
 		Map<String, Object> status = new HashMap<String, Object>();

@@ -47,10 +47,15 @@
 		LEFT OUTER JOIN
 		USER_TABLE B
 		ON A.USER_ID = B.USER_ID
+		ORDER BY CREATETIME DESC
+    </select>
+    
+    <select id="getErrorLogAdmin">
+    	SELECT METHOD_NAME methodName, user_id userId, error_message errorMessage, createtime createTime  FROM ERROR_LOG ORDER BY CREATETIME DESC
     </select>
      
     <select id="getScheduleAdmin">
-    	select episode,complete_flag completeFlag, headCount, location FROM MEETING_SCHEDULE
+    	select episode,complete_flag completeFlag, headCount, location FROM MEETING_SCHEDULE ORDER BY EPISODE DESC
     </select>
     
     <update id="increaseChance">
