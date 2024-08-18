@@ -135,8 +135,10 @@ $(document).ready(function() {
                     var sex = participant.sex;
                     var jobDivision = participant.jobDivision;
                     var year = participant.year;
+                    var location = participant.location;
+                    console.log(location);
                     if (!contentByEpisode[episode]) {
-                        contentByEpisode[episode] = { male: "", female: "" };
+                    	contentByEpisode[episode] = { male: "", female: "", location: location };
                     }
                     
                     if (sex === "남성") {
@@ -149,7 +151,7 @@ $(document).ready(function() {
                 var modalBodyContent = "";
                 for (var episode in contentByEpisode) {
                     modalBodyContent += 
-                        "<div class = 'text-head text-center'>" + formatDateTime(episode) + "</div>" +
+                        "<div class = 'text-head text-center'>" + formatDateTime(episode) + " (" + contentByEpisode[episode].location + ")" + "</div>" +
                         "<div class='row'>" +
                             "<div class='col-md-6'>" +
                                 "<h6 class='text-center'><img class='emoji-icon' src='/image/1F466_color.png' alt='Boy Face'>남자</h6>" +
@@ -169,7 +171,7 @@ $(document).ready(function() {
         },
         error: function(xhr, status, error) {
             console.error("Error:", error);
-            alert("데이터를 불러오는데 실패했습니다.");
+            alert("데이터를 불러오는데 실패했습니다. \n 새로고침 후 이용해주세요.");
         }
     });
 }
@@ -219,7 +221,7 @@ $(document).ready(function() {
           },
           error: function(xhr, status, error) {
               console.error("Error: " + error);
-              alert("스케줄을 불러오는데 실패했습니다.");
+              alert("스케줄을 불러오는데 실패했습니다.  \n 새로고침 후 이용해주세요.");
           }
       });
   }
@@ -243,7 +245,7 @@ $(document).ready(function() {
                 console.log(userName)
                 
                 if(data.length === 0){
-        			$("#modalLabel").html("현재 " + userName + " 님이 진행중인 소개팅이 없습니다.");
+        			$("#modalLabel").html("매칭은 소개팅 이후 가능합니다.");
         		}
                 else{
 	                data.forEach(function(matchInfo) {
@@ -271,7 +273,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error("Error: " + error);
-                alert("데이터를 불러오는데 실패했습니다.");
+                alert("데이터를 불러오는데 실패했습니다.  \n 새로고침 후 이용해주세요.");
             }
         });
     }
@@ -280,40 +282,59 @@ $(document).ready(function() {
  	// 매치 결과 모달
     function matchingResultModalContent(userId) {
     	$(".modal-body").html("");
-    	$("#modalLabel").html("기다리시던 매치 결과가 나왔어요!");
+    	
+    	var content = "";
+        let nickName = "";
+        let episode;
+    	
     	$.ajax({
-            url: "/getMatchingResultInfo",
+    		// 본인을 선택 한 사람 전부
+            url: "/getMatchingResultInfo2",
             type: "POST",
             data: {
                 userId: userId
             },
             success: function(data) {
-                var content = "";
-                let nickName = "";
-                let episode;
-                $(".modal-body").html("");
-                
-                if(data.length === 0){
+				if(data.length === 0){
         			$("#modalLabel").html("매치 결과가 없습니다.");
         		}
-                else{
-	                data.forEach(function(matchInfo) {
-	                	
-	                	nickName = matchInfo.nickName;
-	                	phoneNumber = matchInfo.phoneNumber;
-	                	
-	                    // 선택 여부에 따라 버튼 텍스트 설정
-	                    
-	                    content += `<p class="mobile-font">`+ nickName + phoneNumber +` 
-	                        </p>`;
-	                });
+				else{
+                	 $("#modalLabel").html("기다리시던 매치 결과가 나왔습니다! <br>");
+                	 $("#modalLabel").append("이성에게 총 " + data.length + "표 받으셨어요! <br>");
+                	 $("#modalLabel").append("서로 선택한 이성의 정보만 공개됩니다.");
             	}
-                $(".modal-body").html(content);
-                $("#modal").modal('show');
+				
+                $.ajax({
+                	// 본인과 정확히 매칭된 사람만
+                    url: "/getMatchingResultInfo",
+                    type: "POST",
+                    data: {
+                        userId: userId
+                    },
+                    success: function(data) {
+                        if(data.length != 0){
+                        	
+        	                data.forEach(function(matchInfo) {
+        	                	
+        	                	nickName = matchInfo.nickName;
+        	                	phoneNumber = matchInfo.phoneNumber;
+        	                	
+        	                    content += `<p class="mobile-font">`+ nickName + "님 " + formatPhoneNumber(phoneNumber) +` 
+        	                        </p>`;
+        	                });
+                		}
+                        $(".modal-body").html(content);
+                        $("#modal").modal('show'); 
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error: " + error);
+                        alert("데이터를 불러오는데 실패했습니다. \n 새로고침 후 이용해주세요.");
+                    }
+                });
             },
             error: function(xhr, status, error) {
                 console.error("Error: " + error);
-                alert("데이터를 불러오는데 실패했습니다.");
+                alert("데이터를 불러오는데 실패했습니다. \n 새로고침 후 이용해주세요.");
             }
         });
     }
@@ -355,11 +376,11 @@ function toggleSelectionSchedule(userId, episode) {
            	        btn.className = "btn btn-info btn-sm right-button selectedBtn"; // 선택된 스타일 적용
            	        alert("소개팅 신청에 성공했습니다.");
            	    } else if (data.status == "noChance"){
-           	        alert("남은 티켓이 없습니다 \n 티켓을 구매해주세요.");
+           	        alert("남은 티켓이 없습니다 \n티켓을 구매셨다면 관리자에게 문의해주세요.");
            	    } else if (data.status == "full"){
            	        alert("남은 자리가 없습니다.");
            	    } else if (data.status == "continuity"){
-           	        alert("소개팅 중복 매칭 방지를 위해 \n 주 1회 참여 가능합니다.");
+           	        alert("소개팅 중복 매칭 방지를 위해 \n주 1회 참여 가능합니다.");
            	    } else if (data.status == "hack"){
            	        alert("잘못된 접근입니다.");
            	    }else if(data.status == "cancel") {
@@ -367,7 +388,7 @@ function toggleSelectionSchedule(userId, episode) {
            	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
            	        alert("소개팅 신청을 취소했습니다.");
            	    } else if (data.status == "duplicate"){
-           	    	userConfirmDuplicate = confirm("이전에 함께 참여 했던 이성이 " + data.duplicateCount + " 명 존재합니다. \n 그럼에도 참여를 하시겠습니까?");
+           	    	userConfirmDuplicate = confirm("이전에 함께 참여 했던 이성이 " + data.duplicateCount + " 명 존재합니다. \n그럼에도 참여를 하시겠습니까?");
            	    		if(userConfirmDuplicate){
            	    			$.ajax({
            	    	            url: "/ScheduleSelectionDuplicateInsert",
@@ -386,22 +407,22 @@ function toggleSelectionSchedule(userId, episode) {
 	           	    	           	        alert("소개팅 신청에 성공했습니다.");
            	    	           	    	}
            	    	            	else {
-           	    	           	        alert("소개팅 신청에 실패했습니다.");
+           	    	           	        alert("소개팅 신청에 실패했습니다. \n 새로고침 후 이용해주세요.");
            	    	           	    }
            	    	            },
            	    	            error: function(xhr, status, error) {
            	    	                console.error("Selection update failed: " + error);
-           	    	                alert("소개팅 신청에 실패했습니다.");
+           	    	                alert("소개팅 신청에 실패했습니다. \n 새로고침 후 이용해주세요.");
            	    	            }
            	    	       })
            	    		}
            	    } else {
-           	        alert("소개팅 신청에 실패했습니다.");
+           	        alert("소개팅 신청에 실패했습니다. \n 새로고침 후 이용해주세요.");
            	    }
             },
             error: function(xhr, status, error) {
                 console.error("Selection update failed: " + error);
-                alert("소개팅 신청에 실패했습니다.");
+                alert("소개팅 신청에 실패했습니다. \n 새로고침 후 이용해주세요.");
             }
         });
     }
@@ -440,7 +461,7 @@ function toggleSelectionMatch(userId, nickName, episode) {
             	 if(data.status == "complete") {
            	        btn.textContent = '선택함';
            	        btn.className = "btn btn-info btn-sm right-button selectedBtn"; // 선택된 스타일 적용
-           	        alert("선택을 완료했습니다.");
+           	        //alert("선택을 완료했습니다.");
            	    } else if (data.status == "full"){
            	        alert("이미 두명을 선택했습니다.");
            	    } else if (data.status == "hack"){
@@ -448,14 +469,14 @@ function toggleSelectionMatch(userId, nickName, episode) {
            	    }else if(data.status == "cancel") {
            	        btn.textContent = '선택';
            	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
-           	        alert("선택을 취소했습니다.");
+           	        // alert("선택을 취소했습니다.");
            	    } else {
-           	        alert("선택을 실패했습니다.");
+           	        alert("선택을 실패했습니다. \n 새로고침 후 이용해주세요.");
            	    }
             },
             error: function(xhr, status, error) {
                 console.error("Selection update failed: " + error);
-                alert("선택을 실패했습니다.");
+                alert("선택을 실패했습니다.  \n 새로고침 후 이용해주세요.");
             }
         });
     }
@@ -485,6 +506,19 @@ function formatDateTime(input) {
 
     // 포맷된 문자열 반환
     return year + "년 " + month + "월 " + day + "일 " + dayName + " " + ampm + " " + hour + "시";
+}
+
+function formatPhoneNumber(phoneNumber) {
+    if (phoneNumber.length === 11) {
+        // 11자리 숫자일 경우: 010-1234-1234
+        return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+    } else if (phoneNumber.length === 10) {
+        // 10자리 숫자일 경우: 010-123-1234
+        return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+    } else {
+        // 형식이 맞지 않는 경우 그대로 반환
+        return phoneNumber;
+    }
 }
 
 </script>

@@ -103,7 +103,7 @@
     $(document).ready(function() {
         var userInfoColumns = ["userId", "userName", "sex", "height", "birthday", "jobDivision", "residence", "passFlag", "chance", "phoneNumber"];
         var scheduleInfoColumns = ["episode", "userId", "userName", "location", "sex", "birthday", "jobDivision"];
-        var matchingInfoColumns = ["episode", "userId", "pick", "pickedUserId",  "createtime"];
+        var matchingInfoColumns = ["episode", "userId", "userName", "nickName", "pick", "pickedUserId",  "createtime"];
         var scheduleColumns = ["episode", "completeFlag", "headCount", "location"];
         var logColumns = ["userId", "userName", "sex", "phoneNumber", "target", "logType", "adminDivision", "createTime"];
 

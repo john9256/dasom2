@@ -76,16 +76,6 @@ public class mainController {
 		return null;
     }
     
-    // 매칭 인원 선택 모달
-    @ResponseBody
-    @PostMapping("/getMatchingInfo")
-    public List<Map<String, Object>> getMatchingInfo(@RequestParam("userId") String userId, HttpSession session) {
-    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
-    		
-    		return MainService.getMatchingInfo(userId);
-    	}
-			return null;
-    }
     
     // 소개팅 현황 모달
     @ResponseBody
@@ -98,13 +88,36 @@ public class mainController {
 			return null;
     }
     
-    // 매치 결과 모달
+
+    // 두근두근 매칭 매칭 인원 선택 모달
+    @ResponseBody
+    @PostMapping("/getMatchingInfo")
+    public List<Map<String, Object>> getMatchingInfo(@RequestParam("userId") String userId, HttpSession session) {
+    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    		
+    		return MainService.getMatchingInfo(userId);
+    	}
+			return null;
+    }
+    
+    // 매치 결과 모달 - 서로 선택한 경우
     @ResponseBody
     @PostMapping("/getMatchingResultInfo")
     public List<Map<String, Object>> getMatchingResultInfo(@RequestParam("userId") String userId, HttpSession session) {
     	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     		
     		return MainService.getMatchingResultInfo(userId);
+    	}
+			return null;
+    }
+    
+    // 매치 결과 모달2 - 본인을 선택한 이성 모두
+    @ResponseBody
+    @PostMapping("/getMatchingResultInfo2")
+    public List<Map<String, Object>> getMatchingResultInfo2(@RequestParam("userId") String userId, HttpSession session) {
+    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    		
+    		return MainService.getMatchingResultInfo2(userId);
     	}
 			return null;
     }

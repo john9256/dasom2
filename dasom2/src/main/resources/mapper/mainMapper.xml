@@ -8,7 +8,7 @@
         (SELECT * FROM PARTICIPANT_USER WHERE USER_ID = #{userId}) B
         ON A.EPISODE = B.EPISODE
         WHERE A.COMPLETE_FLAG = 'N'
-        <!-- 현재 시간보다 6시간 넘게 남은 소개팅 날짜만 가져옴 -->
+        <!-- 현재 시간보다 24시간 넘게 남은 소개팅 날짜만 가져옴 -->
         AND A.EPISODE > DATE_ADD(NOW(), INTERVAL 6 HOUR)
         ORDER BY A.EPISODE ASC
     </select>
@@ -28,6 +28,7 @@
         SELECT USER_ID FROM PARTICIPANT_USER 
 		WHERE USER_ID = #{userId}
 		AND EPISODE BETWEEN DATE_ADD(#{LocalDateTimeEpisode}, INTERVAL -5 DAY) AND DATE_ADD(#{LocalDateTimeEpisode}, INTERVAL -1 hour)
+		AND SEX = '남성'
     </select>
     
     <select id="checkDuplication">
@@ -65,7 +66,7 @@
 	                    FROM PARTICIPANT_USER 
 	                    WHERE EPISODE = #{episode}
 	                )
-	                ORDER BY RAND()
+	                ORDER BY LENGTH(VALUE1), VALUE1
 	                LIMIT 1
 	            ) AS AA
 	        )
@@ -85,7 +86,7 @@
     </select>
     
     <select id="getMatchingInfo" resultType="matchPersonVO" parameterType="String">
-    	SELECT  A.USER_ID AS PICKED_USER_ID, NICKNAME, B.PICK, B.PICK_TYPE, A.EPISODE AS localDateTimeEpisode
+    	SELECT  A.USER_ID AS PICKED_USER_ID, NICKNAME, B.PICK, A.EPISODE AS localDateTimeEpisode
 		FROM PARTICIPANT_USER A
         
         LEFT OUTER JOIN 
@@ -105,8 +106,9 @@
 								SELECT EPISODE, ROW_NUMBER() OVER () AS ROWNUM 
 						        FROM PARTICIPANT_USER 
 						        WHERE USER_ID = #{userId}
-						        <!-- AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND NOW() -->
-						        AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND DATE_ADD(NOW(), INTERVAL 5 HOUR)
+						        <!-- 소개팅 시작 부터 6시간 이후 까지 선택 가능 -->
+						        <!-- AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -6 HOUR) AND NOW() -->
+						        AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -50 HOUR) AND DATE_ADD(NOW(), INTERVAL 50 HOUR)
 								ORDER BY EPISODE DESC
 							)AA
 							WHERE AA.ROWNUM =1
@@ -119,14 +121,17 @@
 		FROM
 		(
 			SELECT USER_ID, PICK, PICKED_USER FROM MATCHING WHERE USER_ID =#{userId}
-			AND EPISODE =
-			(SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID =#{userId} AND EPISODE BETWEEN DATE_SUB(NOW(), INTERVAL 24 hour) AND NOW())
+			AND EPISODE IN
+			<!-- 소개팅 시작 부터 24 시간 보임 -->
+			<!-- (SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID =#{userId} AND EPISODE BETWEEN DATE_SUB(NOW(), INTERVAL 24 hour) AND NOW()) -->
+			(SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID =#{userId} AND EPISODE BETWEEN DATE_SUB(NOW(), INTERVAL 50 hour) AND DATE_ADD(NOW(), INTERVAL 50 hour))
 		) AA
 		INNER JOIN
 			(
 				SELECT USER_ID FROM MATCHING WHERE PICKED_USER =#{userId}
-				AND EPISODE =
-				(SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID =#{userId} AND EPISODE BETWEEN DATE_SUB(NOW(), INTERVAL 100 hour) AND DATE_ADD(NOW(), INTERVAL 10 hour))
+				AND EPISODE IN
+				(SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID =#{userId} AND EPISODE BETWEEN DATE_SUB(NOW(), INTERVAL 50 hour) AND DATE_ADD(NOW(), INTERVAL 50 hour))
+				<!-- 소개팅 시작 부터 24 시간 보임 -->
 				<!-- (SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID =#{userId} AND EPISODE BETWEEN DATE_SUB(NOW(), INTERVAL 24 hour) AND NOW()) -->
 			) BB
 		ON AA.PICKED_USER = BB.USER_ID
@@ -135,6 +140,24 @@
 			SELECT USER_ID, PHONE_NUMBER FROM USER_TABLE
 		) CC
 		ON AA.PICKED_USER = CC.USER_ID
+    </select>
+    
+    <select id = "getMatchingResultInfo2">
+    
+    	SELECT A.NICKNAME nickName
+        FROM PARTICIPANT_USER A
+        INNER JOIN 
+        USER_TABLE B
+        ON A.USER_ID = B.USER_ID
+        WHERE 
+        A.USER_ID IN
+        (SELECT USER_ID FROM MATCHING
+        WHERE PICKED_USER = #{userId}
+        AND EPISODE IN (SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID =#{userId} AND EPISODE BETWEEN DATE_SUB(NOW(), INTERVAL 50 hour) AND DATE_ADD(NOW(), INTERVAL 50 hour))
+        <!-- AND EPISODE =(SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID =#{userId} AND EPISODE BETWEEN DATE_SUB(NOW(), INTERVAL 50 hour) AND NOW()) -->
+        )
+        AND EPISODE IN (SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID =#{userId} AND EPISODE BETWEEN DATE_SUB(NOW(), INTERVAL 50 hour) AND DATE_ADD(NOW(), INTERVAL 50 hour))
+        <!-- AND EPISODE = (SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID =#{userId} AND EPISODE BETWEEN DATE_SUB(NOW(), INTERVAL 50 hour) AND NOW()) -->
     </select>
     
     <select id = "checkChace">
@@ -165,14 +188,16 @@
     </delete>
     
     <select id ="getParticipantList">
-    	SELECT A.SEX AS sex, B.JOB_DIVISION AS jobDivision, A.EPISODE AS episode, YEAR(CURDATE()) - YEAR(B.BIRTHDAY) AS year 
+    	SELECT A.SEX AS sex, B.JOB_DIVISION AS jobDivision, A.EPISODE AS episode, YEAR(CURDATE()) - YEAR(B.BIRTHDAY) AS year, C.location location
     	FROM participant_user A
 		INNER JOIN
 		USER_TABLE B
 		ON A.USER_ID = B.USER_ID
-		WHERE EPISODE IN
+        INNER JOIN meeting_schedule C
+        ON A.EPISODE = C.EPISODE
+		WHERE A.EPISODE IN
 		(
-			SELECT episode FROM participant_user 
+			SELECT episode FROM meeting_schedule 
 			WHERE 1=1
 			AND episode > NOW()
 		)

@@ -207,6 +207,7 @@ public class MainService {
             String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
             CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
             status.put("status", "error");
+            throw e;
         }
         
         return status;
@@ -225,6 +226,7 @@ public class MainService {
 	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
 	         CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
 	         status.put("status", "error");
+	         throw e;
 		 }
 		 
 		 return status;
@@ -254,6 +256,14 @@ public class MainService {
 		public List<Map<String, Object>> getMatchingResultInfo(String userId){
 			
 			return MainMapper.getMatchingResultInfo(userId);
+			
+		}
+		
+		// 매치 결과2 get
+		 
+		public List<Map<String, Object>> getMatchingResultInfo2(String userId){
+			
+			return MainMapper.getMatchingResultInfo2(userId);
 			
 		}
 		

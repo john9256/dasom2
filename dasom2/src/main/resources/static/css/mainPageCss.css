@@ -84,29 +84,5 @@
     	align-items: center; /* 수직 중앙 정렬 */
     }
     
-    @media (max-width: 768px) {
-    .modal-dialog {
-      max-width: 100%;
-      margin: 0;
-    }
-    .col-md-6 {
-      flex: 0 0 50%;
-      max-width: 50%;
-    }
-    .modal-title{
-    	font-size: 14px !important;
-    	font-weight: bold;
-    }
-    .btn-secondary{
-    	font-size: 14px !important;
-    }
-    .text-center{
-    	font-size: 13px !important;
-    }
-    .text-head{
-    	font-size: 13px !important;
-    	margin-bottom: 10px;
-    }
     
-  }
   

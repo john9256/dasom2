@@ -20,7 +20,15 @@ public class CommonService {
 	}
 	
 	public int logAdminHistory(String adminId, String targetUser, String type) {
-		return CommonMapper.logAdminHistory(adminId, targetUser, type);
+		try {
+			return CommonMapper.logAdminHistory(adminId, targetUser, type);
+		}
+		catch (Exception e) {
+			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
+            CommonMapper.insertErrorLog(adminId, methodName, e.getMessage());
+			throw e;
+		}
 	}
 	
 	public List<String> getUserListByEpisode(String episode) {

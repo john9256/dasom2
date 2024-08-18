@@ -94,7 +94,9 @@
 <body>
 <div class="container mt-3">
     <div class="top-text"><a href="/mainPage">다솜 소개팅</a></div>
+    <div class="second-text">다솜 소개팅에 오신 것을 환영합니다!</div>
     <div class="second-text">기본 인적 사항을 기재해주세요!</div>
+    <div class="second-text">티켓 구매 후 관리자에게 문의주세요!</div>
     <div class="full-screen-wrapper">
     <div class="button-container">
     	<button id="registerUserInfo" type="button" class="btn btn-main" data-toggle="modal" data-target="#modal">소개팅 준비하기</button>

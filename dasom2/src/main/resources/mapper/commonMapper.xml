@@ -14,7 +14,7 @@
     </insert>
     
     <insert id = "logUserHistory">
-    	INSERT INTO LOG_HISTORY(user_id, target, log_type, admin_division) VALUES(#{adminId}, #{target}, #{type}, 'user')
+    	INSERT INTO LOG_HISTORY(user_id, target, log_type, admin_division) VALUES(#{userId}, #{target}, #{type}, 'user')
     </insert>
     
     <select id = "getUserListByEpisode">

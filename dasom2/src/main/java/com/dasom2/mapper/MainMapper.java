@@ -26,6 +26,7 @@ public interface MainMapper {
 	List<matchPersonVO> getMatchingInfo(String userId);
 	List<Map<String, Object>> getParticipantList();
 	List<Map<String, Object>> getMatchingResultInfo(String userId);
+	List<Map<String, Object>> getMatchingResultInfo2(String userId);
 	Map<String, Object> getParticipantCount();
 	void insertPickUser(String userId, LocalDateTime episode, String nickName);
 	void deletePickUser(String userId, LocalDateTime episode, String nickName);
