@@ -2,19 +2,19 @@
 <mapper namespace="com.dasom2.mapper.CommonMapper">
 
     <select id="getCriteriaData" resultType="map" parameterType="String">
-        SELECT value1 FROM criteria_data WHERE division = #{criteria}
+        SELECT VALUE1 value1 FROM CRITERIA_DATA WHERE DIVISION = #{criteria}
     </select>
     
     <insert id="insertErrorLog" parameterType="String">
-        INSERT INTO error_log(user_id, method_name, error_message) VALUES(#{userId}, #{methodName}, SUBSTRING(#{errorMessage}, 1, 499))
+        INSERT INTO ERROR_LOG(USER_ID, METHOD_NAME, ERROR_MESSAGE) VALUES(#{userId}, #{methodName}, SUBSTRING(#{errorMessage}, 1, 499))
     </insert>
     
     <insert id = "logAdminHistory">
-    	INSERT INTO LOG_HISTORY(user_id, target, log_type, admin_division) VALUES(#{adminId}, #{target}, #{type}, 'admin')
+    	INSERT INTO LOG_HISTORY(USER_ID, TARGET, LOG_TYPE, ADMIN_DIVISION) VALUES(#{adminId}, #{target}, #{type}, 'admin')
     </insert>
     
     <insert id = "logUserHistory">
-    	INSERT INTO LOG_HISTORY(user_id, target, log_type, admin_division) VALUES(#{userId}, #{target}, #{type}, 'user')
+    	INSERT INTO LOG_HISTORY(USER_ID, TARGET, LOG_TYPE, ADMIN_DIVISION) VALUES(#{userId}, #{target}, #{type}, 'user')
     </insert>
     
     <select id = "getUserListByEpisode">

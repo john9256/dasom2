@@ -3,23 +3,23 @@
 
     
     <select id="getResidenceData" resultType="String" parameterType="String">
-        SELECT value1 FROM criteria_data WHERE division = #{division}
+        SELECT VALUE1 FROM CRITERIA_DATA WHERE DIVISION = #{division}
     </select>
     
     <update id="registerUserInfo" parameterType="RegisterUserVO">
-        UPDATE user_table SET 
-        user_name = #{userName}, 
-        phone_number = #{phoneNumber}, 
-        sex = #{sex}, 
-        birthday = STR_TO_DATE(CONCAT(#{birthday}, '-01-01'), '%Y-%m-%d'),
-        height = #{height},
-        job_division = #{jobDivision},
-        residence = #{residence}
-        WHERE user_id =#{userId}
+        UPDATE USER_TABLE SET 
+        USER_NAME = #{userName}, 
+        PHONE_NUMBER = #{phoneNumber}, 
+        SEX = #{sex}, 
+        BIRTHDAY = STR_TO_DATE(CONCAT(#{birthday}, '-01-01'), '%Y-%m-%d'),
+        HEIGHT = #{height},
+        JOB_DIVISION = #{jobDivision},
+        RESIDENCE = #{residence}
+        WHERE USER_ID =#{userId}
     </update>
     
     <insert id="registerUserInfoHistory" parameterType="RegisterUserVO">
-    	INSERT INTO user_table_register_history 
+    	INSERT INTO USER_TABLE_REGISTER_HISTORY 
     	VALUES(
     	#{userId}, 
     	#{userName}, 
@@ -38,7 +38,7 @@
     </insert>
     
     <select id="getUserInfoForUpdate" resultType="RegisterUserVO">
-    	SELECT A.USER_NAME AS userName, A.height AS height, A.job_division AS jobDivision, A.phone_number AS phoneNumber, A.residence AS residence 
+    	SELECT A.USER_NAME AS userName, A.HEIGHT AS height, A.JOB_DIVISION AS jobDivision, A.PHONE_NUMBER AS phoneNumber, A.RESIDENCE AS residence 
     	FROM USER_TABLE A
     	WHERE A.USER_ID = #{userId}
     </select>

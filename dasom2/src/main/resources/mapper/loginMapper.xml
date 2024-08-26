@@ -2,7 +2,7 @@
 <mapper namespace="com.dasom2.mapper.LoginMapper">
 
     <select id="findPasswordByUserId" resultType="String" parameterType="String">
-        SELECT password FROM user_table WHERE user_id = #{userId}
+        SELECT PASSWORD FROM USER_TABLE WHERE USER_ID = #{userId}
     </select>
     
     

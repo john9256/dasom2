@@ -14,7 +14,7 @@
     </select>
     
     <select id="checkHeadCount">
-        SELECT episode from MEETING_SCHEDULE
+        SELECT EPISODE FROM MEETING_SCHEDULE
 		WHERE EPISODE = #{episode}
 		AND 
 		HEADCOUNT/2 <![CDATA[>]]> (
@@ -34,11 +34,11 @@
     <select id="checkDuplication">
 	    SELECT COUNT(*) FROM PARTICIPANT_USER
 		WHERE EPISODE = #{LocalDateTimeEpisode}
-		AND user_id IN (
-		SELECT user_id FROM PARTICIPANT_USER 
+		AND USER_ID IN (
+		SELECT USER_ID FROM PARTICIPANT_USER 
 		WHERE EPISODE IN 
 		(SELECT EPISODE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE <![CDATA[<]]> #{LocalDateTimeEpisode})
-		and user_id <![CDATA[<>]]> #{userId}
+		and USER_ID <![CDATA[<>]]> #{userId}
 		)
     </select>
     
@@ -78,11 +78,11 @@
     </delete>
     
     <select id="getPassFlagbyUser" resultType="String" parameterType="String">
-    	SELECT pass_flag FROM user_manage WHERE user_id = #{userId} AND PASS_FLAG = 'Y'
+    	SELECT PASS_FLAG FROM USER_MANAGE WHERE USER_ID = #{userId} AND PASS_FLAG = 'Y'
     </select>
     
     <select id = "checkUserInfoExist">
-    	SELECT COUNT(*) FROM user_table WHERE user_id = #{userId} AND phone_number IS NULL
+    	SELECT COUNT(*) FROM USER_TABLE WHERE USER_ID = #{userId} AND PHONE_NUMBER IS NULL
     </select>
     
     <select id="getMatchingInfo" resultType="matchPersonVO" parameterType="String">
@@ -188,18 +188,18 @@
     </delete>
     
     <select id ="getParticipantList">
-    	SELECT A.SEX AS sex, B.JOB_DIVISION AS jobDivision, A.EPISODE AS episode, YEAR(CURDATE()) - YEAR(B.BIRTHDAY) AS year, C.location location
-    	FROM participant_user A
+    	SELECT A.SEX AS sex, B.JOB_DIVISION AS jobDivision, A.EPISODE AS episode, YEAR(CURDATE()) - YEAR(B.BIRTHDAY) AS year, C.LOCATION location
+    	FROM PARTICIPANT_USER A
 		INNER JOIN
 		USER_TABLE B
 		ON A.USER_ID = B.USER_ID
-        INNER JOIN meeting_schedule C
+        INNER JOIN MEETING_SCHEDULE C
         ON A.EPISODE = C.EPISODE
 		WHERE A.EPISODE IN
 		(
-			SELECT episode FROM meeting_schedule 
+			SELECT EPISODE FROM MEETING_SCHEDULE 
 			WHERE 1=1
-			AND episode > NOW()
+			AND EPISODE > NOW()
 		)
 		ORDER BY A.CREATETIME ASC
     </select>

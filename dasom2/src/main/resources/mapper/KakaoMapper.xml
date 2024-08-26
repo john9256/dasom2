@@ -1,16 +1,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dasom2.mapper.KakaoMapper">
     <insert id="saveUser">
-        INSERT INTO user_table (user_id, profile_image_url)
+        INSERT INTO USER_TABLE (USER_ID, PROFILE_IMAGE_URL)
         VALUES (#{userId}, #{profileImageUrl})
     </insert>
     
     <select id="checkUserExist">
-    	SELECT COUNT(*) FROM user_table WHERE user_id = #{userId}
+    	SELECT COUNT(*) FROM USER_TABLE WHERE USER_ID = #{userId}
     </select>
     
     <update id ="updateUser">
-    	UPDATE user_table SET profile_image_url = #{profileImageUrl}
+    	UPDATE USER_TABLE SET PROFILE_IMAGE_URL = #{profileImageUrl}
     	WHERE USER_ID = #{userId}
     </update>
 </mapper>

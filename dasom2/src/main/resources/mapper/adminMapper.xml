@@ -29,33 +29,21 @@
     </select>
     
     <select id="getMatchingInfoAdmin">
-    	SELECT A.USER_ID userId, C.USER_NAME userName, A.nickname nickName, B.PICK pick, B.USER_ID pickedUserId, DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, DATE_FORMAT(B.CREATETIME, '%y년 %m월 %d일 %p %h시') createtime
+    	SELECT A.USER_ID userId, B.PICK pick, B.USER_ID pickedUserId, DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, DATE_FORMAT(B.CREATETIME, '%y년 %m월 %d일 %p %h시') createtime
 		FROM PARTICIPANT_USER A
 		LEFT OUTER JOIN
 		MATCHING B
 		ON A.USER_ID = B.USER_ID
 		AND A.EPISODE = B.EPISODE
-		INNER JOIN USER_TABLE C
-        ON A.USER_ID = C.USER_ID
         ORDER BY A.EPISODE DESC
     </select>
      
      <select id="getLogAdmin">
-    	SELECT A.USER_ID userId, B.USER_NAME userName, B.SEX sex, B.PHONE_NUMBER phoneNumber, A.TARGET target, A.LOG_TYPE logType, A.ADMIN_DIVISION adminDivision, A.CREATETIME createTime
-		FROM
-		LOG_HISTORY A
-		LEFT OUTER JOIN
-		USER_TABLE B
-		ON A.USER_ID = B.USER_ID
-		ORDER BY CREATETIME DESC
-    </select>
-    
-    <select id="getErrorLogAdmin">
-    	SELECT METHOD_NAME methodName, user_id userId, error_message errorMessage, createtime createTime  FROM ERROR_LOG ORDER BY CREATETIME DESC
+    	SELECT 
     </select>
      
     <select id="getScheduleAdmin">
-    	select episode,complete_flag completeFlag, headCount, location FROM MEETING_SCHEDULE ORDER BY EPISODE DESC
+    	select EPISODE episode ,COMPLETE_FLAG completeFlag, HEADCOUNT headCount, LOCATION location FROM MEETING_SCHEDULE
     </select>
     
     <update id="increaseChance">
