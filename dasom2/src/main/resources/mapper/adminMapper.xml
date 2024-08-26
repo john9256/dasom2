@@ -8,7 +8,7 @@
 	</select>
 	
 	<select id="getUserInfoAdmin">
-        SELECT A.USER_ID AS userId, A.USER_NAME AS userName, A.SEX AS sex, A.height AS height, DATE_FORMAT(A.birthday, '%y년') AS birthday, A.job_division AS jobDivision, B.PASS_FLAG AS passFlag, A.RESIDENCE AS residence, B.CHANCE AS chance, A.phone_number AS phoneNumber
+        SELECT A.USER_ID AS userId, A.USER_NAME AS userName, A.SEX AS sex, A.HEIGHT AS height, DATE_FORMAT(A.BIRTHDAY, '%y년') AS birthday, A.JOB_DIVISION AS jobDivision, B.PASS_FLAG AS passFlag, A.RESIDENCE AS residence, B.CHANCE AS chance, A.PHONE_NUMBER AS phoneNumber
         FROM USER_TABLE A
         INNER JOIN
         USER_MANAGE B
@@ -17,7 +17,7 @@
     </select>
 	
     <select id="getScheduleInfoAdmin">
-        SELECT DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, B.USER_ID AS userId, A.LOCATION AS location , C.USER_NAME AS userName, C.SEX AS sex, DATE_FORMAT(C.birthday, '%y년') AS birthday, C.JOB_DIVISION AS jobDivision
+        SELECT DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, B.USER_ID AS userId, A.LOCATION AS location , C.USER_NAME AS userName, C.SEX AS sex, DATE_FORMAT(C.BIRTHDAY, '%y년') AS birthday, C.JOB_DIVISION AS jobDivision
 		FROM MEETING_SCHEDULE A
 		LEFT OUTER JOIN
 		(SELECT * FROM PARTICIPANT_USER) B
