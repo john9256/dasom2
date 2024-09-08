@@ -38,12 +38,28 @@
         ORDER BY A.EPISODE DESC
     </select>
      
-     <select id="getLogAdmin">
-    	SELECT 
+    <select id="getLogAdmin">
+    	SELECT A.USER_ID userId, B.USER_NAME userName, B.SEX sex, B.PHONE_NUMBER phoneNumber, A.TARGET target, A.LOG_TYPE logType, A.CREATETIME createTime
+		FROM
+		LOG_HISTORY A
+		LEFT OUTER JOIN
+		USER_TABLE B
+		ON A.USER_ID = B.USER_ID
+		ORDER BY CREATETIME DESC
     </select>
-     
+    
+    <select id="getErrorLogAdmin">
+    	SELECT  METHOD_NAME methodName, A.USER_ID userId, B.USER_NAME userName, ERROR_MESSAGE errorMessage, A.CREATETIME createTime
+		FROM ERROR_LOG A
+		INNER JOIN USER_TABLE B
+		ON A.USER_ID = B.USER_ID
+		ORDER BY CREATETIME DESC
+    </select>
+    
     <select id="getScheduleAdmin">
-    	select EPISODE episode ,COMPLETE_FLAG completeFlag, HEADCOUNT headCount, LOCATION location FROM MEETING_SCHEDULE
+    	select EPISODE episode ,COMPLETE_FLAG completeFlag, HEADCOUNT headCount, LOCATION location
+    	FROM MEETING_SCHEDULE
+    	ORDER BY EPISODE DESC
     </select>
     
     <update id="increaseChance">
