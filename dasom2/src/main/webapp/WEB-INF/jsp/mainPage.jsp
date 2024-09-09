@@ -8,6 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="icon" type="image/png" href="${pageContext.request.contextPath}/image/faviconHeart.png" sizes="32x32">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/commonCss.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/mainPageCss.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
