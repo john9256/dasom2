@@ -172,7 +172,13 @@
                             '<button class="btn btn-sm btn-success increase-chance" data-userid="' + row['userId'] + '">+</button>' +
                             '<button class="btn btn-sm btn-danger decrease-chance" data-userid="' + row['userId'] + '">-</button>' +
                             '</div>';
-                    } else if (key === 'passFlag') {
+                    } else if (key === 'headCount') {
+                        return (row[key] !== undefined ? row[key] : '') +
+                        '<div class="chance-buttons">' +
+                        '<button class="btn btn-sm btn-success increase-headCount" data-episode="' + row['episode'] + '">+</button>' +
+                        '<button class="btn btn-sm btn-danger decrease-headCount" data-episode="' + row['episode'] + '">-</button>' +
+                        '</div>';
+                	}else if (key === 'passFlag') {
                         return (row[key] !== undefined ? row[key] : '') +
                             '<div class="chance-buttons">' +
                             '<button class="btn btn-sm btn-success change-passFlag" data-passflag="' + row['passFlag'] + '" data-userid="' + row['userId'] + '">o</button>' +
@@ -207,6 +213,7 @@
                     $(row).css('background-color', episodeColors[episode]);
                 },
                 initComplete: function() {
+                	
                     // chance 증가/감소 버튼 이벤트 핸들러 추가
                     $('.increase-chance').on('click', function() {
                         var userId = $(this).data('userid');
@@ -249,7 +256,54 @@
                             }
                         });
                     });
-
+					
+                    // 스케줄 최대 인원수 증가
+                    $('.increase-headCount').on('click', function() {
+                        var episode = $(this).data('episode');
+                        
+                        console.log(episode)
+                        $.ajax({
+                            url: '/increaseHeadCount',
+                            type: 'POST',
+                            data: { episode: episode },
+                            success: function(response) {
+                                if(response.status == "increase"){
+                                    var cell = $(this).closest('td');
+                                    var HeadCount = parseInt(cell.text(), 4);
+                                    cell.contents().first()[0].textContent = HeadCount + 1;
+                                    alert(userId + ' 최대 참여 가능 인원이 증가했습니다.');
+                                }
+                            }.bind(this),
+                            error: function(xhr, status, error) {
+                                console.error("Selection update failed: " + error);
+                                alert("참여 인원 증가처리에 실패했습니다.");
+                            }
+                        });
+                    });
+                 // 스케줄 최대 인원수 감소
+                    $('.decrease-headCount').on('click', function() {
+                        var episode = $(this).data('episode');
+                        $.ajax({
+                            url: '/decreaseHeadCount',
+                            type: 'POST',
+                            data: { episode: episode },
+                            success: function(response) {
+                                if(response.status == "decrease"){
+                                    var cell = $(this).closest('td');
+                                    var HeadCount = parseInt(cell.text(), 4);
+                                    cell.contents().first()[0].textContent = HeadCount - 1;
+                                    alert(userId + ' 최대 참여 가능 인원이 감소했습니다.');
+                                }
+                            }.bind(this),
+                            error: function(xhr, status, error) {
+                                console.error("Selection update failed: " + error);
+                                alert("참여 인원 감소처리에 실패했습니다.");
+                            }
+                        });
+                    });
+                    
+                    
+                    
                     $('.change-passFlag').on('click', function() {
                         var userId = $(this).data('userid');
                         var button = $(this); // 클릭한 버튼 요소를 참조

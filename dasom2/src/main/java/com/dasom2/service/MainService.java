@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,12 @@ public class MainService {
 	CommonMapper CommonMapper;
 	
 	// 입력 형식 지정
-	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy년 M월 d일 a h시");
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy년 M월 d일 a h시").withLocale(Locale.KOREAN);
 	
     // 출력 형식 지정
-	private static final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yy년 MM월 dd일 a h시");
+	private static final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yy년 MM월 dd일 a h시").withLocale(Locale.KOREAN);
     
+	// 날짜 선택 GET
 	public List<MeetingScheduleVO> getMeetingSchedule(String userId) {
 		List<MeetingScheduleVO> meetingScheduleInfo = MainMapper.getMeetingSchedule(userId);
 		
@@ -38,6 +40,23 @@ public class MainService {
 	        meetingSchedule.setEpisode(formattedEpisode);
 	    }
 		return meetingScheduleInfo;
+	}
+	
+	// 소개팅 현황 get
+	public List<Map<String, Object>> getParticipantList(String userId){
+		
+		List<Map<String, Object>> participantList = new ArrayList<>();
+		
+		Map<String, Object> temp = new HashMap<>();
+		
+		participantList = MainMapper.getParticipantList();
+		if(participantList.size() > 0) {
+			for(int i = 0; i < participantList.size(); i ++) {
+				participantList.get(i).put("year", classifyAge((int)participantList.get(i).get("year")));
+			}
+		}
+		return participantList;
+		
 	}
 	
 	@Transactional(rollbackFor = {Exception.class})
@@ -58,7 +77,7 @@ public class MainService {
 				// MainMapper.insertParticipantUserHistory(userId, LocalDateTimeEpisode, episodeSelected);
 				status.put("status", "full");
 			}
-			// 소개팅 연속 참여 불가
+			// 소개팅 연속 참여 불가 (남성일 경우)
 			else if(MainMapper.checkContinuity(userId, LocalDateTimeEpisode) != null) {
 				status.put("status", "continuity");
 			}
@@ -186,6 +205,22 @@ public class MainService {
 		
 	}
 	
+	// 매치 결과 get
+	 
+	public List<Map<String, Object>> getMatchingResultInfo(String userId){
+		
+		return MainMapper.getMatchingResultInfo(userId);
+		
+	}
+	
+	// 매치 결과 중 본인 좋아 한다는 사람 get
+	 
+	public List<Map<String, Object>> getMatchingResultInfo2(String userId){
+		
+		return MainMapper.getMatchingResultInfo2(userId);
+		
+	}
+	
 	
 	// 인원 pick
 	
@@ -232,40 +267,8 @@ public class MainService {
 		 return status;
 		 
 	 }
-	 
-	 	// 소개팅 현황 get
-	 
-		public List<Map<String, Object>> getParticipantList(String userId){
-			
-			List<Map<String, Object>> participantList = new ArrayList<>();
-			
-			Map<String, Object> temp = new HashMap<>();
-			
-			participantList = MainMapper.getParticipantList();
-			if(participantList.size() > 0) {
-				for(int i = 0; i < participantList.size(); i ++) {
-					participantList.get(i).put("year", classifyAge((int)participantList.get(i).get("year")));
-				}
-			}
-			return participantList;
-			
-		}
 		
-		// 매치 결과 get
-		 
-		public List<Map<String, Object>> getMatchingResultInfo(String userId){
-			
-			return MainMapper.getMatchingResultInfo(userId);
-			
-		}
 		
-		// 매치 결과2 get
-		 
-		public List<Map<String, Object>> getMatchingResultInfo2(String userId){
-			
-			return MainMapper.getMatchingResultInfo2(userId);
-			
-		}
 		
 	 // 초 중 후반 나이대 구분 함수
 	 public String classifyAge(int age) {

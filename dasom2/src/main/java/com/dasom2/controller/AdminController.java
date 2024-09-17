@@ -130,7 +130,6 @@ public class AdminController {
 		catch (Exception e) {
 			throw e;
 		}
-		
     }
 	
 	// chance 1회 감소
@@ -151,7 +150,46 @@ public class AdminController {
 		catch (Exception e) {
 			throw e;
 		}
+    }
+	
+	// 참가 가능인원 증가
+	@ResponseBody
+	@Transactional(rollbackFor = {Exception.class})
+    @PostMapping("/increaseHeadCount")
+    public Map<String, Object> increaseHeadCount(@RequestParam("userId") String userId, HttpSession session) {
+		Map<String, Object> status = new HashMap<String, Object>();
 		
+		try {
+			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+				commonService.logAdminHistory(session.getAttribute("userId").toString(), userId, "increaseHeadCount");
+	            return adminService.increaseHeadCount(userId);
+	        }
+			status.put("status", "not admin");
+			return status;
+		}
+		catch (Exception e) {
+			throw e;
+		}
+    }
+	
+	// 참가 가능인원 감소
+	@ResponseBody
+	@Transactional(rollbackFor = {Exception.class})
+    @PostMapping("/decreaseChance")
+    public Map<String, Object> decreaseHeadCount(@RequestParam("userId") String userId, HttpSession session) {
+		Map<String, Object> status = new HashMap<String, Object>();
+		
+		try {
+			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+				commonService.logAdminHistory(session.getAttribute("userId").toString(), userId, "decreaseHeadCount");
+				return adminService.decreaseHeadCount(userId);
+	        }
+			status.put("status", "not admin");
+			return status;
+		}
+		catch (Exception e) {
+			throw e;
+		}
     }
 	
 	// passFlag 값 변경
