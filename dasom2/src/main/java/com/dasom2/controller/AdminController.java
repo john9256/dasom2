@@ -156,13 +156,13 @@ public class AdminController {
 	@ResponseBody
 	@Transactional(rollbackFor = {Exception.class})
     @PostMapping("/increaseHeadCount")
-    public Map<String, Object> increaseHeadCount(@RequestParam("userId") String userId, HttpSession session) {
+    public Map<String, Object> increaseHeadCount(@RequestParam("episode") String episode, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try {
 			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-				commonService.logAdminHistory(session.getAttribute("userId").toString(), userId, "increaseHeadCount");
-	            return adminService.increaseHeadCount(userId);
+				commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "increaseHeadCount");
+	            return adminService.increaseHeadCount(episode);
 	        }
 			status.put("status", "not admin");
 			return status;
@@ -175,14 +175,14 @@ public class AdminController {
 	// 참가 가능인원 감소
 	@ResponseBody
 	@Transactional(rollbackFor = {Exception.class})
-    @PostMapping("/decreaseChance")
-    public Map<String, Object> decreaseHeadCount(@RequestParam("userId") String userId, HttpSession session) {
+    @PostMapping("/decreaseHeadCount")
+    public Map<String, Object> decreaseHeadCount(@RequestParam("episode") String episode, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try {
 			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
-				commonService.logAdminHistory(session.getAttribute("userId").toString(), userId, "decreaseHeadCount");
-				return adminService.decreaseHeadCount(userId);
+				commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "decreaseHeadCount");
+				return adminService.decreaseHeadCount(episode);
 	        }
 			status.put("status", "not admin");
 			return status;
@@ -218,7 +218,6 @@ public class AdminController {
 				for (String userId : commonService.getUserListByEpisode(episode)) {
 					adminService.increaseChance(userId);
 				}
-				
 				return adminService.deleteSchedule(episode);
 			}
         }
@@ -239,7 +238,6 @@ public class AdminController {
 		try {
 			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
 				if(commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule") == 1) {
-					System.out.println(commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule"));
 					return adminService.addSchedule(episode, headCount, location);
 				}
 	        }

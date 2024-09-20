@@ -18,7 +18,7 @@ public interface MainMapper {
 	int plusChance(String userId);
 	int checkDuplication(String userId, LocalDateTime LocalDateTimeEpisode);
 	String checkContinuity(String userId, LocalDateTime LocalDateTimeEpisode);
-	void insertParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
+	int insertParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
 	int deleteParticipantUser(String userId, LocalDateTime episode, Boolean episodeSelected);
 	String checkHeadCount(String userId, LocalDateTime episode);
 	int checkMatchPickCount(String userId, LocalDateTime episode);
@@ -28,8 +28,8 @@ public interface MainMapper {
 	List<Map<String, Object>> getMatchingResultInfo(String userId);
 	List<Map<String, Object>> getMatchingResultInfo2(String userId);
 	Map<String, Object> getParticipantCount();
-	void insertPickUser(String userId, LocalDateTime episode, String nickName);
-	void deletePickUser(String userId, LocalDateTime episode, String nickName);
+	int insertPickUser(String userId, LocalDateTime episode, String nickName);
+	int deletePickUser(String userId, LocalDateTime episode, String nickName);
 	LocalDateTime test();
 	int checkUserInfoExist(String userId);
 	String getUserNameByUserId(String userId);

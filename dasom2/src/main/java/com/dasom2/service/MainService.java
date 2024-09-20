@@ -87,9 +87,8 @@ public class MainService {
 				status.put("duplicateCount", duplicateCount);
 			}
 			else {
-				if(MainMapper.minusChance(userId) == 1){
+				if(MainMapper.minusChance(userId) == 1 && MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected) == 1){
 					CommonMapper.logUserHistory(userId, userId, "participate");
-					MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected);
 					status.put("status", "complete");
 				}
 				else {
@@ -223,7 +222,7 @@ public class MainService {
 	
 	
 	// 인원 pick
-	
+	@Transactional(rollbackFor = {Exception.class})
 	public Map<String, Object> insertMatchPick(String userId, String episode, String nickName) {
         LocalDateTime localDateTimeEpisode = LocalDateTime.parse(episode, formatter);
         Map<String, Object> status = new HashMap<>();
@@ -232,9 +231,13 @@ public class MainService {
         		status.put("status", "full");
         	}
         	else{
-        		CommonMapper.logUserHistory(userId, nickName, "pick");
-        		MainMapper.insertPickUser(userId, localDateTimeEpisode, nickName);
-        		status.put("status", "complete");
+        		if(MainMapper.insertPickUser(userId, localDateTimeEpisode, nickName) ==1) {
+	        		CommonMapper.logUserHistory(userId, nickName, "pick");
+	        		status.put("status", "complete");
+        		}
+        		else {
+        			status.put("status", "error");
+        		}
         	}
         	
         } catch (Exception e) {
@@ -248,14 +251,20 @@ public class MainService {
         return status;
     }
 	
+	@Transactional(rollbackFor = {Exception.class})
 	 public Map<String, Object> deleteMatchPick(String userId, String episode, String nickName){
 		 LocalDateTime LocalDateTimeEpisode = LocalDateTime.parse(episode, formatter);
 		 Map<String, Object> status = new HashMap<String, Object>();
 		 // MainMapper.insertPickUserHisotry(userId, localDateTimeEpisode, nickName);
 		 try {
-			 CommonMapper.logUserHistory(userId, nickName, "cancelPick");
-			 MainMapper.deletePickUser(userId, LocalDateTimeEpisode, nickName);
-			 status.put("status", "cancel");
+			 if(MainMapper.deletePickUser(userId, LocalDateTimeEpisode, nickName) == 1) {
+				 CommonMapper.logUserHistory(userId, nickName, "cancelPick");
+				 status.put("status", "cancel");
+			 }
+			 else {
+				 status.put("status", "error");
+			 }
+			 
 		 } catch (Exception e) {
 			 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.

@@ -109,10 +109,10 @@ public class AdminService {
 	}
 	
 	// 참가 가능 인원 증가
-	public Map<String, Object> increaseHeadCount(String userId) {
+	public Map<String, Object> increaseHeadCount(String episode) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		try {
-			int count = adminMapper.increaseHeadCount(userId);
+			int count = adminMapper.increaseHeadCount(episode);
 			if(count == 1) {
 				status.put("status", "increase");
 			}
@@ -122,7 +122,7 @@ public class AdminService {
 		} catch (Exception e) {
 			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
-	         CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
+	         CommonMapper.insertErrorLog(episode, methodName, e.getMessage());
 	         status.put("status", "error");
 	         throw e;
 		}
@@ -130,10 +130,10 @@ public class AdminService {
 	}
 	
 	// 참가 가능 인원 감소
-	public Map<String, Object> decreaseHeadCount(String userId) {
+	public Map<String, Object> decreaseHeadCount(String episode) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		try {
-			int count = adminMapper.decreaseChance(userId);
+			int count = adminMapper.decreaseHeadCount(episode);
 				if(count == 1) {
 					status.put("status", "decrease");
 				}
@@ -143,7 +143,7 @@ public class AdminService {
 		} catch (Exception e) {
 			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 	         String methodName = stackTrace[1].getMethodName(); // '1'은 현재 메소드를 가리키는 인덱스입니다.
-	         CommonMapper.insertErrorLog(userId, methodName, e.getMessage());
+	         CommonMapper.insertErrorLog(episode, methodName, e.getMessage());
 	         status.put("status", "error");
 	         throw e;
 		}
@@ -174,8 +174,8 @@ public class AdminService {
 	    Map<String, Object> status = new HashMap<String, Object>();
 	    try {
 	        int count = adminMapper.deleteSchedule(episode);
-	        adminMapper.deleteAllParticipantByEpisode(episode);
-	        if(count == 1) {
+	        int count2 = adminMapper.deleteAllParticipantByEpisode(episode);
+	        if(count == 1 && count2 >= 1) {
 	            status.put("status", "complete");
 	        } else {
 	            status.put("status", "fail");

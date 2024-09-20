@@ -257,50 +257,48 @@
                         });
                     });
 					
-                    // 스케줄 최대 인원수 증가
-                    $('.increase-headCount').on('click', function() {
-                        var episode = $(this).data('episode');
-                        
-                        console.log(episode)
-                        $.ajax({
-                            url: '/increaseHeadCount',
-                            type: 'POST',
-                            data: { episode: episode },
-                            success: function(response) {
-                                if(response.status == "increase"){
-                                    var cell = $(this).closest('td');
-                                    var HeadCount = parseInt(cell.text(), 4);
-                                    cell.contents().first()[0].textContent = HeadCount + 1;
-                                    alert(userId + ' 최대 참여 가능 인원이 증가했습니다.');
-                                }
-                            }.bind(this),
-                            error: function(xhr, status, error) {
-                                console.error("Selection update failed: " + error);
-                                alert("참여 인원 증가처리에 실패했습니다.");
-                            }
-                        });
-                    });
+                 // 스케줄 최대 인원수 증가
+                 $('.increase-headCount').on('click', function() {
+                     var episode = $(this).data('episode');
+                     $.ajax({
+                         url: '/increaseHeadCount',
+                         type: 'POST',
+                         data: { episode: episode },
+                         success: function(response) {
+                             if(response.status == "increase"){
+                                 var cell = $(this).closest('td');
+                                 var HeadCount = parseInt(cell.text(), 10);
+                                 cell.contents().first()[0].textContent = HeadCount + 1;
+                                 console.log(cell.contents().first()[0].textContent);
+                             }
+                         }.bind(this),
+                         error: function(xhr, status, error) {
+                             console.error("Selection update failed: " + error);
+                             alert("참여 인원 증가처리에 실패했습니다.");
+                         }
+                     });
+                 });
+                 
                  // 스케줄 최대 인원수 감소
-                    $('.decrease-headCount').on('click', function() {
-                        var episode = $(this).data('episode');
-                        $.ajax({
-                            url: '/decreaseHeadCount',
-                            type: 'POST',
-                            data: { episode: episode },
-                            success: function(response) {
-                                if(response.status == "decrease"){
-                                    var cell = $(this).closest('td');
-                                    var HeadCount = parseInt(cell.text(), 4);
-                                    cell.contents().first()[0].textContent = HeadCount - 1;
-                                    alert(userId + ' 최대 참여 가능 인원이 감소했습니다.');
-                                }
-                            }.bind(this),
-                            error: function(xhr, status, error) {
-                                console.error("Selection update failed: " + error);
-                                alert("참여 인원 감소처리에 실패했습니다.");
-                            }
-                        });
-                    });
+                 $('.decrease-headCount').on('click', function() {
+                     var episode = $(this).data('episode');
+                     $.ajax({
+                         url: '/decreaseHeadCount',
+                         type: 'POST',
+                         data: { episode: episode },
+                         success: function(response) {
+                             if(response.status == "decrease"){
+                                 var cell = $(this).closest('td');
+                                 var HeadCount = parseInt(cell.text(), 10);
+                                 cell.contents().first()[0].textContent = HeadCount - 1;
+                             }
+                         }.bind(this),
+                         error: function(xhr, status, error) {
+                             console.error("Selection update failed: " + error);
+                             alert("참여 인원 감소처리에 실패했습니다.");
+                         }
+                     });
+                 });
                     
                     
                     
@@ -426,6 +424,8 @@
                 alert("모든 필드를 입력해주세요.");
             }
         });
+        
+        
         
     });
     </script>
