@@ -142,7 +142,8 @@ public class MainService {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try{
-			if(MainMapper.deleteParticipantUser(userId, LocalDateTimeEpisode, episodeSelected) > 0 && MainMapper.plusChance(userId) == 1) {
+			if(MainMapper.deleteParticipantUser(userId, LocalDateTimeEpisode, episodeSelected) > 0) {
+				MainMapper.plusChance(userId);
 				CommonMapper.logUserHistory(userId, userId, "cancelParticipate");
 				status.put("status", "cancel");
 			}

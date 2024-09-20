@@ -112,6 +112,56 @@ $(document).ready(function() {
     });
     
     
+ 	// 날짜 선택 모달
+	function dateSelectModalContent(userId) {
+		$(".modal-body").html("");
+		$("#modalLabel").html("소개팅 날짜 선택");
+     $.ajax({
+         url: "/getMeetingSchedule",
+         type: "POST",
+         data: {
+             userId: userId
+         },
+         success: function(data) {
+             var content = "";
+             var episode;
+             var location;
+             //var episode = "";
+             if(data.length === 0){
+     			$("#modalLabel").html("진행 예정인 소개팅이 없습니다.");
+     		}
+             else{
+              data.forEach(function(schedule) {
+              	episode = schedule.episode;
+              	location = schedule.location;
+              	
+                  // 선택 여부에 따라 버튼 텍스트 설정
+                  var buttonText = "";
+                  var selectedCss = " ";
+                  if(schedule.userId === userId) {
+                      buttonText = "선택함";
+                      selectedCss = ' selectedBtn';
+                  } else {
+                      buttonText = "선택";
+                  }
+                  
+                  content += `<p class="mobile-font">`+ episode +` (`+ location +`) 
+                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelectionSchedule('${userId}', '`+episode+`')">`+buttonText+`</button>
+                      </p>`;
+              });
+             }
+
+             $(".modal-body").html(content);
+             $("#modal").modal('show');
+         },
+         error: function(xhr, status, error) {
+             console.error("Error: " + error);
+             alert("스케줄을 불러오는데 실패했습니다.  \n 새로고침 후 이용해주세요.");
+         }
+     });
+  }  
+    
+  
  // 소개팅 현황 모달
     function getParticipantList(userId) {
     // 모달 본문 초기화
@@ -178,54 +228,7 @@ $(document).ready(function() {
 }
  
  
- // 날짜 선택 모달
- 	function dateSelectModalContent(userId) {
- 		$(".modal-body").html("");
- 		$("#modalLabel").html("소개팅 날짜 선택");
-      $.ajax({
-          url: "/getMeetingSchedule",
-          type: "POST",
-          data: {
-              userId: userId
-          },
-          success: function(data) {
-              var content = "";
-              var episode;
-              var location;
-              //var episode = "";
-              if(data.length === 0){
-      			$("#modalLabel").html("진행 예정인 소개팅이 없습니다.");
-      		}
-              else{
-	              data.forEach(function(schedule) {
-	              	episode = schedule.episode;
-	              	location = schedule.location;
-	              	
-	                  // 선택 여부에 따라 버튼 텍스트 설정
-	                  var buttonText = "";
-	                  var selectedCss = " ";
-	                  if(schedule.userId === userId) {
-	                      buttonText = "선택함";
-	                      selectedCss = ' selectedBtn';
-	                  } else {
-	                      buttonText = "선택";
-	                  }
-	                  
-	                  content += `<p class="mobile-font">`+ episode +` (`+ location +`) 
-	                      <button type="button" class="btn btn-info btn-sm right-button` +selectedCss+ `" id="btn_`+episode+`" onclick="toggleSelectionSchedule('${userId}', '`+episode+`')">`+buttonText+`</button>
-	                      </p>`;
-	              });
-              }
-
-              $(".modal-body").html(content);
-              $("#modal").modal('show');
-          },
-          error: function(xhr, status, error) {
-              console.error("Error: " + error);
-              alert("스케줄을 불러오는데 실패했습니다.  \n 새로고침 후 이용해주세요.");
-          }
-      });
-  }
+ 
     
     // 두근두근 매칭 모달
     function matchingModalContent(userId) {

@@ -92,11 +92,11 @@
 	</update>
     
     <delete id="deleteSchedule">
-		DELETE FROM MEETING_SCHEDULE WHERE EPISODE = REPLACE(#{episode}, 'T', ' ')
+		DELETE FROM MEETING_SCHEDULE WHERE EPISODE = #{episode}
     </delete>
     
     <delete id="deleteAllParticipantByEpisode">
-    	DELETE FROM PARTICIPANT_USER WHERE EPISODE = REPLACE(#{episode}, 'T', ' ')
+    	DELETE FROM PARTICIPANT_USER WHERE EPISODE = #{episode}
     </delete>
     
     <insert id ="addSchedule">

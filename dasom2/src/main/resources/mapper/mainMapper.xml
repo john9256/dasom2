@@ -169,6 +169,7 @@
     
     <delete id="deleteParticipantUser" >
         DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = #{episode}
+        AND EPISODE > DATE_ADD(NOW(), INTERVAL 1 DAY)
     </delete>
     
     <select id="getPassFlagbyUser" resultType="String" parameterType="String">

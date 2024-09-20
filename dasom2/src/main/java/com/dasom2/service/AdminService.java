@@ -174,8 +174,8 @@ public class AdminService {
 	    Map<String, Object> status = new HashMap<String, Object>();
 	    try {
 	        int count = adminMapper.deleteSchedule(episode);
-	        int count2 = adminMapper.deleteAllParticipantByEpisode(episode);
-	        if(count == 1 && count2 >= 1) {
+	        adminMapper.deleteAllParticipantByEpisode(episode);
+	        if(count == 1) {
 	            status.put("status", "complete");
 	        } else {
 	            status.put("status", "fail");
