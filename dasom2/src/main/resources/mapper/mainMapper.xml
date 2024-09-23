@@ -9,7 +9,7 @@
         ON A.EPISODE = B.EPISODE
         WHERE A.COMPLETE_FLAG = 'N'
         <!-- 현재 시간보다 24시간 넘게 남은 소개팅 날짜만 가져옴 -->
-        AND A.EPISODE > DATE_ADD(NOW(), INTERVAL 6 HOUR)
+        AND A.EPISODE > DATE_ADD(NOW(), INTERVAL 24 HOUR)
         ORDER BY A.EPISODE ASC
     </select>
     
@@ -51,9 +51,9 @@
 								SELECT EPISODE, ROW_NUMBER() OVER () AS ROWNUM 
 						        FROM PARTICIPANT_USER 
 						        WHERE USER_ID = #{userId}
-						        <!-- 소개팅 시작 부터 6시간 이후 까지 선택 가능 -->
+						        <!-- 소개팅 시작 1 시간 이후부터 6시간 이후 까지 선택 가능 -->
 						        <!-- AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -6 HOUR) AND NOW() -->
-						        AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -50 HOUR) AND DATE_ADD(NOW(), INTERVAL 50 HOUR)
+						        AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -3 HOUR) AND DATE_ADD(NOW(), INTERVAL -1 HOUR)
 								ORDER BY EPISODE DESC
 							)AA
 							WHERE AA.ROWNUM =1

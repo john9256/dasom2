@@ -70,7 +70,7 @@ public class mainController {
     @ResponseBody
     @PostMapping("/getMeetingSchedule")
     public List<MeetingScheduleVO> getMeetingSchedule(@RequestParam("userId") String userId, HttpSession session) {
-    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    	if(userId != null && session.getAttribute("userId") != null && userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     	return MainService.getMeetingSchedule(userId);
     	}
 		return null;
@@ -81,7 +81,7 @@ public class mainController {
     @ResponseBody
     @PostMapping("/getParticipantList")
     public List<Map<String, Object>> getParticipantList(@RequestParam("userId") String userId, HttpSession session) {
-    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    	if(userId != null && session.getAttribute("userId") != null && userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     		
     		return MainService.getParticipantList(userId);
     	}
@@ -93,7 +93,7 @@ public class mainController {
     @ResponseBody
     @PostMapping("/getMatchingInfo")
     public List<Map<String, Object>> getMatchingInfo(@RequestParam("userId") String userId, HttpSession session) {
-    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    	if(userId != null && session.getAttribute("userId") != null && userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     		
     		return MainService.getMatchingInfo(userId);
     	}
@@ -104,7 +104,7 @@ public class mainController {
     @ResponseBody
     @PostMapping("/getMatchingResultInfo")
     public List<Map<String, Object>> getMatchingResultInfo(@RequestParam("userId") String userId, HttpSession session) {
-    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    	if(userId != null && session.getAttribute("userId") != null && userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     		
     		return MainService.getMatchingResultInfo(userId);
     	}
@@ -115,7 +115,7 @@ public class mainController {
     @ResponseBody
     @PostMapping("/getMatchingResultInfo2")
     public List<Map<String, Object>> getMatchingResultInfo2(@RequestParam("userId") String userId, HttpSession session) {
-    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    	if(userId != null && session.getAttribute("userId") != null && userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
     		
     		return MainService.getMatchingResultInfo2(userId);
     	}
@@ -130,7 +130,7 @@ public class mainController {
     	Map<String, Object> status = new HashMap<String, Object>();
     	
 		try {
-			if (userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+			if (userId != null && session.getAttribute("userId") != null && userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
 				if (episodeSelected == true) {
 					return MainService.insertParticipantUser(userId, episode, episodeSelected);
 				} else {
@@ -152,7 +152,7 @@ public class mainController {
 		Map<String, Object> status = new HashMap<String, Object>();
 
 		try {
-			if (userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+			if (userId != null && session.getAttribute("userId") != null && userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
 				return MainService.insertParticipantUserDuplicate(userId, episode, episodeSelected);
 			}
 			status.put("status", "hack");
@@ -171,7 +171,7 @@ public class mainController {
     	Map<String, Object> status = new HashMap<String, Object>();
     	
     	try {
-	    	if(userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+	    	if(userId != null && session.getAttribute("userId") != null && userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
 		    	if(nickNameSelected == true) {
 		    		return MainService.insertMatchPick(userId, episode, nickName);
 		    	}

@@ -386,7 +386,7 @@ function toggleSelectionSchedule(userId, episode) {
            	    } else if (data.status == "continuity"){
            	        alert("소개팅 중복 매칭 방지를 위해 \n주 1회 참여 가능합니다.");
            	    } else if (data.status == "hack"){
-           	        alert("잘못된 접근입니다.");
+           	        alert("잘못된 접근입니다. 새로고침 후 이용해주세요.");
            	    }else if(data.status == "cancel") {
            	        btn.textContent = '선택';
            	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀

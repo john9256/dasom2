@@ -51,7 +51,7 @@ public class AdminController {
     @PostMapping("/getUserInfoAdmin")
     public List<Map<String, Object>> getUserInfoAdmin(HttpSession session) {
 		
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+		if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
 	            return adminService.getUserInfoAdmin();
 	    }
 	    return null;
@@ -62,7 +62,7 @@ public class AdminController {
     @PostMapping("/getScheduleInfoAdmin")
     public List<Map<String, Object>> getScheduleInfoAdmin(HttpSession session) {
 		
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+		if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
             return adminService.getScheduleInfoAdmin();
         }
 		return null;
@@ -73,7 +73,7 @@ public class AdminController {
     @PostMapping("/getMatchingInfoAdmin")
     public List<Map<String, Object>> getMatchingInfoAdmin(HttpSession session) {
 		
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+		if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
             return adminService.getMatchingInfoAdmin();
         }
 		return null;
@@ -84,7 +84,7 @@ public class AdminController {
     @PostMapping("/getScheduleAdmin")
     public List<Map<String, Object>> getScheduleAdmin(HttpSession session) {
 		
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+		if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
             return adminService.getScheduleAdmin();
         }
 		return null;
@@ -95,7 +95,7 @@ public class AdminController {
     @PostMapping("/getLogAdmin")
     public List<Map<String, Object>> getLogAdmin(HttpSession session) {
 		
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+		if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
             return adminService.getLogAdmin();
         }
 		return null;
@@ -106,7 +106,7 @@ public class AdminController {
     @PostMapping("/getErrorLogAdmin")
     public List<Map<String, Object>> getErrorLogAdmin(HttpSession session) {
 		
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+		if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
             return adminService.getErrorLogAdmin();
         }
 		return null;
@@ -120,7 +120,7 @@ public class AdminController {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try {
-			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+			if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
 				commonService.logAdminHistory(session.getAttribute("userId").toString(), userId, "increaseChance");
 	            return adminService.increaseChance(userId);
 	        }
@@ -140,7 +140,7 @@ public class AdminController {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try {
-			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+			if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
 				commonService.logAdminHistory(session.getAttribute("userId").toString(), userId, "decreaseChance");
 				return adminService.decreaseChance(userId);
 	        }
@@ -160,7 +160,7 @@ public class AdminController {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try {
-			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+			if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
 				commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "increaseHeadCount");
 	            return adminService.increaseHeadCount(episode);
 	        }
@@ -180,7 +180,7 @@ public class AdminController {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try {
-			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+			if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
 				commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "decreaseHeadCount");
 				return adminService.decreaseHeadCount(episode);
 	        }
@@ -197,7 +197,7 @@ public class AdminController {
     @PostMapping("/changePassFlag")
     public Map<String, Object> changePassFlag(@RequestParam("userId") String userId, @RequestParam("passFlag") String passFlag, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+		if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
             return adminService.changePassFlag(userId, passFlag);
         }
 		status.put("status", "fail");
@@ -211,7 +211,7 @@ public class AdminController {
     public Map<String, Object> deleteSchedule(@RequestParam("episode") String episode, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		try {
-		if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+		if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
 			if(commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "deleteSchedule") == 1) {
 				
 				// 스케줄 삭제시 신청했던 인원들의 chance 값 다시 돌려줌
@@ -236,7 +236,7 @@ public class AdminController {
     public Map<String, Object> addSchedule(String episode, int headCount, String location, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		try {
-			if (adminService.checkAdmin(session.getAttribute("userId").toString())) {
+			if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
 				if(commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule") == 1) {
 					return adminService.addSchedule(episode, headCount, location);
 				}
