@@ -77,9 +77,13 @@ public class MainService {
 				// MainMapper.insertParticipantUserHistory(userId, LocalDateTimeEpisode, episodeSelected);
 				status.put("status", "full");
 			}
-			// 소개팅 연속 참여 불가 (남성일 경우)
+			// 소개팅 연속 참여 (5일 이내) 불가 (남성일 경우)
 			else if(MainMapper.checkContinuity(userId, LocalDateTimeEpisode) != null) {
 				status.put("status", "continuity");
+			}
+			// 하루에 소개팅 두번 연속 참여 불가
+			else if(MainMapper.checkDoublePerDay(userId, LocalDateTimeEpisode) != null) {
+				status.put("status", "double");
 			}
 			// 소개팅 참가 인원 중복 배제
 			else if(duplicateCount != 0) {
@@ -142,9 +146,13 @@ public class MainService {
 		Map<String, Object> status = new HashMap<String, Object>();
 		
 		try{
-			if(MainMapper.deleteParticipantUser(userId, LocalDateTimeEpisode, episodeSelected) > 0) {
-				MainMapper.plusChance(userId);
-				CommonMapper.logUserHistory(userId, userId, "cancelParticipate");
+			if(MainMapper.checkAbleDelete(userId, LocalDateTimeEpisode) == 0) {
+				status.put("status", "expire");
+			}
+			else if(MainMapper.deleteParticipantUser(userId, LocalDateTimeEpisode, episodeSelected) > 0 
+					&& MainMapper.plusChance(userId) == 1
+					&& CommonMapper.logUserHistory(userId, userId, "cancelParticipate") == 1
+					) {
 				status.put("status", "cancel");
 			}
 			else {
@@ -221,6 +229,13 @@ public class MainService {
 		
 	}
 	
+	// GET RECENT EPISODE BY USERID
+	
+	public String getEpisodeByUser(String userId){
+		
+		return MainMapper.getEpisodeByUser(userId);
+		
+	}
 	
 	// 인원 pick
 	@Transactional(rollbackFor = {Exception.class})

@@ -190,10 +190,10 @@ public class AdminService {
 	    return status;
 	}
 	
-	public Map<String, Object> addSchedule(String episode, int headCount, String location) {
+	public Map<String, Object> addSchedule(String episode, int headCount, String location, int matchingResultTerm) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		try {
-			int count = adminMapper.addSchedule(episode, headCount, location);
+			int count = adminMapper.addSchedule(episode, headCount, location, matchingResultTerm);
 				if(count == 1) {
 					status.put("status", "complete");
 				}

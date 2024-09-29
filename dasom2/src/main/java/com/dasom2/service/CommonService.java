@@ -35,5 +35,10 @@ public class CommonService {
 		return CommonMapper.getUserListByEpisode(episode);
 	}
     
+	// 유저의 가장 최근 episode 값을 가져옴
+	public String getClosestEpisodeByUser(String userId) {
+		return CommonMapper.getClosestEpisodeByUser(userId);
+	}
+	
 }
 

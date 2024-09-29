@@ -233,12 +233,12 @@ public class AdminController {
 	@ResponseBody
 	@Transactional(rollbackFor = {Exception.class})
     @PostMapping("/addSchedule")
-    public Map<String, Object> addSchedule(String episode, int headCount, String location, HttpSession session) {
+    public Map<String, Object> addSchedule(String episode, int headCount, String location, int matchingResultTerm, HttpSession session) {
 		Map<String, Object> status = new HashMap<String, Object>();
 		try {
 			if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
 				if(commonService.logAdminHistory(session.getAttribute("userId").toString(), episode, "addSchedule") == 1) {
-					return adminService.addSchedule(episode, headCount, location);
+					return adminService.addSchedule(episode, headCount, location, matchingResultTerm);
 				}
 	        }
 			status.put("status", "fail");

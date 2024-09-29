@@ -175,9 +175,9 @@ public class mainController {
 		    	if(nickNameSelected == true) {
 		    		return MainService.insertMatchPick(userId, episode, nickName);
 		    	}
-		    	else {
-		    		return MainService.deleteMatchPick(userId, episode, nickName);
-		    	}
+//		    	else {
+//		    		return MainService.deleteMatchPick(userId, episode, nickName);
+//		    	}
 	    	}
 	    	status.put("status", "hack");
 			return status;

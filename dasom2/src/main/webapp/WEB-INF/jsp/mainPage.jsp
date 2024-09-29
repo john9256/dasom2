@@ -222,7 +222,7 @@ $(document).ready(function() {
         },
         error: function(xhr, status, error) {
             console.error("Error:", error);
-            alert("데이터를 불러오는데 실패했습니다. \n 새로고침 후 이용해주세요.");
+            alert("데이터를 불러오는데 실패했습니다. \n새로고침 후 이용해주세요.");
         }
     });
 }
@@ -277,7 +277,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error("Error: " + error);
-                alert("데이터를 불러오는데 실패했습니다.  \n 새로고침 후 이용해주세요.");
+                alert("데이터를 불러오는데 실패했습니다.  \n새로고침 후 이용해주세요.");
             }
         });
     }
@@ -332,13 +332,13 @@ $(document).ready(function() {
                     },
                     error: function(xhr, status, error) {
                         console.error("Error: " + error);
-                        alert("데이터를 불러오는데 실패했습니다. \n 새로고침 후 이용해주세요.");
+                        alert("데이터를 불러오는데 실패했습니다. \n새로고침 후 이용해주세요.");
                     }
                 });
             },
             error: function(xhr, status, error) {
                 console.error("Error: " + error);
-                alert("데이터를 불러오는데 실패했습니다. \n 새로고침 후 이용해주세요.");
+                alert("데이터를 불러오는데 실패했습니다. \n새로고침 후 이용해주세요.");
             }
         });
     }
@@ -356,7 +356,7 @@ function toggleSelectionSchedule(userId, episode) {
     // 사용자에게 스케줄 선택 확인 요청
     var userConfirmed;
     	if(episodeSelected){
-    		userConfirmed = confirm("소개팅을 신청하시겠습니까?");
+    		userConfirmed = confirm("소개팅을 신청하시겠습니까? \n소개팅 하루 전날 취소는 불가능합니다.");
     		}
     	else{
     		userConfirmed = confirm("소개팅을 취소하시겠습니까?");
@@ -385,9 +385,13 @@ function toggleSelectionSchedule(userId, episode) {
            	        alert("남은 자리가 없습니다.");
            	    } else if (data.status == "continuity"){
            	        alert("소개팅 중복 매칭 방지를 위해 \n주 1회 참여 가능합니다.");
+           	    } else if (data.status == "double"){
+           	        alert("소개팅 중복 매칭 방지를 위해 \n하루 1회 참여 가능합니다.");
            	    } else if (data.status == "hack"){
            	        alert("잘못된 접근입니다. 새로고침 후 이용해주세요.");
-           	    }else if(data.status == "cancel") {
+           	    } else if (data.status == "expire"){
+           	        alert("소개팅 하루전 취소는 불가능합니다.");
+           	    } else if(data.status == "cancel") {
            	        btn.textContent = '선택';
            	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
            	        alert("소개팅 신청을 취소했습니다.");
@@ -411,22 +415,22 @@ function toggleSelectionSchedule(userId, episode) {
 	           	    	           	        alert("소개팅 신청에 성공했습니다.");
            	    	           	    	}
            	    	            	else {
-           	    	           	        alert("소개팅 신청에 실패했습니다. \n 새로고침 후 이용해주세요.");
+           	    	           	        alert("소개팅 신청에 실패했습니다. \n새로고침 후 이용해주세요.");
            	    	           	    }
            	    	            },
            	    	            error: function(xhr, status, error) {
            	    	                console.error("Selection update failed: " + error);
-           	    	                alert("소개팅 신청에 실패했습니다. \n 새로고침 후 이용해주세요.");
+           	    	                alert("소개팅 신청에 실패했습니다. \n새로고침 후 이용해주세요.");
            	    	            }
            	    	       })
            	    		}
            	    } else {
-           	        alert("소개팅 신청에 실패했습니다. \n 새로고침 후 이용해주세요.");
+           	        alert("소개팅 신청에 실패했습니다. \n새로고침 후 이용해주세요.");
            	    }
             },
             error: function(xhr, status, error) {
                 console.error("Selection update failed: " + error);
-                alert("소개팅 신청에 실패했습니다. \n 새로고침 후 이용해주세요.");
+                alert("소개팅 신청에 실패했습니다. \n새로고침 후 이용해주세요.");
             }
         });
     }
@@ -439,13 +443,15 @@ function toggleSelectionMatch(userId, nickName, episode) {
     var btnId = "btn_" + nickName;
     var nickNameSelected = document.getElementById(btnId).textContent === '선택';
 
-    // 사용자에게 스케줄 선택 확인 요청
+    // 매칭하기
     var userConfirmed;
     	if(nickNameSelected){
-    		userConfirmed = confirm("선택 하시겠습니까?");
+    		userConfirmed = confirm("매칭 선택은 취소가 불가능합니다. \n선택 하시겠습니까?");
     		}
     	else{
-    		userConfirmed = confirm("선택을 취소 하시겠습니까?");
+    		alert("매칭 취소는 불가능합니다.");
+    		userConfirmed == false;
+    		// userConfirmed = confirm("선택을 취소 하시겠습니까?");
     	}
 
     // 사용자가 확인을 누른 경우에만 AJAX 통신 실행
@@ -475,12 +481,12 @@ function toggleSelectionMatch(userId, nickName, episode) {
            	        btn.className = "btn btn-info btn-sm right-button"; // 기본 스타일로 복귀
            	        // alert("선택을 취소했습니다.");
            	    } else {
-           	        alert("선택을 실패했습니다. \n 새로고침 후 이용해주세요.");
+           	        alert("선택을 실패했습니다. \n새로고침 후 이용해주세요.");
            	    }
             },
             error: function(xhr, status, error) {
                 console.error("Selection update failed: " + error);
-                alert("선택을 실패했습니다.  \n 새로고침 후 이용해주세요.");
+                alert("선택을 실패했습니다.  \n새로고침 후 이용해주세요.");
             }
         });
     }
@@ -529,5 +535,3 @@ function formatPhoneNumber(phoneNumber) {
 
 </body>
 </html>
-
-

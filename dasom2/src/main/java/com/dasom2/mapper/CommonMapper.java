@@ -13,4 +13,5 @@ public interface CommonMapper {
     int logUserHistory(String userId, String target, String type);
     int logAdminHistory(String adminId, String target, String type);
     List<String> getUserListByEpisode(String episode);
+    String getClosestEpisodeByUser(String userId);
 }

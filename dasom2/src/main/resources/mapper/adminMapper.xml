@@ -29,8 +29,11 @@
     </select>
     
     <select id="getMatchingInfoAdmin">
-    	SELECT A.USER_ID userId, B.PICK pick, B.USER_ID pickedUserId, DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, DATE_FORMAT(B.CREATETIME, '%y년 %m월 %d일 %p %h시') createtime
+    	SELECT A.USER_ID userId, C.USER_NAME userName, B.PICK pick, B.USER_ID pickedUserId, DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, DATE_FORMAT(B.CREATETIME, '%y년 %m월 %d일 %p %h시') createtime
 		FROM PARTICIPANT_USER A
+        INNER JOIN
+        USER_TABLE C
+        ON A.USER_ID = C.USER_ID
 		LEFT OUTER JOIN
 		MATCHING B
 		ON A.USER_ID = B.USER_ID
@@ -100,7 +103,7 @@
     </delete>
     
     <insert id ="addSchedule">
-    	INSERT INTO MEETING_SCHEDULE(EPISODE, HEADCOUNT, LOCATION) VALUES(REPLACE(#{episode}, 'T', ' '), #{headCount}, #{location})
+    	INSERT INTO MEETING_SCHEDULE(EPISODE, HEADCOUNT, LOCATION, MATCHING_RESULT_TERM) VALUES(REPLACE(#{episode}, 'T', ' '), #{headCount}, #{location}, #{matchingResultTerm})
     </insert>
     
 </mapper>

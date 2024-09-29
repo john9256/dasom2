@@ -20,4 +20,12 @@
     <select id = "getUserListByEpisode">
     	SELECT USER_ID AS userId FROM PARTICIPANT_USER WHERE EPISODE = #{episode}
     </select>
+    
+    <select id = "getClosestEpisodeByUser">
+    	SELECT EPISODE
+		FROM PARTICIPANT_USER
+        WHERE USER_ID = #{userId}
+		ORDER BY ABS(TIMESTAMPDIFF(MINUTE, EPISODE, NOW()))
+		LIMIT 1
+    </select>
 </mapper>

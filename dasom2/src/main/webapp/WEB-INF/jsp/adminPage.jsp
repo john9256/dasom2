@@ -88,9 +88,14 @@
 	                        <input type="number" class="form-control" id="newHeadCount" required>
 	                    </div>
 	                    <div class="form-group">
+	                        <label for="matchingResultTerm">Matching Result Term</label>
+	                        <input type="number" class="form-control" id="matchingResultTerm" required>
+	                    </div>
+	                    <div class="form-group">
 	                        <label for="newLocation">Location</label>
 	                        <input type="text" class="form-control" id="newLocation" required>
 	                    </div>
+	                    
 	                </form>
 	            </div>
 	            <div class="modal-footer">
@@ -399,12 +404,13 @@
             // var newCompleteFlag = $('#newCompleteFlag').val();
             var newHeadCount = $('#newHeadCount').val();
             var newLocation = $('#newLocation').val();
+            var matchingResultTerm = $('#matchingResultTerm').val();
 
-            if (newEpisode && newHeadCount && newLocation) {
+            if (newEpisode && newHeadCount && newLocation && matchingResultTerm) {
                 $.ajax({
                     url: '/addSchedule',
                     type: 'POST',
-                    data: { episode: newEpisode, headCount: newHeadCount, location: newLocation },
+                    data: { episode: newEpisode, headCount: newHeadCount, location: newLocation, matchingResultTerm: matchingResultTerm},
                     success: function(response) {
                         if(response.status == "complete"){
                             alert('스케줄이 추가되었습니다.');
