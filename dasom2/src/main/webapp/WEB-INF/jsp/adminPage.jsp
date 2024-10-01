@@ -147,13 +147,6 @@
             $('#addScheduleBtn').remove();
             $('#data-inform').remove();
             
-         	// 데이터가 없는 경우
-            if (!data || data.length === 0) {
-            	var dataContent = `<p id ="data-inform">No data available</p>`;
-                $('#dataTable').append(dataContent);
-                return;
-            }
-            
          	// 스케줄 관리 탭인 경우
             if (isScheduleTable) {
                 var scheduleBtnContent = `
@@ -168,6 +161,13 @@
                 $('#addScheduleModal').modal('show');
             });
             
+         	// 데이터가 없는 경우
+            if (!data || data.length === 0) {
+            	var dataContent = `<p id ="data-inform">No data available</p>`;
+                $('#dataTable').append(dataContent);
+                return;
+            }
+         	
             // 테이블 헤더 생성
             var tableHeader = '<tr>';
             for (var i = 0; i < columnOrder.length; i++) {
