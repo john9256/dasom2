@@ -34,11 +34,18 @@
         .delete-button {
             margin-left: 10px;
         }
+        #right-a{
+         	float: right;
+         	margin-right: 100px;
+         	margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container-fluid mt-4">
+        
         <h2>Admin Page</h2>
+        <div id="right-a"><a href="/mainPage" class="text-head" >메인페이지</a></div>
         <div class="btn-group mb-4" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-primary" id="userInfoBtn">유저 정보</button>
             <button type="button" class="btn btn-secondary" id="scheduleInfoBtn">스케줄 정보</button>
@@ -126,6 +133,7 @@
         }
 		
        
+        /* ---------------- 테이블 생성 함수 ---------------*/
         
         function createTable(data, columnOrder, isScheduleTable = false) {
             // 기존 DataTable 삭제
@@ -139,6 +147,13 @@
             $('#addScheduleBtn').remove();
             $('#data-inform').remove();
             
+         	// 데이터가 없는 경우
+            if (!data || data.length === 0) {
+            	var dataContent = `<p id ="data-inform">No data available</p>`;
+                $('#dataTable').append(dataContent);
+                return;
+            }
+            
          	// 스케줄 관리 탭인 경우
             if (isScheduleTable) {
                 var scheduleBtnContent = `
@@ -148,17 +163,11 @@
                 $('#dataTable').append(scheduleBtnContent);
             }
          	
+         	// 스케줄 생성 버튼
             $("#addScheduleBtn").click(function() {
                 $('#addScheduleModal').modal('show');
             });
             
-            // 데이터가 없는 경우
-            if (!data || data.length === 0) {
-            	var dataContent = `<p id ="data-inform">No data available</p>`;
-                $('#dataTable').append(dataContent);
-                return;
-            }
-
             // 테이블 헤더 생성
             var tableHeader = '<tr>';
             for (var i = 0; i < columnOrder.length; i++) {
@@ -305,8 +314,6 @@
                      });
                  });
                     
-                    
-                    
                     $('.change-passFlag').on('click', function() {
                         var userId = $(this).data('userid');
                         var button = $(this); // 클릭한 버튼 요소를 참조
@@ -361,7 +368,10 @@
                 }
             });
         }
-
+		
+        /* ---------------- 테이블 생성 함수 끝----------------*/
+        
+        
         $('#userInfoBtn').click(function() {
             $.post('/getUserInfoAdmin', function(data) {
                 createTable(data, userInfoColumns);
@@ -388,13 +398,13 @@
         
         $('#logBtn').click(function() {
             $.post('/getLogAdmin', function(data) {
-                createTable(data, logColumns); // 스케줄 테이블임을 나타내는 플래그 전달
+                createTable(data, logColumns); 
             });
         });
         
         $('#errorLogBtn').click(function() {
             $.post('/getErrorLogAdmin', function(data) {
-                createTable(data, errorLogColumns); // 스케줄 테이블임을 나타내는 플래그 전달
+                createTable(data, errorLogColumns); 
             });
         });
         

@@ -38,7 +38,7 @@
     </insert>
     
     <select id="getUserInfoForUpdate" resultType="RegisterUserVO">
-    	SELECT A.USER_NAME AS userName, A.HEIGHT AS height, A.JOB_DIVISION AS jobDivision, A.PHONE_NUMBER AS phoneNumber, A.RESIDENCE AS residence 
+    	SELECT A.USER_NAME AS userName, A.SEX AS sex, YEAR(A.BIRTHDAY) AS birthday, A.HEIGHT AS height, A.JOB_DIVISION AS jobDivision, A.PHONE_NUMBER AS phoneNumber, A.RESIDENCE AS residence 
     	FROM USER_TABLE A
     	WHERE A.USER_ID = #{userId}
     </select>

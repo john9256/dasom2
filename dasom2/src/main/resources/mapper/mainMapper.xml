@@ -1,8 +1,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dasom2.mapper.MainMapper">
 	
+	<select id="getCheckAdmin">
+        SELECT ADMIN_FLAG FROM USER_MANAGE WHERE USER_ID = #{userId}
+    </select>
+	
 	<select id="getEpisodeByUser" resultType="String" parameterType="String">
-        SELECT EPISODE FROM 
+        SELECT EPISODE FROM MEETING_SCHEDULE
     </select>
 	
 	
@@ -12,7 +16,7 @@
         (SELECT * FROM PARTICIPANT_USER WHERE USER_ID = #{userId}) B
         ON A.EPISODE = B.EPISODE
         WHERE A.COMPLETE_FLAG = 'N'
-        <!-- 현재 시간보다 24시간 넘게 남은 소개팅 날짜만 가져옴 -->
+        <!-- 현재 시간보다 4시간 넘게 남은 소개팅 날짜만 가져옴 -->
         AND A.EPISODE > DATE_ADD(NOW(), INTERVAL 4 HOUR)
         ORDER BY A.EPISODE ASC
     </select>
@@ -35,7 +39,7 @@
     </select>
     
     <select id="getMatchingInfo" resultType="matchPersonVO" parameterType="String">
-    	SELECT  A.USER_ID AS pickedUserId, NICKNAME nickName, B.PICK pick, A.EPISODE AS localDateTimeEpisode
+    	SELECT A.USER_ID AS pickedUserId, NICKNAME nickName, B.PICK pick, A.EPISODE AS localDateTimeEpisode
 		FROM PARTICIPANT_USER A
         
         LEFT OUTER JOIN 
@@ -46,24 +50,22 @@
 
 		WHERE SEX <![CDATA[<>]]>
 			(
-				SELECT SEX 
+				SELECT SEX
 				FROM USER_TABLE
 				WHERE USER_ID = #{userId}
 			)
 		AND A.EPISODE = (SELECT AA.EPISODE FROM
 							(
 								SELECT EPISODE, ROW_NUMBER() OVER () AS ROWNUM 
-						        FROM PARTICIPANT_USER 
+						        FROM PARTICIPANT_USER
 						        WHERE USER_ID = #{userId}
-						        <!-- 소개팅 시작 1 시간 이후부터 5시간 이후 까지 선택 가능 -->
+						        <!-- 소개팅 시작 1 시간 이후부터 5시간 이후 까지 조회 가능 -->
 						        AND EPISODE BETWEEN DATE_ADD(NOW(), INTERVAL -5 HOUR) AND DATE_ADD(NOW(), INTERVAL -1 HOUR)
 								ORDER BY EPISODE DESC
 							)AA
 							WHERE AA.ROWNUM =1
 						)
     </select>
-    
-    
     
     <select id = "getMatchingResultInfo">
     

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -31,7 +32,9 @@
 <div class="container mt-3">
 
 	<div class="text-right">
-	
+		    <c:if test="${checkAdmin != null && checkAdmin == 'Y'}">
+		        <a href="/adminPage" class="text-head" >ADMIN</a>
+		    </c:if>
 		<a href="/register.user?param='y'" class="text-head" >회원 정보 수정</a>
         <!-- <a href="/test" class="text-head" >자주 묻는 질문</a> -->
         <!-- <a href="/logout" class="text-head" >로그아웃</a> -->
@@ -356,7 +359,7 @@ function toggleSelectionSchedule(userId, episode) {
     // 사용자에게 스케줄 선택 확인 요청
     var userConfirmed;
     	if(episodeSelected){
-    		userConfirmed = confirm("소개팅을 신청하시겠습니까? \n소개팅 하루 전날 취소는 불가능합니다.");
+    		userConfirmed = confirm("소개팅 24 시간전 취소는 불가능합니다. \n소개팅을 신청하시겠습니까?");
     		}
     	else{
     		userConfirmed = confirm("소개팅을 취소하시겠습니까?");

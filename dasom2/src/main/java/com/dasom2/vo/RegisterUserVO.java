@@ -9,7 +9,7 @@ public class RegisterUserVO {
     private String phoneNumber;
     private String email;
     private String sex;
-    private String birthday;
+    private int birthday;
     private String height;
     private String companyName;
     private String jobDivision;
@@ -52,10 +52,10 @@ public class RegisterUserVO {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	public String getBirthday() {
+	public int getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(String birthday) {
+	public void setBirthday(int birthday) {
 		this.birthday = birthday;
 	}
 	public String getHeight() {

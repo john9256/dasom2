@@ -48,7 +48,7 @@ public class mainController {
         // 로그인이 필요한 경우 로그인 페이지로 리디렉션
     	
     	model.addAttribute("userId", session.getAttribute("userId"));
-    	model.addAttribute("accessToken", session.getAttribute("accessToken"));
+//    	model.addAttribute("accessToken", session.getAttribute("accessToken"));
     	model.addAttribute("userName", MainService.getUserNameByUserId(String.valueOf(session.getAttribute("userId"))));
     	
         if (session.getAttribute("userId") == null) {
@@ -58,6 +58,8 @@ public class mainController {
 //        if(MainService.getPassFlagbyUser(String.valueOf(session.getAttribute("userId")))) 
         if(MainService.checkUserInfoExist(String.valueOf(session.getAttribute("userId")))) 
         {
+        	String checkAdmin = MainService.getCheckAdmin(String.valueOf(session.getAttribute("userId")));
+        	model.addAttribute("checkAdmin", checkAdmin);
         	return "mainPage";
         }
         else {

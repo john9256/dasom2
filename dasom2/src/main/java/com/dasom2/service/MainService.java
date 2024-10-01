@@ -31,6 +31,11 @@ public class MainService {
     // 출력 형식 지정
 	private static final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yy년 MM월 dd일 a h시").withLocale(Locale.KOREAN);
     
+	// admin check
+	public String getCheckAdmin(String userId) {
+		return MainMapper.getCheckAdmin(userId);
+	}
+	
 	// 날짜 선택 GET
 	public List<MeetingScheduleVO> getMeetingSchedule(String userId) {
 		List<MeetingScheduleVO> meetingScheduleInfo = MainMapper.getMeetingSchedule(userId);

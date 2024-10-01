@@ -130,6 +130,12 @@ $(document).ready(function() {
                 if (data.userName) {
                     $("#userName").val(data.userName);
                 }
+                if (data.sex) {
+                    $("#sex").val(data.sex);
+                }
+                if (data.birthday) {
+                    $("#birthday").val(data.birthday);
+                }
                 if (data.phoneNumber) {
                     $("#phoneNumber").val(data.phoneNumber);
                 }
