@@ -68,12 +68,27 @@ public class mainController {
         }
     }
     
+    // 티켓 값 get
+    @ResponseBody
+    @PostMapping("/getTicket")
+    public Map<String, Object> getTicket(@RequestParam("userId") String userId, HttpSession session) {
+    	if(userId != null && session.getAttribute("userId") != null && userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
+    		Map<String, Object> ticketValue = new HashMap<>();
+    		if(MainService.getTicket(userId) != null) {
+	    		String ticket = MainService.getTicket(userId);
+	    		ticketValue.put("ticket", ticket);
+	    		return ticketValue;
+    		}
+    	}
+    	return null;
+    }
+    
     // 소개팅 스케줄 날짜 선택 모달
     @ResponseBody
     @PostMapping("/getMeetingSchedule")
     public List<MeetingScheduleVO> getMeetingSchedule(@RequestParam("userId") String userId, HttpSession session) {
     	if(userId != null && session.getAttribute("userId") != null && userId.equalsIgnoreCase(session.getAttribute("userId").toString())) {
-    	return MainService.getMeetingSchedule(userId);
+    		return MainService.getMeetingSchedule(userId);
     	}
 		return null;
     }

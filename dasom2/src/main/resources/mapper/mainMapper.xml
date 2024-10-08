@@ -5,10 +5,14 @@
         SELECT ADMIN_FLAG FROM USER_MANAGE WHERE USER_ID = #{userId}
     </select>
 	
+	<select id="getTicket">
+		SELECT CHANCE AS chance FROM USER_MANAGE
+        WHERE USER_ID =#{userId}
+	</select>
+	
 	<select id="getEpisodeByUser" resultType="String" parameterType="String">
         SELECT EPISODE FROM MEETING_SCHEDULE
     </select>
-	
 	
     <select id="getMeetingSchedule" resultType="MeetingScheduleVO" parameterType="String">
         SELECT A.EPISODE AS LocalDateTimeEpisode, B.USER_ID AS userId, A.LOCATION AS location FROM MEETING_SCHEDULE A

@@ -36,6 +36,16 @@ public class MainService {
 		return MainMapper.getCheckAdmin(userId);
 	}
 	
+	// ticket get
+	public String getTicket(String userId) {
+		if(MainMapper.getTicket(userId) != null) {
+			return MainMapper.getTicket(userId);
+		}
+		else {
+			return "0";
+		}
+	}
+	
 	// 날짜 선택 GET
 	public List<MeetingScheduleVO> getMeetingSchedule(String userId) {
 		List<MeetingScheduleVO> meetingScheduleInfo = MainMapper.getMeetingSchedule(userId);

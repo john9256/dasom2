@@ -1,4 +1,4 @@
-.full-screen-wrapper {
+	.full-screen-wrapper {
         display: flex;
         justify-content: center; /* Horizontally centers the child */
         align-items: center; /* Vertically centers the child */
@@ -83,6 +83,16 @@
     p{
     	align-items: center; /* 수직 중앙 정렬 */
     }
+    
+    #ticket  {
+	    margin-top: 0px;
+	    margin-right : 20px;
+	    background-color: white; 
+	    border-color: white; 
+	    color: #ff85a2;
+	    text-decoration: none;
+	    font-weight: bold;
+	}
     
     
   

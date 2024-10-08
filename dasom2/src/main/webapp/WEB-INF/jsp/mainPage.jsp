@@ -32,6 +32,7 @@
 <div class="container mt-3">
 
 	<div class="text-right">
+		<span id="ticket" class="text-head"></span>
 		    <c:if test="${checkAdmin != null && checkAdmin == 'Y'}">
 		        <a href="/adminPage" class="text-head" >ADMIN</a>
 		    </c:if>
@@ -112,6 +113,28 @@ $(document).ready(function() {
     
     $('#matchingResultBtn').click(function() {
     	matchingResultModalContent("${userId}");
+    });
+    
+    
+    
+    $.ajax({
+        url: "/getTicket",
+        type: "POST",
+        data: {
+            userId: "${userId}"
+        },
+        success: function(data) {
+            if(data.length === 0){
+            	$('#ticket').text("티켓: 0");
+    		}
+            else{
+            	$('#ticket').html("티켓: " + data.ticket);
+            }
+        },
+        error: function() {
+            // 오류 처리 (옵션)
+            console.log("Error getTicket");
+        }
     });
     
     
@@ -248,8 +271,7 @@ $(document).ready(function() {
                 let nickName = "";
                 let episode;
                 $(".modal-body").html("");
-                var userName = "${userName}";
-                console.log(userName)
+                var userName = "${userName}";t
                 
                 if(data.length === 0){
         			$("#modalLabel").html("매칭은 소개팅 이후 가능합니다.");

@@ -13,6 +13,7 @@ import com.dasom2.vo.matchPersonVO;
 public interface MainMapper {
     
 	String getCheckAdmin(String userId);
+	String getTicket(String userId);
 	List<MeetingScheduleVO> getMeetingSchedule(String userId);
 	int checkChace(String userId);
 	int minusChance(String userId);
