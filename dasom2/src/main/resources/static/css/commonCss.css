@@ -1,6 +1,5 @@
 .right-button{
-   float: right;
-   width: 100px;
+   margin-left: auto; width: 100px;
 }
 
 .top-text{
@@ -22,33 +21,39 @@ a {
 }
 
 .mobile-font{
-		align-items: center; /* 수직 중앙 정렬 */
-		margin-bottom : 20px;
+		display: flex; align-items: center;
 	}
 
 .mobile-font2{
 		align-items: center; /* 수직 중앙 정렬 */
 		margin-bottom : 0px;
 	}
+.notice{
+	color: #ff85a2;
+}
+
+.btn-secondary{
+   	font-size: 15px !important;
+   	width: 150px;
+}
+.modal-title{
+   	font-size: 16px;
+   	font-weight: bold;
+}
 
 @media(max-width: 768px){
 	
 	.mobile-font{
-		font-size: 14px;
-		align-items: center; /* 수직 중앙 정렬 */
-		margin-bottom : 20px;
+		font-size: 15px;
+		display: flex; align-items: center;
 	}
 	
 	.right-button{
-	   float: right;
-	   width: auto;
-	   height: auto;
-	   font-size: 12px !important;
-	   align-items: center !important; /* 수직 중앙 정렬 */
+	   margin-left: auto; width: 80px;
 	}
 	
 	.mobile-font2{
-		font-size: 13px;
+		font-size: 15px;
 		align-items: center; /* 수직 중앙 정렬 */
 		margin-bottom : 0px;
 	}
@@ -62,17 +67,18 @@ a {
       max-width: 50%;
     }
     .modal-title{
-    	font-size: 14px !important;
+    	font-size: 16px !important;
     	font-weight: bold;
     }
     .btn-secondary{
-    	font-size: 14px !important;
+    	font-size: 15px !important;
+    	width: 150px;
     }
     .text-center{
-    	font-size: 13px !important;
+    	font-size: 15px !important;
     }
     .text-head{
-    	font-size: 13px !important;
+    	font-size: 14px !important;
     	margin-bottom: 10px;
     }
     .second-text{

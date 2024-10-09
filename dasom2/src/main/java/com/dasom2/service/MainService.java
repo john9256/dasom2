@@ -64,11 +64,23 @@ public class MainService {
 		
 		Map<String, Object> temp = new HashMap<>();
 		
-		participantList = MainMapper.getParticipantList();
+		participantList = MainMapper.getParticipantList(userId);
 		if(participantList.size() > 0) {
-			for(int i = 0; i < participantList.size(); i ++) {
-				participantList.get(i).put("year", classifyAge((int)participantList.get(i).get("year")));
-			}
+		    for(int i = 0; i < participantList.size(); i ++) {
+		        Object yearObj = participantList.get(i).get("year");
+		        if (yearObj instanceof Long) {
+		            // Long 타입이면 int로 변환
+		            int year = ((Long) yearObj).intValue();
+		            participantList.get(i).put("year", classifyAge(year));
+		        } else if (yearObj instanceof Integer) {
+		            // Integer 타입이면 그대로 사용
+		            int year = (Integer) yearObj;
+		            participantList.get(i).put("year", classifyAge(year));
+		        } else {
+		            // year 값이 예상하지 못한 타입일 경우 처리 (optional)
+		            throw new IllegalArgumentException("Unexpected type for year: " + yearObj.getClass());
+		        }
+		    }
 		}
 		return participantList;
 		

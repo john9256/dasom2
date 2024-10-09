@@ -60,7 +60,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel"></h5>
+        <div class="modal-title" id="modalLabel"></div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -80,7 +80,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel2"></h5>
+        <div class="modal-title" id="modalLabel2"></div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -197,11 +197,11 @@ $(document).ready(function() {
         url: "/getParticipantList",
         type: "POST",
         data: {
-            userId: userId
+            userId: "${userId}"
         },
         success: function(data) {
             var contentByEpisode = {};
-            
+            var nickname = "";
             $("#modalParticipantList-body").html("");
             
             if (data.length === 0) {
@@ -213,7 +213,11 @@ $(document).ready(function() {
                     var jobDivision = participant.jobDivision;
                     var year = participant.year;
                     var location = participant.location;
-                    console.log(location);
+                    
+                    if(participant.nickname != null){
+                    	nickname = participant.nickname;
+                    }
+                    
                     if (!contentByEpisode[episode]) {
                     	contentByEpisode[episode] = { male: "", female: "", location: location };
                     }
@@ -226,16 +230,21 @@ $(document).ready(function() {
                 });
                 
                 var modalBodyContent = "";
+                
+                if(nickname != ""){
+                	modalBodyContent = "<div class = 'text-head text-center notice'><img class='emoji-icon' src='/image/faviconHeart.png'>" + " 당신은 " + nickname + " 입니다.</div>";
+                }
+                
                 for (var episode in contentByEpisode) {
                     modalBodyContent += 
                         "<div class = 'text-head text-center'>" + formatDateTime(episode) + " (" + contentByEpisode[episode].location + ")" + "</div>" +
                         "<div class='row'>" +
                             "<div class='col-md-6'>" +
-                                "<h6 class='text-center'><img class='emoji-icon' src='/image/1F466_color.png' alt='Boy Face'>남자</h6>" +
+                                "<div class='text-center'><img class='emoji-icon' src='/image/1F466_color.png' alt='Boy Face'>남자</div>" +
                                 "<div class='text-center'>" + contentByEpisode[episode].male + "</div>" +
                             "</div>" +
                             "<div class='col-md-6'>" +
-                                "<h6 class='text-center'><img class='emoji-icon' src='/image/1F467_color.png' alt='Girl Face'>여자</h6>" +
+                                "<div class='text-center'><img class='emoji-icon' src='/image/1F467_color.png' alt='Girl Face'>여자</div>" +
                                 "<div class='text-center'>" + contentByEpisode[episode].female + "</div>" +
                             "</div>" +
                         "</div>" +
@@ -259,7 +268,7 @@ $(document).ready(function() {
     // 두근두근 매칭 모달
     function matchingModalContent(userId) {
     	$(".modal-body").html("");
-    	$("#modalLabel").html("마음에 드는 이성 두명을 골라주세요~");
+    	$("#modalLabel").html("호감이 가는 이성 두명을 골라주세요~");
     	$.ajax({
             url: "/getMatchingInfo",
             type: "POST",
