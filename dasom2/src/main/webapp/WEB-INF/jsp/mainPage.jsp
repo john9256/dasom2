@@ -231,13 +231,15 @@ $(document).ready(function() {
                 
                 var modalBodyContent = "";
                 
-                if(nickname != ""){
-                	modalBodyContent = "<div class = 'text-head text-center notice'><img class='emoji-icon' src='/image/faviconHeart.png'>" + " 당신은 " + nickname + " 입니다.</div>";
-                }
-                
                 for (var episode in contentByEpisode) {
                     modalBodyContent += 
-                        "<div class = 'text-head text-center'>" + formatDateTime(episode) + " (" + contentByEpisode[episode].location + ")" + "</div>" +
+                        "<div class = 'text-head text-center'>" + formatDateTime(episode) + " (" + contentByEpisode[episode].location + ")" + "</div>"; 
+                        
+                        if(nickname != ""){
+                        	modalBodyContent += "<div class = 'text-head text-center notice'><img class='emoji-icon' src='/image/faviconHeart.png'>" + " 당신은 " + nickname + " 입니다.</div>"; 
+                        }
+                        
+                    modalBodyContent +=
                         "<div class='row'>" +
                             "<div class='col-md-6'>" +
                                 "<div class='text-center'><img class='emoji-icon' src='/image/1F466_color.png' alt='Boy Face'>남자</div>" +
