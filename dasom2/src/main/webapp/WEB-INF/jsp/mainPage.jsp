@@ -217,9 +217,12 @@ $(document).ready(function() {
                     if(participant.nickname != null){
                     	nickname = participant.nickname;
                     }
+                    else{
+                    	nickname = "";
+                    }
                     
                     if (!contentByEpisode[episode]) {
-                    	contentByEpisode[episode] = { male: "", female: "", location: location };
+                    	contentByEpisode[episode] = { male: "", female: "", location: location, nickname: nickname };
                     }
                     
                     if (sex === "남성") {
@@ -232,6 +235,10 @@ $(document).ready(function() {
                 var modalBodyContent = "";
                 
                 for (var episode in contentByEpisode) {
+                	nickname = "";
+                	if(contentByEpisode[episode].nickname != ""){
+                		nickname = contentByEpisode[episode].nickname;
+                	}
                     modalBodyContent += 
                         "<div class = 'text-head text-center'>" + formatDateTime(episode) + " (" + contentByEpisode[episode].location + ")" + "</div>"; 
                         

@@ -93,15 +93,19 @@ public class MainService {
 		Map<String, Object> status = new HashMap<String, Object>();
 		int duplicateCount = MainMapper.checkDuplication(userId, LocalDateTimeEpisode);
 		
-		// 연속 참여 체크 - 관리자 test 를 위해 제외
-		if(userId == "3609301426" || userId =="3629220993") {
-			duplicateCount = 0;
-		}
-		
 		try {
-			
+			// 관리자 인원들은 test를 위해 모든 validation 제외 - 나중에 하드코드가 아닌거로 리팩토링 요망..
+			if(userId.equals("3609301426") || userId.equals("3629220993")) {
+				if(MainMapper.minusChance(userId) == 1 && MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected) == 1){
+					CommonMapper.logUserHistory(userId, userId, "participate");
+					status.put("status", "complete");
+				}
+				else {
+					status.put("status", "error");
+				}
+			}
 			// 참여 가능 횟수 확인
-			if(MainMapper.checkChace(userId) <= 0) {
+			else if(MainMapper.checkChace(userId) <= 0) {
 				status.put("status", "noChance");
 			}
 			// 최대 인원 수 제한

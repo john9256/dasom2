@@ -43,7 +43,7 @@
 			WHERE 1=1
 			AND EPISODE > NOW()
 		)
-		ORDER BY A.CREATETIME ASC
+		ORDER BY A.EPISODE ASC
     </select>
     
     <select id="getMatchingInfo" resultType="matchPersonVO" parameterType="String">
