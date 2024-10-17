@@ -280,7 +280,7 @@ $(document).ready(function() {
                 let nickName = "";
                 let episode;
                 $(".modal-body").html("");
-                var userName = "${userName}";t
+                var userName = "${userName}";
                 
                 if(data.length === 0){
         			$("#modalLabel").html("매칭은 소개팅 이후 가능합니다.");
