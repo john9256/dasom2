@@ -93,6 +93,11 @@ public class MainService {
 		Map<String, Object> status = new HashMap<String, Object>();
 		int duplicateCount = MainMapper.checkDuplication(userId, LocalDateTimeEpisode);
 		
+		// 연속 참여 체크 - 관리자 test 를 위해 제외
+		if(userId == "3609301426" || userId =="3629220993") {
+			duplicateCount = 0;
+		}
+		
 		try {
 			
 			// 참여 가능 횟수 확인
