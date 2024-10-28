@@ -30,6 +30,22 @@
         border-color: #f8a5c2;
         box-shadow: 0 0 0 0.2rem rgba(248, 165, 194, 0.25);
     }
+    /* 개인정보 동의 박스 스타일 */
+    .consent-box {
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 20px;
+        width: 100%;
+        max-width: 700px;
+    }
+    @media (max-width: 576px) {
+        .consent-box {
+            font-size: 0.9rem;
+            padding: 8px;
+        }
+    }
 </style>
 </head>
 <body>
@@ -88,9 +104,24 @@
                             </select>
                         </div>
                         
+                        <div id="consentBox" class="consent-box">
+	                        <h6>개인정보 수집 및 이용에 대한 동의 안내</h6>
+	                        <p>dasomcupid.com 은 서비스 제공을 위해 아래와 같이 개인정보를 수집·이용하고자 합니다.  이용자는 개인정보 제공에 대한 동의를 거부할 권리가 있으며, 동의를 거부할 경우 일부 서비스 이용에 제한이 있을 수 있습니다.</p>
+	                        <strong>수집하는 개인정보 항목:</strong> 이름, 전화번호, 거주지, 나이 등<br>
+	                        <strong>개인정보 수집 및 이용 목적:</strong> 서비스 제공 및 상담 응대, 고객 관리 및 서비스 품질 개선, 회원 식별 및 인증, 마케팅 및 프로모션 목적의 연락<br>
+	                        <strong>개인정보 보유 및 이용 기간:</strong> 수집된 개인정보는 이용 목적 달성 후 지체 없이 파기됩니다. 단, 관련 법령에 따라 일정 기간 보존할 필요가 있는 경우 해당 기간 동안 안전하게 보관됩니다.<br>
+	                        <strong>동의 철회 및 개인정보 삭제 요청:</strong> 이용자는 언제든지 개인정보 수집·이용에 대한 동의를 철회하거나 삭제를 요청할 수 있습니다. 동의 철회 또는 삭제 요청 시, 일부 서비스 이용이 제한될 수 있습니다.<br>
+	                        <br>
+	                        <label><input type="checkbox" id="consentCheckbox" required> 위 사항에 대해 충분히 이해하였으며, 이에 동의합니다.</label>
+	                    </div>
+	                    <br>
+                        
                         <button type="submit" class="btn btn-primary">회원가입</button>
                         <a href="/mainPage" class="btn btn-primary">취소</a>
                     </form>
+                    
+                     
+                    
                 </div>
             </div>
         </div>
@@ -191,12 +222,28 @@ $(document).ready(function() {
         } else {
             $("#jobDivision").removeClass("is-invalid");
         }
-
+		
+        // 개인정보 동의 검증
+        if (!$('#consentCheckbox').is(':checked')) {
+            e.preventDefault(); // 폼 제출 막기
+            alert("개인정보 수집 및 이용에 대한 동의를 체크해 주세요.");
+            isValid = false;
+        }
+        
         // 모든 검증이 통과되었을 때 폼 데이터 제출
         if (isValid) {
+        	
+        	if (!$('#consentCheckbox').is(':checked')) {
+                e.preventDefault(); // 폼 제출 막기
+                alert("개인정보 수집 및 이용에 대한 동의를 체크해 주세요.");
+            }
+        	
             this.submit(); // 폼 데이터를 실제로 제출
         }
     });
+    
+    $("#consentBox").draggable();
+    
 });
 </script>
 </body>
