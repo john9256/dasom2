@@ -173,6 +173,7 @@
             for (var i = 0; i < columnOrder.length; i++) {
                 tableHeader += '<th>' + columnOrder[i] + '</th>';
             }
+            console.log(columnOrder.length);
             tableHeader += '<th>Action</th>'; // Action 헤더 추가
             tableHeader += '</tr>';
             $('#adminTable thead').html(tableHeader);
@@ -212,7 +213,7 @@
                 return rowData;
             });
 
-            // DataTable 초기화
+         // DataTable 초기화
             $('#adminTable').DataTable({
                 destroy: true,
                 data: tableData,
@@ -225,147 +226,145 @@
                         episodeColors[episode] = getNextColor();
                     }
                     $(row).css('background-color', episodeColors[episode]);
-                },
-                initComplete: function() {
-                	
-                    // chance 증가/감소 버튼 이벤트 핸들러 추가
-                    $('.increase-chance').on('click', function() {
-                        var userId = $(this).data('userid');
-                        $.ajax({
-                            url: '/increaseChance',
-                            type: 'POST',
-                            data: { userId: userId },
-                            success: function(response) {
-                                if(response.status == "increase"){
-                                    var cell = $(this).closest('td');
-                                    var chanceValue = parseInt(cell.text(), 10);
-                                    cell.contents().first()[0].textContent = chanceValue + 1;
-                                    alert(userId + ' 유저의 티켓이 증가했습니다.');
-                                }
-                            }.bind(this),
-                            error: function(xhr, status, error) {
-                                console.error("Selection update failed: " + error);
-                                alert("티켓 증가처리에 실패했습니다.");
-                            }
-                        });
-                    });
-
-                    $('.decrease-chance').on('click', function() {
-                        var userId = $(this).data('userid');
-                        $.ajax({
-                            url: '/decreaseChance',
-                            type: 'POST',
-                            data: { userId: userId },
-                            success: function(response) {
-                                if(response.status == "decrease"){
-                                    var cell = $(this).closest('td');
-                                    var chanceValue = parseInt(cell.text(), 10);
-                                    cell.contents().first()[0].textContent = chanceValue - 1;
-                                    alert(userId + ' 유저의 티켓이 감소했습니다.');
-                                }
-                            }.bind(this),
-                            error: function(xhr, status, error) {
-                                console.error("Selection update failed: " + error);
-                                alert("티켓 감소처리에 실패했습니다.");
-                            }
-                        });
-                    });
-					
-                 // 스케줄 최대 인원수 증가
-                 $('.increase-headCount').on('click', function() {
-                     var episode = $(this).data('episode');
-                     $.ajax({
-                         url: '/increaseHeadCount',
-                         type: 'POST',
-                         data: { episode: episode },
-                         success: function(response) {
-                             if(response.status == "increase"){
-                                 var cell = $(this).closest('td');
-                                 var HeadCount = parseInt(cell.text(), 10);
-                                 cell.contents().first()[0].textContent = HeadCount + 1;
-                                 console.log(cell.contents().first()[0].textContent);
-                             }
-                         }.bind(this),
-                         error: function(xhr, status, error) {
-                             console.error("Selection update failed: " + error);
-                             alert("참여 인원 증가처리에 실패했습니다.");
-                         }
-                     });
-                 });
-                 
-                 // 스케줄 최대 인원수 감소
-                 $('.decrease-headCount').on('click', function() {
-                     var episode = $(this).data('episode');
-                     $.ajax({
-                         url: '/decreaseHeadCount',
-                         type: 'POST',
-                         data: { episode: episode },
-                         success: function(response) {
-                             if(response.status == "decrease"){
-                                 var cell = $(this).closest('td');
-                                 var HeadCount = parseInt(cell.text(), 10);
-                                 cell.contents().first()[0].textContent = HeadCount - 1;
-                             }
-                         }.bind(this),
-                         error: function(xhr, status, error) {
-                             console.error("Selection update failed: " + error);
-                             alert("참여 인원 감소처리에 실패했습니다.");
-                         }
-                     });
-                 });
-                    
-                    $('.change-passFlag').on('click', function() {
-                        var userId = $(this).data('userid');
-                        var button = $(this); // 클릭한 버튼 요소를 참조
-                        var currentFlag = button.data('passflag'); // 현재 data-passflag 값을 가져옴
-                        var newPassFlag;
-
-                        // 화면에 표시된 텍스트 값과 data-passflag 속성 값을 모두 변경
-                        if (currentFlag === "Y") {
-                            newPassFlag = "N";
-                        } else {
-                            newPassFlag = "Y";
-                        }
-
-                        $.ajax({
-                            url: '/changePassFlag',
-                            type: 'POST',
-                            data: { userId: userId, passFlag: currentFlag }, // 반전된 값을 서버에 전송
-                            success: function(response) {
-                                var cell = button.closest('td');
-                                cell.contents().first()[0].textContent = newPassFlag; // 화면에서 값 반영
-                                button.data('passflag', newPassFlag); // data-passflag 속성 값 업데이트
-                                alert(userId + ' 유저의 패스 플래그가 변경되었습니다.');
-                            }
-                        });
-                    });
-
-                    // 삭제 버튼 이벤트 핸들러 추가 (스케줄 관리 테이블일 때만 추가)
-                    if (isScheduleTable) {
-                        $('.delete-schedule').on('click', function() {
-                            var episode = $(this).data('episode');
-                            if (confirm(episode + ' 스케줄을 삭제하시겠습니까?')) {
-                                $.ajax({
-                                    url: '/deleteSchedule',
-                                    type: 'POST',
-                                    data: { episode: episode },
-                                    success: function(response) {
-                                        if(response.status == "complete"){
-                                            alert('스케줄이 삭제되었습니다.');
-                                            $('#scheduleBtn').click(); // 스케줄 리스트 새로고침
-                                        } else {
-                                            alert('스케줄 삭제에 실패했습니다.');
-                                        }
-                                    },
-                                    error: function(xhr, status, error) {
-                                        console.error("Schedule deletion failed: " + error);
-                                        alert("스케줄 삭제에 실패했습니다.");
-                                    }
-                                });
-                            }
-                        });
-                    }
                 }
+            });
+
+            // 이벤트 위임 방식으로 chance 증가/감소 버튼 이벤트 핸들러 추가
+            $('#adminTable tbody').off('click', '.increase-chance').on('click', '.increase-chance', function() {
+                var userId = $(this).data('userid');
+                console.log("이것은 userId " + userId);
+                $.ajax({
+                    url: '/increaseChance',
+                    type: 'POST',
+                    data: { userId: userId },
+                    success: function(response) {
+                        if (response.status == "increase") {
+                            var cell = $(this).closest('td');
+                            var chanceValue = parseInt(cell.contents().first()[0].textContent, 10);
+                            cell.contents().first()[0].textContent = chanceValue + 1;
+                            alert(userId + ' 유저의 티켓이 증가했습니다.');
+                        }
+                    }.bind(this),
+                    error: function(xhr, status, error) {
+                        console.error("Selection update failed: " + error);
+                        alert("티켓 증가처리에 실패했습니다.");
+                    }
+                });
+            });
+
+            $('#adminTable tbody').off('click', '.decrease-chance').on('click', '.decrease-chance', function() {
+                var userId = $(this).data('userid');
+                $.ajax({
+                    url: '/decreaseChance',
+                    type: 'POST',
+                    data: { userId: userId },
+                    success: function(response) {
+                        if (response.status == "decrease") {
+                            var cell = $(this).closest('td');
+                            var chanceValue = parseInt(cell.contents().first()[0].textContent, 10);
+                            cell.contents().first()[0].textContent = chanceValue - 1;
+                            alert(userId + ' 유저의 티켓이 감소했습니다.');
+                        }
+                    }.bind(this),
+                    error: function(xhr, status, error) {
+                        console.error("Selection update failed: " + error);
+                        alert("티켓 감소처리에 실패했습니다.");
+                    }
+                });
+            });
+            
+         // headCount 증가/감소 버튼 이벤트 핸들러 추가
+            $('#adminTable tbody').off('click', '.increase-headCount').on('click', '.increase-headCount', function() {
+                var episode = $(this).data('episode');
+                $.ajax({
+                    url: '/increaseHeadCount',
+                    type: 'POST',
+                    data: { episode: episode },
+                    success: function(response) {
+                        if (response.status == "increase") {
+                            var cell = $(this).closest('td');
+                            var headCountValue = parseInt(cell.contents().first()[0].textContent, 10);
+                            cell.contents().first()[0].textContent = headCountValue + 1;
+                            alert('Head count가 증가했습니다.');
+                        }
+                    }.bind(this),
+                    error: function(xhr, status, error) {
+                        console.error("Head count 증가 실패: " + error);
+                        alert("Head count 증가에 실패했습니다.");
+                    }
+                });
+            });
+
+            $('#adminTable tbody').off('click', '.decrease-headCount').on('click', '.decrease-headCount', function() {
+                var episode = $(this).data('episode');
+                $.ajax({
+                    url: '/decreaseHeadCount',
+                    type: 'POST',
+                    data: { episode: episode },
+                    success: function(response) {
+                        if (response.status == "decrease") {
+                            var cell = $(this).closest('td');
+                            var headCountValue = parseInt(cell.contents().first()[0].textContent, 10);
+                            cell.contents().first()[0].textContent = headCountValue - 1;
+                            alert('Head count가 감소했습니다.');
+                        }
+                    }.bind(this),
+                    error: function(xhr, status, error) {
+                        console.error("Head count 감소 실패: " + error);
+                        alert("Head count 감소에 실패했습니다.");
+                    }
+                });
+            });
+            
+            $('#adminTable tbody').off('click', '.delete-schedule').on('click', '.delete-schedule', function() {
+                var episode = $(this).data('episode');
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    $.ajax({
+                        url: '/deleteSchedule',
+                        type: 'POST',
+                        data: { episode: episode },
+                        success: function(response) {
+                            if (response.status === "deleted") {
+                                alert('스케줄이 삭제되었습니다.');
+                                // 테이블을 다시 로드하거나 해당 행을 삭제하여 UI 업데이트
+                                $('#scheduleBtn').click(); // 스케줄 리스트 새로고침
+                            } else {
+                                alert('스케줄 삭제에 실패했습니다.');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("스케줄 삭제 실패: " + error);
+                            alert("스케줄 삭제에 실패했습니다.");
+                        }
+                    });
+                }
+            });
+            
+            $('#adminTable tbody').off('click', '.change-passFlag').on('click', '.change-passFlag', function() {
+                var userId = $(this).data('userid');
+                var currentPassFlag = $(this).data('passflag');
+                var newPassFlag = currentPassFlag === 'Y' ? 'N' : 'Y'; // 현재 값에 따라 토글
+
+                $.ajax({
+                    url: '/changePassFlag',
+                    type: 'POST',
+                    data: { userId: userId, passFlag: newPassFlag },
+                    success: function(response) {
+                        if (response.status === "changed") {
+                            alert('Pass flag가 변경되었습니다.');
+                            // passFlag 값을 업데이트하여 UI 반영
+                            var cell = $(this).closest('td');
+                            cell.contents().first()[0].textContent = newPassFlag; 
+                            $(this).data('passflag', newPassFlag); // 버튼의 데이터 속성 업데이트
+                        } else {
+                            alert('Pass flag 변경에 실패했습니다.');
+                        }
+                    }.bind(this),
+                    error: function(xhr, status, error) {
+                        console.error("Pass flag 업데이트 실패: " + error);
+                        alert("Pass flag 변경에 실패했습니다.");
+                    }
+                });
             });
         }
 		

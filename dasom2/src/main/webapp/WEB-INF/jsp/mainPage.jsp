@@ -213,6 +213,8 @@ $(document).ready(function() {
                     var jobDivision = participant.jobDivision;
                     var year = participant.year;
                     var location = participant.location;
+                    var height = participant.height;
+                    console.log(height);
                     
                     if(participant.nickname != null){
                     	nickname = participant.nickname;
@@ -226,9 +228,9 @@ $(document).ready(function() {
                     }
                     
                     if (sex === "남성") {
-                        contentByEpisode[episode].male += "<p class='mobile-font2'>" + year + " " + jobDivision + "</p>";
+                        contentByEpisode[episode].male += "<p class='mobile-font2'>" + year + "/" + height + "/" + jobDivision + "</p>";
                     } else {
-                        contentByEpisode[episode].female += "<p class='mobile-font2'>" + year + " " + jobDivision + "</p>";
+                        contentByEpisode[episode].female += "<p class='mobile-font2'>" + year + "/" + height + "/" + jobDivision + "</p>";
                     }
                 });
                 

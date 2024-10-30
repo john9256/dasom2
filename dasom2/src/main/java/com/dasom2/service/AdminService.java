@@ -176,7 +176,7 @@ public class AdminService {
 	        int count = adminMapper.deleteSchedule(episode);
 	        adminMapper.deleteAllParticipantByEpisode(episode);
 	        if(count == 1) {
-	            status.put("status", "complete");
+	            status.put("status", "deleted");
 	        } else {
 	            status.put("status", "fail");
 	        }
