@@ -29,6 +29,7 @@ public interface MainMapper {
 	String getPassFlagbyUser(String userId);
 	List<matchPersonVO> getMatchingInfo(String userId);
 	List<Map<String, Object>> getParticipantList(String userId);
+	List<Map<String, Object>> getParticipantListIndexPage();
 	List<Map<String, Object>> getMatchingResultInfo(String userId);
 	List<Map<String, Object>> getMatchingResultInfo2(String userId);
 	Map<String, Object> getParticipantCount();

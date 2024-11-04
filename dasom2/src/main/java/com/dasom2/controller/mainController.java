@@ -36,10 +36,10 @@ public class mainController {
 	@Autowired
 	CommonMapper CommonMapper;
 	
-	@GetMapping("/test1")
-	public String test1() {
-		return "index";
-	}
+	@GetMapping("/")
+    public String index() {
+        return "landingPage"; // landingPage.jsp 파일로 이동
+    }
 	
 	//메인페이지
     @SuppressWarnings("unused") 
@@ -102,9 +102,17 @@ public class mainController {
     		
     		return MainService.getParticipantList(userId);
     	}
-			return null;
+    	return null;
     }
     
+    // 비로그인 소개팅 현황 모달
+    @ResponseBody
+    @PostMapping("/getParticipantListIndexPage")
+    public List<Map<String, Object>> getParticipantListIndexPage() {
+    	
+    		return MainService.getParticipantListIndexPage();
+    		
+    }
 
     // 두근두근 매칭 매칭 인원 선택 모달
     @ResponseBody

@@ -62,8 +62,6 @@ public class MainService {
 		
 		List<Map<String, Object>> participantList = new ArrayList<>();
 		
-		Map<String, Object> temp = new HashMap<>();
-		
 		participantList = MainMapper.getParticipantList(userId);
 		if(participantList.size() > 0) {
 		    for(int i = 0; i < participantList.size(); i ++) {
@@ -86,6 +84,33 @@ public class MainService {
 		
 	}
 	
+	// 비로그인 소개팅 현황 get
+		public List<Map<String, Object>> getParticipantListIndexPage(){
+			
+			List<Map<String, Object>> participantList = new ArrayList<>();
+			
+			participantList = MainMapper.getParticipantListIndexPage();
+			if(participantList.size() > 0) {
+			    for(int i = 0; i < participantList.size(); i ++) {
+			        Object yearObj = participantList.get(i).get("year");
+			        if (yearObj instanceof Long) {
+			            // Long 타입이면 int로 변환
+			            int year = ((Long) yearObj).intValue();
+			            participantList.get(i).put("year", classifyAge(year));
+			        } else if (yearObj instanceof Integer) {
+			            // Integer 타입이면 그대로 사용
+			            int year = (Integer) yearObj;
+			            participantList.get(i).put("year", classifyAge(year));
+			        } else {
+			            // year 값이 예상하지 못한 타입일 경우 처리 (optional)
+			            throw new IllegalArgumentException("Unexpected type for year: " + yearObj.getClass());
+			        }
+			    }
+			}
+			return participantList;
+			
+		}
+	
 	@Transactional(rollbackFor = {Exception.class})
 	public Map<String, Object> insertParticipantUser(String userId, String episode, Boolean episodeSelected) {
 		// 스케줄에 인원수가 남으면 참가인원에 insert
@@ -94,7 +119,7 @@ public class MainService {
 		int duplicateCount = MainMapper.checkDuplication(userId, LocalDateTimeEpisode);
 		
 		try {
-			// 관리자 인원들은 test를 위해 모든 validation 제외 - 나중에 하드코드가 아닌거로 리팩토링 요망..
+			// 관리자 인원들은 test를 위해 참가 validation 제외 - 나중에 하드코드가 아닌거로 리팩토링 요망..
 			if(userId.equals("3609301426") || userId.equals("3629220993")) {
 				if(MainMapper.minusChance(userId) == 1 && MainMapper.insertParticipantUser(userId, LocalDateTimeEpisode, episodeSelected) == 1){
 					CommonMapper.logUserHistory(userId, userId, "participate");
