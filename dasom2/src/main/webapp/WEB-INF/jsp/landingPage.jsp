@@ -133,7 +133,6 @@
     <script>
         $(document).ready(function() {
             animateText();
-            animateBackground();
         });
 
         function animateText() {
