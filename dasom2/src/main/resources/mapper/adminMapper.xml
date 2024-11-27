@@ -17,7 +17,7 @@
     </select>
 	
     <select id="getScheduleInfoAdmin">
-        SELECT DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, B.USER_ID AS userId, A.LOCATION AS location , C.USER_NAME AS userName, C.SEX AS sex, DATE_FORMAT(C.BIRTHDAY, '%y년') AS birthday, C.JOB_DIVISION AS jobDivision
+        SELECT DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, B.USER_ID AS userId, C.PHONE_NUMBER AS phoneNumber, A.LOCATION AS location , C.USER_NAME AS userName, C.SEX AS sex, DATE_FORMAT(C.BIRTHDAY, '%y년') AS birthday, C.JOB_DIVISION AS jobDivision
 		FROM MEETING_SCHEDULE A
 		LEFT OUTER JOIN
 		(SELECT * FROM PARTICIPANT_USER) B

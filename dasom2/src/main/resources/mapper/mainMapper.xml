@@ -171,7 +171,7 @@
     </select>
     
     <insert id="insertParticipantUser">
-	    INSERT INTO PARTICIPANT_USER(USER_ID, EPISODE, SEX, NICKNAME) 
+	    INSERT INTO PARTICIPANT_USER(USER_ID, EPISODE, SEX, NICKNAME, CREATETIME) 
 	    VALUES (
 	        #{userId},
 	        #{episode},
@@ -197,7 +197,8 @@
 	                ORDER BY LENGTH(VALUE1), VALUE1
 	                LIMIT 1
 	            ) AS AA
-	        )
+	        ),
+	        SYSDATE()
 	    )
 	</insert>
     
