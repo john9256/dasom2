@@ -55,8 +55,7 @@ public class mainController {
             return "redirect:/login/kakao";
         }
         
-//        if(MainService.getPassFlagbyUser(String.valueOf(session.getAttribute("userId")))) 
-        if(MainService.checkUserInfoExist(String.valueOf(session.getAttribute("userId")))) 
+        if(MainService.checkUserInfoExist(String.valueOf(session.getAttribute("userId"))) && MainService.getPassFlagbyUser(String.valueOf(session.getAttribute("userId")))) 
         {
         	String checkAdmin = MainService.getCheckAdmin(String.valueOf(session.getAttribute("userId")));
         	model.addAttribute("checkAdmin", checkAdmin);

@@ -249,4 +249,25 @@ public class AdminController {
 		}
     }
 	
+	// 유저 모임에서 제외
+	@ResponseBody
+	@Transactional(rollbackFor = {Exception.class})
+    @PostMapping("/deleteParticipantUserAdmin")
+    public Map<String, Object> deleteParticipantUserAdmin(@RequestParam("userId") String userId, @RequestParam("episode") String episode, HttpSession session) {
+		Map<String, Object> status = new HashMap<String, Object>();
+		try {
+		if (session.getAttribute("userId") != null && adminService.checkAdmin(session.getAttribute("userId").toString())) {
+			if(commonService.logAdminHistory(session.getAttribute("userId").toString(), userId, "deleteParticipantUserAdmin") == 1) {
+				
+				return adminService.deleteParticipantUserAdmin(userId, episode);
+			}
+        }
+		status.put("status", "fail");
+		return status;
+		}
+		catch (Exception e) {
+			throw e;
+		}
+    }
+	
 }

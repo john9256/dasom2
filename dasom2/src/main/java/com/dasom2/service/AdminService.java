@@ -210,5 +210,26 @@ public class AdminService {
 				return status;
 	}
 	
+	
+	@Transactional
+	public Map<String, Object> deleteParticipantUserAdmin(String userId, String episode) {
+	    Map<String, Object> status = new HashMap<String, Object>();
+	    try {
+	        int count = adminMapper.deleteParticipantUserAdmin(userId, episode);
+	        if(count == 1) {
+	            status.put("status", "deleted");
+	        } else {
+	            status.put("status", "fail");
+	        }
+	    } catch (Exception e) {
+	        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	        String methodName = stackTrace[1].getMethodName();
+	        CommonMapper.insertErrorLog("admin", methodName, e.getMessage());
+	        status.put("status", "error");
+	        throw e; // 트랜잭션 롤백을 위해 예외를 다시 던짐
+	    }
+	    return status;
+	}
+	
 }
 

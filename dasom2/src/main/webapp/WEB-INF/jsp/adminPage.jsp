@@ -116,7 +116,7 @@
     <script>
     $(document).ready(function() {
         var userInfoColumns = ["userId", "userName", "sex", "height", "birthday", "jobDivision", "residence", "passFlag", "chance", "phoneNumber"];
-        var scheduleInfoColumns = ["episode", "userId", "userName", "phoneNumber", "location", "sex", "birthday", "jobDivision"];
+        var scheduleInfoColumns = ["episode", "userId", "userName", "phoneNumber", "nickName", "location", "sex", "birthday", "jobDivision"];
         var matchingInfoColumns = ["episode", "userId", "userName", "nickName", "pick", "pickedUserId",  "createtime"];
         var scheduleColumns = ["episode", "completeFlag", "headCount", "location"];
         var logColumns = ["userId", "userName", "sex", "phoneNumber", "target", "logType", "adminDivision", "createTime"];
@@ -135,17 +135,18 @@
        
         /* ---------------- 테이블 생성 함수 ---------------*/
         
-        function createTable(data, columnOrder, isScheduleTable = false) {
+        function createTable(data, columnOrder, isScheduleTable = false, isScheduleInfo = false) {
             // 기존 DataTable 삭제
             if ($.fn.DataTable.isDataTable('#adminTable')) {
                 $('#adminTable').DataTable().clear().destroy();
             }
-
             // 테이블 헤더와 본문 비우기
             $('#adminTable thead').empty();
             $('#adminTable tbody').empty();
             $('#addScheduleBtn').remove();
             $('#data-inform').remove();
+            
+            
             
          	// 스케줄 관리 탭인 경우
             if (isScheduleTable) {
@@ -173,7 +174,6 @@
             for (var i = 0; i < columnOrder.length; i++) {
                 tableHeader += '<th>' + columnOrder[i] + '</th>';
             }
-            console.log(columnOrder.length);
             tableHeader += '<th>Action</th>'; // Action 헤더 추가
             tableHeader += '</tr>';
             $('#adminTable thead').html(tableHeader);
@@ -203,13 +203,18 @@
                     }
                 });
 
-                // 삭제 버튼 추가 (스케줄 관리 테이블일 때만 추가)
+                // 삭제 버튼 추가 (스케줄 관리 테이블)
                 if (isScheduleTable) {
                     rowData.push('<button class="btn btn-sm btn-danger delete-schedule" data-episode="' + row['episode'] + '">삭제</button>');
-                } else {
+                }
+                // 유저 삭제 버튼 추가 (스케줄 단순 조회 테이블)
+                else if (isScheduleInfo) {
+                	rowData.push('<button class="btn btn-sm btn-danger delete-user" data-episode="' + row['episode'] + '" data-userid="' + row['userId'] + '">삭제</button>');
+                }
+                else {
                     rowData.push(''); // 빈 셀 추가
                 }
-
+				
                 return rowData;
             });
 
@@ -232,7 +237,6 @@
             // 이벤트 위임 방식으로 chance 증가/감소 버튼 이벤트 핸들러 추가
             $('#adminTable tbody').off('click', '.increase-chance').on('click', '.increase-chance', function() {
                 var userId = $(this).data('userid');
-                console.log("이것은 userId " + userId);
                 $.ajax({
                     url: '/increaseChance',
                     type: 'POST',
@@ -340,6 +344,35 @@
                 }
             });
             
+            $('#adminTable tbody').off('click', '.delete-user').on('click', '.delete-user', function() {
+                var episode = $(this).data('episode'); // data-episode 값 가져오기
+                var userId = $(this).data('userid');  // data-user-id 값 가져오기
+				
+                if (confirm("해당 유저를 모임에서 제외시키겠습니까?")) {
+                    $.ajax({
+                        url: '/deleteParticipantUserAdmin',
+                        type: 'POST',
+                        data: { 
+                            episode: episode,
+                            userId: userId // userId 값 추가
+                        },
+                        success: function(response) {
+                            if (response.status === "deleted") {
+                                alert('제외 되었습니다.');
+                                // 테이블을 다시 로드하거나 해당 행을 삭제하여 UI 업데이트
+                                $('#scheduleInfoBtn').click(); // 스케줄 리스트 새로고침
+                            } else {
+                                alert('유저 제외에 실패했습니다.');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("유저 제외 실패: " + error);
+                            alert("유저 제외에 실패했습니다.");
+                        }
+                    });
+                }
+            });
+            
             $('#adminTable tbody').off('click', '.change-passFlag').on('click', '.change-passFlag', function() {
                 var userId = $(this).data('userid');
                 var currentPassFlag = $(this).data('passflag');
@@ -379,7 +412,7 @@
 
         $('#scheduleInfoBtn').click(function() {
             $.post('/getScheduleInfoAdmin', function(data) {
-                createTable(data, scheduleInfoColumns);
+                createTable(data, scheduleInfoColumns, false, true); // 스케줄 조회 표시 플래그 전달
             });
         });
 

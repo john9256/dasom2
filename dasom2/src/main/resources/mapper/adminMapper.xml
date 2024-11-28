@@ -17,7 +17,7 @@
     </select>
 	
     <select id="getScheduleInfoAdmin">
-        SELECT DATE_FORMAT(A.EPISODE, '%y년 %m월 %d일 %p %h시') AS episode, B.USER_ID AS userId, C.PHONE_NUMBER AS phoneNumber, A.LOCATION AS location , C.USER_NAME AS userName, C.SEX AS sex, DATE_FORMAT(C.BIRTHDAY, '%y년') AS birthday, C.JOB_DIVISION AS jobDivision
+        SELECT A.EPISODE AS episode, B.USER_ID AS userId, C.PHONE_NUMBER AS phoneNumber, B.NICKNAME AS nickName, A.LOCATION AS location , C.USER_NAME AS userName, C.SEX AS sex, DATE_FORMAT(C.BIRTHDAY, '%y년') AS birthday, C.JOB_DIVISION AS jobDivision
 		FROM MEETING_SCHEDULE A
 		LEFT OUTER JOIN
 		(SELECT * FROM PARTICIPANT_USER) B
@@ -105,5 +105,9 @@
     <insert id ="addSchedule">
     	INSERT INTO MEETING_SCHEDULE(EPISODE, HEADCOUNT, LOCATION, MATCHING_RESULT_TERM) VALUES(REPLACE(#{episode}, 'T', ' '), #{headCount}, #{location}, #{matchingResultTerm})
     </insert>
+    
+    <delete id="deleteParticipantUserAdmin">
+		DELETE FROM PARTICIPANT_USER WHERE USER_ID = #{userId} AND EPISODE = #{episode}
+    </delete>
     
 </mapper>
